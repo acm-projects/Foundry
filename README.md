@@ -65,8 +65,8 @@ HackLab is a platform that empowers developers to bring their software ideas to 
 
 ## 🤝 The Team
 + Frontend
-  + Aastha Sheth
-  + Luke Sultzer
+  + TBD
+  + TBD
 + Backend
-  + Owen Isenhart
-  + Ethan Scherwitz
+  + TBD
+  + TBD
