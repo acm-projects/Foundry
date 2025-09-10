@@ -34,13 +34,16 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 |**11**&nbsp;&nbsp;&nbsp;*Nov 24th - 28th* | **Fall Break** | **Fall Break** |
 |**12**&nbsp;&nbsp;&nbsp;*Dec 3rd* | **Presentation Night! 🎉** | **Presentation Night! 🎉** |
 
-## 👨‍💻 Tech Stack
+## 👨‍💻 Resources
 + **Must Watch!!**
   + [What is a frontend?](https://youtu.be/WG5ikvJ2TKA?si=mBepopDcfIZK37jk)
   + [What is a backend?](https://youtu.be/XBu54nfzxAQ?si=kuioRqmCAxXhQocA)
   + [REST APIs](https://youtu.be/LooL6_chvN4?si=amF2wvhjfx1-UiaM)
   + [Basic Git & GitHub in VSCode Tutorial](https://youtu.be/z5jZ9lrSpqk?si=51sKMz2JHPklqfnV)
 + **Frontend**
+  + [UI/UX Design Course](https://youtu.be/wIuVvCuiJhU?si=WP5yoDOMkowZYoBX)
+  + [UI/UX Design Principles](https://youtu.be/uwNClNmekGU?si=AFvRWtjlGUL3NG2b)
+  + [Even More UI/UX!](https://youtu.be/HE4rLEQpiXY?si=NNJqbhTl-ZjJouaQ)
   + [Designing a Web App](https://youtu.be/W8smyf1eHFk?si=QlgPgMOSFb21KPr7) 
   + [Figma](https://www.youtube.com/watch?v=FTFaQWZBqQ8)
   + [React High Level Overview](https://youtu.be/BdjAAvBQnQc?si=JoEFSUFok5dki1DZ)
