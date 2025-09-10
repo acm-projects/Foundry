@@ -1,6 +1,6 @@
 ![HackLab](https://github.com/acm-projects/Foundry/blob/main/thumbnail.png)
 ## 🛠️ Foundry
-HackLab is a platform that empowers developers to bring their software ideas to life through meaningful collaboration. Developers can pitch their own project ideas, join exciting projects proposed by others, and connect with like-minded contributors who share their vision. By fostering organic team formation and providing hands-on opportunities, HackLab enables users to showcase their skills and build impressive portfolios. This community-driven environment accelerates practical software engineering experience, making real-world collaboration both accessible and rewarding.
+Foundry is a visual infrastructure builder that transforms AWS deployment from complex configurations into simple drag-and-drop design. Teams build production-ready applications by visually connecting databases, servers, and storage without any cloud expertise—just drag, connect, and deploy. With real-time collaboration, automatic GitHub CI/CD, and transparent cost tracking, Foundry eliminates the AWS learning curve so developers can focus on building applications, not wrestling with infrastructure.
 
 ## 🏆 MVP
 + GitHub Oauth
