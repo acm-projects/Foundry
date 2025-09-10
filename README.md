@@ -18,7 +18,7 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 + Integrated SQL Terminal
 
 ## 📅 Timeline
-| **Week**&nbsp;(mon-fri)| **Frontend** | **Backend** |
+| **Week**&nbsp;| **Frontend** | **Backend** |
 |--- | --- | --- |
 |**1**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 10th - 17th* | Start Initial Wireframe| Introduce Backend Stack |
 |**2**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 17th - 24th* | **Finalize Design and Style**| Env Setup + DB Schema |
