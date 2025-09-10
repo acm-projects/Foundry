@@ -57,6 +57,7 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 + **Backend**
   + [NodeJS](https://youtu.be/TlB_eWDSMt4?si=SR_sp3VxQaE-A-yF)
   + [ExpressJS](https://youtu.be/SccSCuHhOw0?si=59GUgjRs6cW25cxL)
+  + [Swagger API Documentation **Important!**](https://youtu.be/5aryMKiBEKY?si=g95KxHYMiRiihYaZ)
   + [AWS EC2 Deployment](https://youtu.be/T-Pum2TraX4?si=ygIIu4QjyV7PNFau)
   + [Database Design](https://youtu.be/5RpUmDEsn1k?si=3d-UFfpMOjf0T7n4)
   + [AWS RDS](https://youtu.be/I_fTQTsz2nQ?si=mjiaxX4ci3vMTiIt)
