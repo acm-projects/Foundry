@@ -41,9 +41,10 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
   + [REST APIs](https://youtu.be/LooL6_chvN4?si=amF2wvhjfx1-UiaM)
   + [Basic Git & GitHub in VSCode Tutorial](https://youtu.be/z5jZ9lrSpqk?si=51sKMz2JHPklqfnV)
 + **Frontend**
-  + [UI/UX Design Course](https://youtu.be/wIuVvCuiJhU?si=WP5yoDOMkowZYoBX)
+  + [UI/UX Super Short Design Course](https://youtu.be/wIuVvCuiJhU?si=WP5yoDOMkowZYoBX)
   + [UI/UX Design Principles](https://youtu.be/uwNClNmekGU?si=AFvRWtjlGUL3NG2b)
-  + [Even More UI/UX!](https://youtu.be/HE4rLEQpiXY?si=NNJqbhTl-ZjJouaQ)
+  + [UI/UX Mistakes to Avoid](https://youtu.be/86PGRyQjdzQ?si=FPCzqxxat1xD04dH)
+  + [Even More UI/UX! (optional)](https://youtu.be/HE4rLEQpiXY?si=NNJqbhTl-ZjJouaQ)
   + [Designing a Web App](https://youtu.be/W8smyf1eHFk?si=QlgPgMOSFb21KPr7) 
   + [Figma](https://www.youtube.com/watch?v=FTFaQWZBqQ8)
   + [React High Level Overview](https://youtu.be/BdjAAvBQnQc?si=JoEFSUFok5dki1DZ)
