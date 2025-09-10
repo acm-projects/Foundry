@@ -20,18 +20,18 @@ HackLab is a platform that empowers developers to bring their software ideas to 
 ## 📅 Timeline
 | **Week**&nbsp;(mon-fri)| **Frontend** | **Backend** |
 |--- | --- | --- |
-|**1**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 10th - 17th* | Start Initial Wireframes and Mockups| Introduce Backend Stack |
+|**1**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 10th - 17th* | Start Initial Wireframe| Introduce Backend Stack |
 |**2**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 17th - 24th* | **Finalize Design and Style**| Env Setup + DB Schema |
-|**3**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 24th - Oct 1st* | Implement Authentication UI | Create Auth APIs + RDS Database |
-|**4**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 1st - 8th* | Build User Profile Page | Develop User/Profile CRUD APIs |
-|**5**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 8th - 15th* | Create Project Flows | Implement Project Management APIs |
-|**6**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 15th - 22nd* | Build Home Page + Search Functionality | Develop Reputation Calculation APIs |
-|**7**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 22nd - 29th* | Implement Reputation System UI | EC2 Deployment + Testing |
+|**3**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 24th - Oct 1st* | Implement Oauth | Create Auth APIs + RDS Database |
+|**4**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 1st - 8th* | Build Canvas Page | Develop CloudFormation CRUD APIs |
+|**5**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 8th - 15th* | Create Infra Functionality | Develop CloudFormation CRUD APIs |
+|**6**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 15th - 22nd* | Create Infra Funtionality | Develop Team APIs |
+|**7**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 22nd - 29th* | Full User Flow Finished | Deployment + API Documentation |
 |**8**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 29th - Nov 5th* | **Integrations** | **Integrations** |
 |**9**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Nov 5th - 12th* | Create Presentation Slides | Finish up Remaining Integrations |
 |**10**&nbsp;&nbsp;&nbsp;*Nov 12th - 19th* | Practice Presentation | Practice Presentation |
-|**10**&nbsp;&nbsp;&nbsp;*Nov 19th* | Mock Presentations |
-|**11**&nbsp;&nbsp;&nbsp;*Nov 24th - 28th* | **Fall Break** |
+|**10**&nbsp;&nbsp;&nbsp;*Nov 19th* | Mock Presentations | Mock Presentations |
+|**11**&nbsp;&nbsp;&nbsp;*Nov 24th - 28th* | **Fall Break** | **Fall Break** |
 |**12**&nbsp;&nbsp;&nbsp;*Dec 3rd* | **Presentation Night! 🎉** | **Presentation Night! 🎉** |
 
 ## 👨‍💻 Tech Stack
