@@ -24,8 +24,8 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 |**2**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 17th - 24th* | **Finalize Design and Style**| Env Setup + DB Schema |
 |**3**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Sept 24th - Oct 1st* | Implement Oauth | Create Auth APIs + RDS Database |
 |**4**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 1st - 8th* | Build Canvas Page | Develop CloudFormation CRUD APIs |
-|**5**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 8th - 15th* | Create Infra Functionality | Develop CloudFormation CRUD APIs |
-|**6**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 15th - 22nd* | Create Infra Funtionality | Develop Team APIs |
+|**5**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 8th - 15th* | Create Infra UI | Develop CloudFormation CRUD APIs |
+|**6**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 15th - 22nd* | Create Infra UI | Develop Team APIs |
 |**7**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 22nd - 29th* | Full User Flow Finished | Deployment + API Documentation |
 |**8**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Oct 29th - Nov 5th* | **Integrations** | **Integrations** |
 |**9**&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Nov 5th - 12th* | Create Presentation Slides | Finish up Remaining Integrations |
