@@ -16,6 +16,7 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 + Advanced Logging
 + Educational Material
 + Integrated SQL Terminal
++ AI Gen Infra
 
 ## 📅 Timeline
 | **Week**&nbsp;| **Frontend** | **Backend** |
