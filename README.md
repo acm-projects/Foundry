@@ -64,9 +64,11 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
   + [AWS RDS](https://youtu.be/I_fTQTsz2nQ?si=mjiaxX4ci3vMTiIt)
 
 ## 🤝 The Team
-+ Frontend
-  + TBD
-  + TBD
-+ Backend
-  + TBD
-  + TBD
++ Akilan Sathish
++ Efrain Arevalo
++ Enaya Jawed
++ Luana Marques
+
+## 🧠 Industry Mentor
++ Sean Hassan
+
