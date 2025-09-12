@@ -7,6 +7,7 @@ Foundry is a visual infrastructure builder that transforms AWS deployment from c
 + Drag and Drop Infra (servers, databases, buckets)
   + Create, Modify, Delete
 + Teams
+  + Access Control System - Read/Modify/Admin Permissions 
 + Cost Monitoring
 + Logging
 
