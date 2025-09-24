@@ -1,3 +1,6 @@
+// This is something!
+
+
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
