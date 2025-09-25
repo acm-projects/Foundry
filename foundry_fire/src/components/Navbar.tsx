@@ -1,23 +1,30 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { LogOut, Plus, Workflow, GraduationCap, Cloud, User, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
-import { DraggableProfileMenu } from './DraggableProfileMenu';
+import React from "react";
+import { Button } from "./ui/button";
+import {
+  LogOut,
+  Plus,
+  Workflow,
+  GraduationCap,
+  Cloud,
+  User,
+  ChevronDown,
+} from "lucide-react";
+import { useState } from "react";
+import { DraggableProfileMenu } from "./DraggableProfileMenu";
+import { PageType } from "../types";
 
 interface NavbarProps {
-  currentPage: string;
-  onNavigate: (page: string) => void;
-  onLogout: () => void;
-  onNewWorkflow: () => void;
-  onBackToLanding: () => void;
+  currentPage: PageType;
+  onNavigate: (page: PageType) => void;
+  workflowName?: string;
 }
 
-export function Navbar({ currentPage, onNavigate, onLogout, onNewWorkflow, onBackToLanding }: NavbarProps) {
+export function Navbar({ currentPage, onNavigate, workflowName }: NavbarProps) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     setIsProfileMenuOpen(false);
-    onLogout();
+    onNavigate("landing");
   };
 
   return (
@@ -26,20 +33,20 @@ export function Navbar({ currentPage, onNavigate, onLogout, onNewWorkflow, onBac
         {/* Left side - Logo/Brand */}
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <button 
-              onClick={onBackToLanding}
+            <button
+              onClick={() => onNavigate("landing")}
               className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center hover:from-orange-500 hover:to-orange-700 transition-colors"
             >
               <Cloud className="w-4 h-4 text-white" />
             </button>
           </div>
-          
+
           {/* Navigation Links */}
           <div className="flex items-center gap-1">
             <Button
-              variant={currentPage === 'workflows' ? 'secondary' : 'ghost'}
+              variant={currentPage === "workflows" ? "secondary" : "ghost"}
               size="sm"
-              onClick={() => onNavigate('workflows')}
+              onClick={() => onNavigate("workflows")}
               className="flex items-center gap-2"
             >
               <Workflow size={16} />
@@ -47,9 +54,9 @@ export function Navbar({ currentPage, onNavigate, onLogout, onNewWorkflow, onBac
             </Button>
 
             <Button
-              variant={currentPage === 'education' ? 'secondary' : 'ghost'}
+              variant={currentPage === "education" ? "secondary" : "ghost"}
               size="sm"
-              onClick={() => onNavigate('education')}
+              onClick={() => onNavigate("education")}
               className="flex items-center gap-2"
             >
               <GraduationCap size={16} />
@@ -70,11 +77,13 @@ export function Navbar({ currentPage, onNavigate, onLogout, onNewWorkflow, onBac
             </div>
             <div className="hidden sm:block text-left">
               <div className="text-sm font-medium">You</div>
-              <div className="text-xs text-muted-foreground">you@foundry.com</div>
+              <div className="text-xs text-muted-foreground">
+                you@foundry.com
+              </div>
             </div>
             <ChevronDown size={14} className="text-muted-foreground" />
           </Button>
-          
+
           <DraggableProfileMenu
             isOpen={isProfileMenuOpen}
             onClose={() => setIsProfileMenuOpen(false)}
