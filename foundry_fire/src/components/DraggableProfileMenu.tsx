@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { Button } from './ui/button';
 import { LogOut, User, X } from 'lucide-react';

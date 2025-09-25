@@ -1,3 +1,4 @@
+import React from 'react'
 import { useDrop } from 'react-dnd';
 import { ServiceNode } from './ServiceNode';
 import { ConnectionLine } from './ConnectionLine';

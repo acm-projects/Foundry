@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from './ui/button';
 import { LogOut, Plus, Workflow, GraduationCap, Cloud, User, ChevronDown } from 'lucide-react';
 import { useState } from 'react';

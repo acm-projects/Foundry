@@ -1,3 +1,4 @@
+import React from 'react'
 interface ConnectionLineProps {
   sourcePosition: { x: number; y: number };
   targetPosition: { x: number; y: number };

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button } from './ui/button';
 import { Cloud, Server, Database, HardDrive, ArrowRight, Zap, Shield, Globe } from 'lucide-react';
 

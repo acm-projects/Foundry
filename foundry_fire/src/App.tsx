@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -672,10 +673,10 @@ export default function App() {
                   className="flex items-center gap-2 px-4 py-2 shadow-lg"
                 >
                   <Rocket size={18} />
-                  Create
+                  Deploy
                   {!allServicesConfigured && (
                     <span className="ml-2 text-xs opacity-75">
-                      (Configure all services)
+                      (Configure all service)
                     </span>
                   )}
                 </Button>
