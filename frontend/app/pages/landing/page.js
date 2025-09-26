@@ -8,7 +8,9 @@ import {
   
   export default function Page() {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 text-gray-900">
+      <div>
+        <div className="fixed inset-0 bg-gradient-to-br from-orange-50 via-white to-transparent -z-10"></div>
+        <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 text-gray-900">
        
         <header className="sticky top-3 z-50 flex justify-center">
           <div className="bg-white/80 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
@@ -97,6 +99,7 @@ import {
           </div>
         </section>
       </main>
+      </div>
     );
   }
   
