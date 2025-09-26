@@ -22,7 +22,7 @@ export default function Workflows() {
             Manage and monitor your AWS infrastructure workflows
           </p>
       </div>
-    <Link href = "/pages/canvas">
+    <Link href = "/canvas">
         <button 
           className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white 
                      bg-gradient-to-r from-orange-500 to-orange-600 shadow 
@@ -34,7 +34,7 @@ export default function Workflows() {
         </Link>
       </div>
 
-<Link href = "/pages/canvas">
+<Link href = "/canvas">
       <div className="mt-8">
   <div
     className="w-[400px] h-[220px] rounded-2xl border-2 border-dashed border-orange-300 

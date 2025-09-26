@@ -34,10 +34,10 @@ import {
           <h1 className="text-6xl font-extrabold tracking-tight text-orange-700">Foundry</h1>
           <p className=" pt-20 mt-8 text-5xl font-black text-gray-900">Drag. Drop. Deploy.</p>
           <p className="mt-4 text-lg text-gray-600">
-            Visual AWS service management with powerful automation
+            Turn AWS infrastructure into a canvas for your cloud requirements.
           </p>
           <div className="mt-8">
-          <Link href="/pages/workflows">
+          <Link href="/workflows">
             <button className="inline-flex items-center gap-2 rounded-xl bg-orange-600 text-white font-semibold px-5 py-3 shadow-[0_8px_18px_rgba(249,115,22,.35)] hover:translate-y-[1px] hover:shadow-[0_6px_14px_rgba(249,115,22,.3)] transition">
               Get Started <span>→</span>
             </button>
