@@ -7,18 +7,10 @@ export default function Workflows() {
 
 
 
-    return (<div> 
-<NavBar/>
-
-
-
-
-
- 
-    <main className="mx-auto max-w-6xl px-6 pt-8 pb-16">
-     
+    return (<div className="min-h-screen bg-gray-50"> 
+    <NavBar/>
+      <main className="mx-auto max-w-6xl px-6 pt-8 pb-16">
       <div className="flex items-start justify-between">
-
         <div>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
@@ -30,10 +22,8 @@ export default function Workflows() {
           <p className="mt-2 text-gray-500">
             Manage and monitor your AWS infrastructure workflows
           </p>
-        </div>
-
-
-<Link href = "/pages/canvas">
+      </div>
+    <Link href = "/canvas">
         <button 
           className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white 
                      bg-gradient-to-r from-orange-500 to-orange-600 shadow 
@@ -45,7 +35,7 @@ export default function Workflows() {
         </Link>
       </div>
 
-<Link href = "/pages/canvas">
+<Link href = "/canvas">
       <div className="mt-8">
   <div
     className="w-[400px] h-[220px] rounded-2xl border-2 border-dashed border-orange-300 
