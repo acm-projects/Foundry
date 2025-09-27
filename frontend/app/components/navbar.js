@@ -1,6 +1,7 @@
 
 import { Cloud, GitBranch, GraduationCap, User, X, LogOut } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function NavBar() {
   const [button, setButton] = useState(true);
@@ -12,7 +13,7 @@ export default function NavBar() {
         <div className="w-8 h-8 bg-orange-600 hover:bg-orange-700 rounded-full flex items-center justify-center">
           <Cloud className="text-white w-5 h-5" />
         </div>
-
+<Link href = "/workflows">
         <button
           onClick={() => { setButton(true); }}
           className={`flex hover:bg-gray-200 items-center space-x-2 px-3 py-1 rounded-md text-black font-medium ${button ? "bg-gray-200" : ""}`}
@@ -20,7 +21,8 @@ export default function NavBar() {
           <GitBranch className="w-4 h-4" />
           <span className="text-sm font-bold">Workflows</span>
         </button>
-
+        </Link>
+<Link href = "/education">
         <button
           onClick={() => setButton(false)}
           className={`rounded flex hover:bg-gray-200 items-center space-x-2 px-3 py-1 hover:text-black ${button == false ? "bg-gray-200" : ""}`}
@@ -28,6 +30,7 @@ export default function NavBar() {
           <GraduationCap className="w-4 h-4" />
           <span className="text-sm font-bold">Education</span>
         </button>
+        </Link>
       </div>
 
       <button
