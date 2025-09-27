@@ -1,4 +1,4 @@
-"use client";
+
 import { Cloud, GitBranch, GraduationCap, User, X, LogOut } from "lucide-react";
 import { useState } from "react";
 

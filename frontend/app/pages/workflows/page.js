@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import { GitBranch, Plus } from "lucide-react";
 import NavBar from '../../components/navbar'
