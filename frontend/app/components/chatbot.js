@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import NavBar from '../../components/navbar'
+import NavBar from './navbar'
 import {useState} from 'react'
 
 
