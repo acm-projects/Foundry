@@ -1,7 +1,7 @@
 export default function LogsPage({ params }) {
   return (
     <div className="pt-8 pb-8">
-      <h1 className="text-2xl font-bold">
+      <h1 className="text-2xl font-bold mt-4">
         Logs for Project {params.projectId}
       </h1>
     </div>
