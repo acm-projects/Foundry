@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '../../../../components/ui/card.jsx';
-import { useParams } from 'next/navigation.js';
+
 export default function CostsPage({ params }) {
   return (
     <div className="pt-8 pb-8">
