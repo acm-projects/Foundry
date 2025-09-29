@@ -1,11 +1,11 @@
 
-import Landing_page from "./(pages)/landing/page";
+import Land from "./(pages)/landing/page";
 
 export default function Home() {
   return (
    
     <div> 
-      <Landing_page/>
+      <Land/>
  
     </div>
   );

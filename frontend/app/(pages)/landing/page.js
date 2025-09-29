@@ -1,18 +1,22 @@
-
+import React from 'react'
 import {
     Cloud, Bolt, Shield, Globe,
     Server, Archive, Database
   } from "lucide-react";
+  import Link from 'next/link';
 
-  import Link from "next/link";
-  
-  export default function Page() {
+  import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+
+export default function Land() { 
+
     return (
-      <div>
-        <div className="fixed inset-0 bg-gradient-to-br from-orange-50 via-white to-transparent -z-10"></div>
-        <main className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 text-gray-900">
-       
-        <header className="sticky top-3 z-50 flex justify-center">
+    
+    
+        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-300 via-orange-50 to-transparent -z-10" >
+ 
+
+   <header className="sticky top-3 z-50 flex justify-center pt-4">
           <div className="bg-white/80 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
             <div className="flex items-center space-x-2">
               <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-600 shadow-sm">
@@ -28,35 +32,74 @@ import {
             </button>
           </div>
         </header>
-  
-      
-        <section className="mx-auto max-w-6xl px-6 pt-40 pb-10 text-center">
-          <h1 className="text-6xl font-extrabold tracking-tight text-orange-700">Foundry</h1>
-          <p className=" pt-20 mt-8 text-5xl font-black text-gray-900">Drag. Drop. Deploy.</p>
-          <p className="mt-4 text-lg text-gray-600">
-            Turn AWS infrastructure into a canvas for your cloud requirements.
-          </p>
-          <div className="mt-8">
-          <Link href="/workflows">
+
+        
+        
+        
+        
+        
+        
+        <div className="flex h-[85vh]">
+  <div className="w-1/2  p-6 flex justify-center items-center">
+    <div className="flex flex-col items-start space-y-4">
+      <h1 className="text-orange-600 font-bold pl-10 text-6xl">
+        The visual<br/>
+        AWS infrastructure<br/> 
+        builder
+      </h1>
+      <div className = "pl-10">
+      <Link href="/workflows">
             <button className="inline-flex items-center gap-2 rounded-xl bg-orange-600 text-white font-semibold px-5 py-3 shadow-[0_8px_18px_rgba(249,115,22,.35)] hover:translate-y-[1px] hover:shadow-[0_6px_14px_rgba(249,115,22,.3)] transition">
               Get Started <span>→</span>
             </button>
           </Link>
-          </div>
-        </section>
-  
+      </div>
+    </div>
+  </div>
 
-        <section className="mx-auto max-w-5xl px-6 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Feature icon={<Server className="w-6 h-6 text-orange-600" />} chip="bg-orange-100" title="EC2 Instance" />
-            <Feature icon={<Archive className="w-6 h-6 text-green-600" />} chip="bg-green-100" title="S3 Bucket" />
-            <Feature icon={<Database className="w-6 h-6 text-blue-600" />} chip="bg-blue-100" title="RDS" />
-            <Feature icon={<Database className="w-6 h-6 text-purple-600" />} chip="bg-purple-100" title="DynamoDB" />
-          </div>
-        </section>
-  
-      
-        <section className="bg-gradient-to-b from-transparent to-orange-50/40">
+  <div className="w-1/2 flex flex-col items-center justify-center">
+  <div className="w-2/5 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50 -translate-x-20 z-30 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-100 mb-2">
+      <Server className="w-7 h-7 text-orange-600" />
+    </div>
+    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
+  </div>
+
+  <div className="w-2/5 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50 -mt-3 z-20 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-100 mb-2">
+      <Database className="w-7 h-7 text-blue-600" />
+    </div>
+    <h1 className="text-blue-700 font-semibold">RDS</h1>
+  </div>
+
+  <div className="w-2/5 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50 -mt-3 translate-x-20 z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-purple-100 mb-2">
+      <Archive className="w-7 h-7 text-purple-600" />
+    </div>
+    <h1 className="text-purple-700 font-semibold">S3 Bucket</h1>
+  </div>
+</div>
+
+
+</div>
+
+<div className="w-full bg-transparent flex justify-center">
+  <div className="h-screen w-3/4 flex justify-center">
+    <div className="h-6/7 w-7/7">
+      <ReactFlow
+        fitView
+        className="border rounded bg-transparent"
+        style={{ background: 'transparent' }}
+      >
+        <FlowBackground />
+        <Controls />
+      </ReactFlow>
+    </div>
+  </div>
+</div>
+
+
+<section className="bg-gradient-to-b from-transparent to-orange-50/40">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold">Why Choose Foundry?</h2>
@@ -99,22 +142,21 @@ import {
             </button>
           </div>
         </section>
-      </main>
-      </div>
-    );
-  }
-  
-  
-  function Feature({ icon, chip, title }) {
-    return (
-      <div className="rounded-2xl border border-orange-100 bg-white/80 shadow-sm p-6 flex flex-col items-center gap-3">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${chip}`}>{icon}</div>
-        <div className="text-gray-800 font-semibold">{title}</div>
-      </div>
-    );
-  }
-  
-  function Card({ icon, title, desc }) {
+
+
+
+ 
+
+
+
+   
+
+
+
+
+    </div>)
+}
+function Card({ icon, title, desc }) {
     return (
       <div className="rounded-2xl border border-orange-100 bg-white shadow-sm p-8 text-center">
         <div className="w-12 h-12 rounded-xl bg-orange-100 mx-auto flex items-center justify-center">
@@ -125,5 +167,3 @@ import {
       </div>
     );
   }
-  
-
