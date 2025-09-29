@@ -1,5 +1,6 @@
 import React from 'react'
 import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
+import { Sheet } from '../../../../components/ui/sheet';
 import '@xyflow/react/dist/style.css';
 
 export default function Canvas({ params }) {
@@ -17,6 +18,11 @@ export default function Canvas({ params }) {
         <FlowBackground />
         <Controls />
       </ReactFlow>
+    </div>
+    <div>
+      <Sheet>
+
+      </Sheet>
     </div>
     </div>
   );
