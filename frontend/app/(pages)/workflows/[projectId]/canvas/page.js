@@ -1,7 +1,9 @@
 import React from 'react'
 import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
-import { Sheet } from '../../../../components/ui/sheet';
 import '@xyflow/react/dist/style.css';
+import EC2InstanceConfigMenu from "@/app/components/EC2InstanceConfigMenu";
+import RDSConfigMenu from "@/app/components/RDSConfigMenu";
+import S3BucketConfigMenu from "@/app/components/S3BucketConfigMenu";
 
 export default function Canvas({ params }) {
  
@@ -20,9 +22,9 @@ export default function Canvas({ params }) {
       </ReactFlow>
     </div>
     <div>
-      <Sheet>
-
-      </Sheet>
+      <S3BucketConfigMenu></S3BucketConfigMenu>
+      <EC2InstanceConfigMenu></EC2InstanceConfigMenu>
+      <RDSConfigMenu></RDSConfigMenu>
     </div>
     </div>
   );
