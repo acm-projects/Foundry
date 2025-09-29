@@ -9,7 +9,7 @@ export default function S3BucketConfigMenu(){
         <SheetTrigger asChild>
           <button className="mt-4 px-4 py-2 bg-gray-500 text-white rounded"> S3 Drag Simulate </button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent className="!h-[80vh] !max-h-[80vh] !top-1/2 !translate-y-[-50%] !bottom-auto max-w-lg w-full sm:w-3/4 rounded-l-xl">
           <SheetHeader>
             <SheetTitle>S3 Bucket 1</SheetTitle>
             <SheetDescription>Configure your S3 Bucket 1 instance with the required parameters.</SheetDescription>
