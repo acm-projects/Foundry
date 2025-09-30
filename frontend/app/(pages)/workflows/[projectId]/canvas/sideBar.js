@@ -12,9 +12,9 @@ export default function SideBar ()  {
   };
 
   return (
-    <div className="h-full  flex items-center justify-center">
-      <div className= "bg-white">
-    <div className="flex flex-col space-y-6 justify-center items-center rounded border pt-6  w-25">
+    <div className=" bg-transparent flex items-center justify-center">
+      <div className= "bg-white rounded-full">
+    <div className="flex flex-col space-y-6 justify-center items-center bg-transparent pt-6  w-25">
 
     <div className="w-10 h-10 flex items-center justify-center bg-orange-500  text-white rounded-lg shadow">
   <Cloud className="w-8 h-8" />

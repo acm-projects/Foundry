@@ -127,13 +127,15 @@ const DnDFlow = () => {
           <Controls />
           <Background />
         </ReactFlow>
+  
       </div>
 
    
+      <Sidebar/>
+    
       
-        <Sidebar />
-  
     </div>
+      
   );
 };
 
