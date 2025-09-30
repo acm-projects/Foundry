@@ -13,7 +13,7 @@ export default function Land() {
     return (
     
     
-        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-300 via-orange-50 to-transparent -z-10" >
+        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10" >
  
 
    <header className="sticky top-3 z-50 flex justify-center pt-4">
