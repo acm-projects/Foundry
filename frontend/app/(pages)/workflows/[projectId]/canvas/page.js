@@ -33,7 +33,7 @@ const DnDFlow = () => {
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
 
-  //memory part of the nodes
+  //memory part of the nodes instead local storage api call from backend later
   useEffect(() => { 
 
     if(nodes.length === 0 && edges.length === 0) return; 
@@ -79,14 +79,14 @@ const DnDFlow = () => {
         id: getId(),
         type,
         position,
-        data: { label: `${type} node` },
+        data: { label: `${type}` },
       };
   
       setNodes((nds) => {
-        const prevLast = nds[nds.length - 1];  // last node, if any
+        const prevLast = nds[nds.length - 1];  
         const next = nds.concat(newNode);
   
-        // 👇 automatically create an edge from last → new
+   
         if (prevLast) {
           setEdges((eds) =>
             eds.concat({
@@ -109,32 +109,39 @@ const DnDFlow = () => {
   
 
   return (
-    <div className="flex w-full h-[80vh] rounded-lg border border-gray-300 overflow-hidden">
+    
 
-      <div ref={reactFlowWrapper} className="flex-1 h-full">
-        <ReactFlow
-          style={{ width: "100%", height: "100%" }}  
-          nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode }}
-          nodes={nodes}
-          edges={edges}
-          onNodesChange={onNodesChange}
-          onEdgesChange={onEdgesChange}
-          onConnect={onConnect}
-          onDrop={onDrop}
-          onDragOver={onDragOver}
-          fitView
-        >
-          <Controls />
-          <Background />
-        </ReactFlow>
-  
-      </div>
 
-   
-      <Sidebar/>
+<div className="w-full h-[80vh] flex ">
+
+
+  <div className="shrink-0 ">
+    <Sidebar />
+ 
+  </div>
+  <div className="flex-1">
+    <ReactFlow
+      style={{ width: "100%", height: "100%" }}
+      nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      fitView
+    >
+     
+    </ReactFlow>
+  </div>
+  <Controls position = "bottom-right"/>
+</div>
+
+      
     
       
-    </div>
+
       
   );
 };
