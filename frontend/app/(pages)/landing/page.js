@@ -7,6 +7,11 @@ import {
 
   import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { ReactFlowProvider } from '@xyflow/react';
+import DnDFlow from '../workflows/[projectId]/canvas/page';
+import { DnDProvider } from '../workflows/[projectId]/canvas/DnDContext';
+import TextAnimateDemo6 from '../../components/animatedText/slogan';
+
 
 export default function Land() { 
 
@@ -17,7 +22,7 @@ export default function Land() {
  
 
    <header className="sticky top-3 z-50 flex justify-center pt-4">
-          <div className="bg-white/80 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
+          <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
             <div className="flex items-center space-x-2">
               <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-600 shadow-sm">
                 <Cloud className="w-4 h-4 text-white" />
@@ -41,15 +46,21 @@ export default function Land() {
         
         <div className="flex h-[85vh]">
   <div className="w-1/2  p-6 flex justify-center items-center">
-    <div className="flex flex-col items-start space-y-4">
-      <h1 className="text-orange-600 font-bold pl-10 text-6xl">
-        The visual<br/>
-        AWS infrastructure<br/> 
-        builder
-      </h1>
+    <div className="flex flex-col items-start space-y-8">
+      <div className="text-orange-600 font-bold pl-10 text-6xl">
+        <h1 className = "mb-3">The visual</h1>
+        <h1 className = "mb-3">AWS infrastructure</h1>
+        <h1 >builder</h1>
+
+      
+      </div>
       <div className = "pl-10">
+        <div className = "w-full  text-5xl">
+        <TextAnimateDemo6/>
+        </div>
+        
       <Link href="/workflows">
-            <button className="inline-flex items-center gap-2 rounded-xl bg-orange-600 text-white font-semibold px-5 py-3 shadow-[0_8px_18px_rgba(249,115,22,.35)] hover:translate-y-[1px] hover:shadow-[0_6px_14px_rgba(249,115,22,.3)] transition">
+            <button className="inline-flex mt-8 items-center gap-2 rounded-xl bg-orange-600 text-white font-semibold px-5 py-3 shadow-[0_8px_18px_rgba(249,115,22,.35)] hover:translate-y-[1px] hover:shadow-[0_6px_14px_rgba(249,115,22,.3)] transition">
               Get Started <span>→</span>
             </button>
           </Link>
@@ -85,15 +96,15 @@ export default function Land() {
 
 <div className="w-full bg-transparent flex justify-center">
   <div className="h-screen w-3/4 flex justify-center">
-    <div className="h-6/7 w-7/7">
-      <ReactFlow
-        fitView
-        className="border rounded bg-transparent"
-        style={{ background: 'transparent' }}
-      >
-        <FlowBackground />
-        <Controls />
-      </ReactFlow>
+    {/* React Flow Canvas goes here*/}
+    <div className="h-6/7 w-7/7 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
+      <ReactFlowProvider>
+            <DnDProvider>
+              <DnDFlow />
+       
+            </DnDProvider>
+
+          </ReactFlowProvider>
     </div>
   </div>
 </div>
