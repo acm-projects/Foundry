@@ -1,6 +1,10 @@
 "use client"
 import React, { useRef, useCallback,useEffect } from "react";
-import ConfigMenu from "./configMenu";
+import EC2_menu from "./configMenu/EC2_menu";
+import DynamoDB_menu from "./configMenu/Dynamo_menu";
+import S3_menu from "./configMenu/S3_menu";
+import RDS_menu from "./configMenu/RDS_menu";
+
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -19,8 +23,7 @@ import { DnDProvider, useDnD } from "./DnDContext";
 
 
 
-//use this value for initial nodes landing page
-// const initialNodes = [{ id: "1", type: "input", data: { label: "input node" }, position: { x: 250, y: 5 } },];
+
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -134,7 +137,8 @@ const DnDFlow = () => {
     >
       
     </ReactFlow>
-    <ConfigMenu/>
+    {/* config menu will go here need logic tho */}
+<S3_menu />
   </div>
   <Controls position = "bottom-right"/>
 </div>
