@@ -8,8 +8,8 @@ import {
   import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
-import DnDFlow from '../workflows/[projectId]/canvas/page';
-import { DnDProvider } from '../workflows/[projectId]/canvas/DnDContext';
+import DnDFlow from './second_canvas/canvas';
+import { DnDProvider } from './second_canvas/canvas';
 import TextAnimateDemo6 from '../../components/animatedText/slogan';
 
 
@@ -96,15 +96,12 @@ export default function Land() {
 
 <div className="w-full bg-transparent flex justify-center">
   <div className="h-screen w-3/4 flex justify-center">
-    {/* React Flow Canvas goes here*/}
+  
     <div className="h-6/7 w-7/7 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
-      <ReactFlowProvider>
-            <DnDProvider>
-              <DnDFlow />
-       
-            </DnDProvider>
+     <ReactFlowProvider>
+<DnDFlow/>
 
-          </ReactFlowProvider>
+      </ReactFlowProvider>
     </div>
   </div>
 </div>

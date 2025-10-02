@@ -1,5 +1,5 @@
-import {Sheet, SheetHeader, SheetTitle, SheetTrigger, SheetDescription, SheetContent, SheetClose} from '../components/ui/sheet'
-import {Input} from '../components/ui/input'
+import {Sheet, SheetHeader, SheetTitle, SheetTrigger, SheetDescription, SheetContent, SheetClose} from './ui/sheet'
+import {Input} from './ui/input'
 // import {DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem} from '../components/ui/dropdown-menu'
 
 export default function DynamoDBConfigMenu(){

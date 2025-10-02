@@ -1,6 +1,6 @@
 "use client"
 import React, { useRef, useCallback,useEffect } from "react";
-
+import ConfigMenu from "./configMenu";
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -9,11 +9,10 @@ import {
   useEdgesState,
   Controls,
   useReactFlow,
-  Background,
+  Background
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
-
 
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
@@ -116,6 +115,7 @@ const DnDFlow = () => {
 
 
   <div className="shrink-0 ">
+  
     <Sidebar />
  
   </div>
@@ -132,8 +132,9 @@ const DnDFlow = () => {
       onDragOver={onDragOver}
       fitView
     >
-     
+      
     </ReactFlow>
+    <ConfigMenu/>
   </div>
   <Controls position = "bottom-right"/>
 </div>
