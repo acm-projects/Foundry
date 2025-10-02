@@ -1,33 +1,159 @@
-import React from 'react'
-import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import EC2InstanceConfigMenu from "@/app/components/EC2InstanceConfigMenu";
-import RDSConfigMenu from "@/app/components/RDSConfigMenu";
-import S3BucketConfigMenu from "@/app/components/S3BucketConfigMenu";
-import DynamoDBConfigMenu from '@/app/components/DynamoDBConfigMenu';
+"use client"
+import React, { useRef, useCallback,useEffect } from "react";
 
-export default function Canvas({ params }) {
- 
+import {
+  ReactFlow,
+  ReactFlowProvider,
+  addEdge,
+  useNodesState,
+  useEdgesState,
+  Controls,
+  useReactFlow,
+  Background,
+} from "@xyflow/react";
+import "@xyflow/react/dist/style.css";
+import SingleHandleNode from "./customNode";
+
+
+import Sidebar from "./sideBar";
+import { DnDProvider, useDnD } from "./DnDContext";
+
+
+
+//use this value for initial nodes landing page
+// const initialNodes = [{ id: "1", type: "input", data: { label: "input node" }, position: { x: 250, y: 5 } },];
+
+let id = 0;
+const getId = () => `dndnode_${id++}`;
+
+const DnDFlow = () => {
+  const reactFlowWrapper = useRef(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const { screenToFlowPosition } = useReactFlow();
+  const [type] = useDnD();
+
+  //memory part of the nodes instead local storage api call from backend later
+  useEffect(() => { 
+
+    if(nodes.length === 0 && edges.length === 0) return; 
+
+    localStorage.setItem("nodes", JSON.stringify(nodes)); 
+
+    localStorage.setItem("edges", JSON.stringify(edges));
+
+  },[nodes,edges])
+
+  //retrieve nodes memory
+
+  useEffect(() => { 
+
+    const storedNodes = JSON.parse(localStorage.getItem("nodes"));
+    const storedEdges = JSON.parse(localStorage.getItem("edges"));
+
+    if (storedNodes) { 
+      setNodes(storedNodes);
+    }
+
+    if (storedEdges) { 
+      setEdges(storedEdges);
+    }
+
+
+
+  },[])
+
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }, []);
+
+  
+
+  const onDrop = useCallback(
+    (e) => {
+      e.preventDefault();
+      if (!type) return;
+  
+      const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
+  
+      const newNode = {
+        id: getId(),
+        type,
+        position,
+        data: { label: `${type}` },
+      };
+  
+      setNodes((nds) => {
+        const prevLast = nds[nds.length - 1];  
+        const next = nds.concat(newNode);
+  
+   
+        if (prevLast) {
+          setEdges((eds) =>
+            eds.concat({
+              id: `e${prevLast.id}-${newNode.id}`,
+              source: prevLast.id,
+              target: newNode.id,
+            })
+          );
+        }
+  
+        return next;
+      });
+    },
+    [screenToFlowPosition, type, setNodes, setEdges]
+  );
+  
+  
+    
+    
+  
 
   return (
+    
 
-    <div className = "h-screen w-full flex justify-center">
-    <div className="h-6/7 w-7/7">
-      <ReactFlow
-       
-        fitView
-        className="border rounded"
-      >
-        <FlowBackground />
-        <Controls />
-      </ReactFlow>
-    </div>
-    <div>
-      <S3BucketConfigMenu></S3BucketConfigMenu>
-      <EC2InstanceConfigMenu></EC2InstanceConfigMenu>
-      <RDSConfigMenu></RDSConfigMenu>
-      <DynamoDBConfigMenu></DynamoDBConfigMenu>
-    </div>
-    </div>
+
+<div className="w-full h-[80vh] flex ">
+
+
+  <div className="shrink-0 ">
+    <Sidebar />
+ 
+  </div>
+  <div className="flex-1">
+    <ReactFlow
+      style={{ width: "100%", height: "100%" }}
+      nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onConnect={onConnect}
+      onDrop={onDrop}
+      onDragOver={onDragOver}
+      fitView
+    >
+     
+    </ReactFlow>
+  </div>
+  <Controls position = "bottom-right"/>
+</div>
+
+      
+    
+      
+
+      
+  );
+};
+
+export default function CanvasPage() {
+  return (
+    <ReactFlowProvider>
+      <DnDProvider>
+        <DnDFlow />
+      </DnDProvider>
+    </ReactFlowProvider>
   );
 }
+
+
