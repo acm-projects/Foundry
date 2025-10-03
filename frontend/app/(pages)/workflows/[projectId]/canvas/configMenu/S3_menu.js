@@ -1,7 +1,33 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
+import {useState,useEffect} from 'react'
 
-export default function S3_menu() { 
+export default function S3_menu({id,onChange,value}) { 
+
+const[region,setRegion] = useState("")
+const[bucketName,setBucketName] = useState("")
+const[displayName,setDisplayName] = useState("")
+const storageKey = `s3:${id}`;
+useEffect(() => {
+    const local = localStorage.getItem(storageKey);
+    const saved = JSON.parse(local) || {};
+    setRegion(saved.region || "");
+    setBucketName(saved.bucketName || "");
+    setDisplayName(saved.displayName || "")
+},[storageKey])
+
+const save = () => { 
+
+localStorage.setItem(storageKey,JSON.stringify({region,bucketName,displayName}))
+
+
+}
+const remove = () =>  { 
+  localStorage.removeItem(storageKey)
+  setRegion("")
+  setBucketName("")
+  setDisplayName("")
+}
 
     return (
     
@@ -16,9 +42,10 @@ export default function S3_menu() {
       </div>
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-gray-900">S3</h2>
+        <p className="text-xs text-gray-500">{id}</p>
         <p className="text-xs text-gray-500">Compute</p>
       </div>
-      <button aria-label="Close" className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700">✕</button>
+    
     </div>
 
     <div className="h-px w-full bg-gray-200" />
@@ -37,13 +64,13 @@ export default function S3_menu() {
       <form className="space-y-2">
  
           <span className="font-medium text-gray-800">Bucket name</span>
-          <input type="text" placeholder="my-s3-bucket" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {bucketName} onChange = {(e) => setBucketName(e.target.value)} placeholder="my-s3-bucket" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
        
 
 
           <span className="font-medium text-gray-800">Region</span>
           <div className="relative mt-1">
-            <select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+            <select value = {region} onChange = {(e) => setRegion(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>us-east-1</option>
               <option>us-west-2</option>
@@ -55,7 +82,7 @@ export default function S3_menu() {
 
       
           <span className="font-medium text-gray-800">Display name</span>
-          <input type="text" placeholder="my S3 bucket" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {displayName} onChange = {(e) => setDisplayName(e.target.value)} type="text" placeholder="my S3 bucket" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
  
 
        
@@ -65,13 +92,13 @@ export default function S3_menu() {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
       <div className="flex items-center gap-2">
         <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button  onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>
   </aside>

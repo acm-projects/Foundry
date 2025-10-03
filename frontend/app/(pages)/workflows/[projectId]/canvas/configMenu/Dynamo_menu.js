@@ -1,8 +1,38 @@
 
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
+import {useState,useEffect} from "react"
+export default function DynamoDB_menu({id}) { 
 
-export default function DynamoDB_menu() { 
+  const[tableName,setTableName] = useState("")
+  const[partitionKey,setPartitionKey] = useState("")
+  const[sortKey,setSortKey] = useState("")
+  const[billingMode,setBillingMode] = useState("")
+
+  const storageKey = `dynamodb:${id}`;
+
+  useEffect(() => {
+      const local = localStorage.getItem(storageKey);
+   
+      const saved = JSON.parse(local) || {};
+      setTableName(saved.tableName || "");
+      setPartitionKey(saved.partitionKey || "");
+      setSortKey(saved.sortKey || "");
+      setBillingMode(saved.billingMode || "");
+  }
+  , [storageKey]);
+  const save = () => {
+    const payload = { tableName, partitionKey, sortKey, billingMode };
+    localStorage.setItem(storageKey, JSON.stringify(payload));
+  }
+  const remove = () => {
+    localStorage.removeItem(storageKey);
+    setTableName("");
+    setPartitionKey("");
+    setSortKey("");
+    setBillingMode("");
+  }
+  
 
     return (
     
@@ -12,14 +42,21 @@ export default function DynamoDB_menu() {
 >
   <aside className="fixed right-4  z-50 w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[60vh] flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
+
+    
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
-      </div>
+       </div>
+     
+      
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-gray-900">DynamoDB</h2>
+        
+   
+        <p className="text-xs text-gray-500">{id}</p>
         <p className="text-xs text-gray-500">Compute</p>
       </div>
-      <button aria-label="Close" className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700">✕</button>
+    
     </div>
 
     <div className="h-px w-full bg-gray-200" />
@@ -38,20 +75,20 @@ export default function DynamoDB_menu() {
       <form className="space-y-2">
         
           <span className="font-medium text-gray-800">Table name <span className = 'text-red-500'>*</span></span>
-          <input type="text" placeholder="my-dynamoDB-table..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {tableName} onChange = {(e) => setTableName(e.target.value) } placeholder="my-dynamoDB-table..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
      <span className="font-medium text-gray-800">Partition key</span>
           <div className="relative mt-1">
-          <input type="text" placeholder="id" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {partitionKey} onChange = {(e) => setPartitionKey(e.target.value)} placeholder="id" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
           </div>
 
           <span className="font-medium text-gray-800">Sort key (optional)</span>
-          <input type="text" placeholder="timestamp" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {sortKey} onChange = {(e) => setSortKey(e.target.value)} placeholder="timestamp" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
   
 <span className="font-medium text-gray-800">Billing Mode</span>
-<select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+<select value = {billingMode} onChange = {(e) => setBillingMode(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>Pay per request</option>
-              <option>Provisioned</option>
+              <option >Provisioned</option>
 
               </select>
       </form>
@@ -60,13 +97,13 @@ export default function DynamoDB_menu() {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
       <div className="flex items-center gap-2">
         <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>
   </aside>

@@ -1,8 +1,43 @@
 
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
+import {useState,useEffect} from "react"
 
-export default function RDS_menu() { 
+export default function RDS_menu({id}) { 
+
+  const storageKey = `rds:${id}`;
+const[engine,setEngine] = useState("")
+const[instanceClass,setInstanceClass] = useState("") 
+const[storage,setStorage] = useState("")
+const[masterUsername,setMasterUsername] = useState("")
+const[masterPassword,setMasterPassword] = useState("")
+const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
+  useEffect(() => {
+      const local = localStorage.getItem(storageKey);
+   
+      const saved = JSON.parse(local) || {};
+      setEngine(saved.engine || "");
+      setInstanceClass(saved.instanceClass || "");
+      setStorage(saved.storage || "");
+      setMasterUsername(saved.masterUsername || "");
+      setMasterPassword(saved.masterPassword || "");
+      setVpcSubnetGroup(saved.vpcSubnetGroup || "");
+  }
+  , [storageKey]);
+  const save = () => {
+    const payload = { engine, instanceClass, storage, masterUsername, masterPassword, vpcSubnetGroup };
+    localStorage.setItem(storageKey, JSON.stringify(payload));
+  }
+  const remove = () => {
+    localStorage.removeItem(storageKey);
+    setEngine("");
+    setInstanceClass("");
+    setStorage("");
+    setMasterUsername("");
+    setMasterPassword("");
+    setVpcSubnetGroup("");
+  }
+
 
     return (
     
@@ -17,9 +52,10 @@ export default function RDS_menu() {
       </div>
       <div className="flex-1">
         <h2 className="text-sm font-semibold text-gray-900">RDS</h2>
+        <p className="text-xs text-gray-500">{id}</p>
         <p className="text-xs text-gray-500">Compute</p>
       </div>
-      <button aria-label="Close" className="rounded-lg p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700">✕</button>
+      
     </div>
 
     <div className="h-px w-full bg-gray-200" />
@@ -38,7 +74,7 @@ export default function RDS_menu() {
       <form className="space-y-2">
         
           <span className="font-medium text-gray-800">Database engine <span className = 'text-red-500'>*</span></span>
-          <select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+          <select value = {engine} onChange = {(e) => setEngine(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>Postgre SQL</option>
          
@@ -48,7 +84,7 @@ export default function RDS_menu() {
           
      
      <span className="font-medium text-gray-800">DB instance class</span>
-     <select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+     <select value = {instanceClass} onChange = {(e) => setInstanceClass(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>db.t3.micro</option>
               <option>db.t3.small</option>
@@ -58,16 +94,16 @@ export default function RDS_menu() {
           
 
           <span className="font-medium text-gray-800">Storage (GB)</span>
-          <input type="text" placeholder="number..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+          <input value = {storage} onChange = {(e) => setStorage(e.target.value) } placeholder="number..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
   
 <span className="font-medium text-gray-800">Master Username</span>
-<input type="text" placeholder="admin" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+<input value = {masterUsername} onChange = {(e) => setMasterUsername(e.target.value)}  placeholder="admin" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
 
 <span className="font-medium text-gray-800">Master Password</span>
-<input type="text" placeholder="password" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+<input value = {masterPassword} onChange = {(e) => setMasterPassword(e.target.value)} placeholder="password" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
 
 <span className="font-medium text-gray-800">VPC subnet group</span>
-<input type="text" placeholder="default-subnet-group" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
+<input value = {vpcSubnetGroup} onChange = {(e) => setVpcSubnetGroup(e.target.value)}  placeholder="default-subnet-group" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
 
 
         
@@ -77,13 +113,13 @@ export default function RDS_menu() {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
       <div className="flex items-center gap-2">
         <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>
   </aside>

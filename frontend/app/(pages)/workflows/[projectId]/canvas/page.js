@@ -1,10 +1,10 @@
 "use client"
-import React, { useRef, useCallback,useEffect } from "react";
+import React, { useRef, useCallback,useEffect, use } from "react";
 import EC2_menu from "./configMenu/EC2_menu";
 import DynamoDB_menu from "./configMenu/Dynamo_menu";
 import S3_menu from "./configMenu/S3_menu";
 import RDS_menu from "./configMenu/RDS_menu";
-
+import { nanoid } from "nanoid";
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -21,12 +21,7 @@ import SingleHandleNode from "./customNode";
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
-
-
-
-
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+import {useState} from "react"
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -35,7 +30,51 @@ const DnDFlow = () => {
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
 
-  //memory part of the nodes instead local storage api call from backend later
+  const[ec2,setEc2] = useState(false);
+  const[s3,setS3] = useState(false);
+  const[rds,setRDS] = useState(false);
+  const[dynamo,setDynamo] = useState(false)
+const[configID,setConfigID] = useState(null);
+
+const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
+
+
+
+
+const onNodeClick = useCallback((event, node) => {
+  
+  setConfigID(node.id);
+  switch(node.type) {
+    case "EC2":
+        setEc2(true);
+        setS3(false);
+        setRDS(false);
+        setDynamo(false);
+        break;
+    case "S3":
+      setEc2(false);
+      setS3(true);
+      setRDS(false);
+      setDynamo(false);
+      
+        break;
+    case "RDS":
+      setEc2(true);
+      setS3(false);
+      setRDS(true);
+      setDynamo(false);
+      
+        break;
+    case "DynamoDB":  
+         setEc2(false);
+        setS3(false);
+        setRDS(false);
+        setDynamo(true);
+        break;}
+ }, 
+  []);
+
+
   useEffect(() => { 
 
     if(nodes.length === 0 && edges.length === 0) return; 
@@ -46,7 +85,7 @@ const DnDFlow = () => {
 
   },[nodes,edges])
 
-  //retrieve nodes memory
+ 
 
   useEffect(() => { 
 
@@ -78,38 +117,75 @@ const DnDFlow = () => {
       const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
   
       const newNode = {
-        id: getId(),
+        id: nanoid(),
         type,
         position,
         data: { label: `${type}` },
       };
+
   
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
-        const next = nds.concat(newNode);
-  
+       const next = nds.concat(newNode);
+       //const next = nds.concat({id: newNode.id, type: newNode.type, position: newNode.position, data: { label: `${newNode.type}` }});
    
         if (prevLast) {
           setEdges((eds) =>
             eds.concat({
-              id: `e${prevLast.id}-${newNode.id}`,
+              id: `e${nanoid()}`,
               source: prevLast.id,
               target: newNode.id,
             })
           );
         }
+
+       
+    switch(newNode.type) {
+    case "EC2":
+      setEc2(true);
+      setS3(false);
+    setRDS(false);
+    setDynamo(false);
+     setConfigID(newNode.id);
+              break;
+    case "S3":
+      setEc2(false);
+      setS3(true);
+      setRDS(false);
+      setDynamo(false);
+      setConfigID(newNode.id);
+            
+          break;
+    case "RDS":
+      setEc2(true);
+      setS3(false);
+      setRDS(true);
+      setDynamo(false);
+      setConfigID(newNode.id);
+            
+         break;
+   case "DynamoDB":  
+     setEc2(false);
+     setS3(false);
+     setRDS(false);
+     setDynamo(true);
+    setConfigID(newNode.id);
+          break;}
+     
   
         return next;
       });
     },
     [screenToFlowPosition, type, setNodes, setEdges]
   );
-  
-  
-    
-    
-  
 
+  useEffect(() => { 
+
+localStorage.getItem("amiID")
+
+
+  },[configID])
+  
   return (
     
 
@@ -134,20 +210,25 @@ const DnDFlow = () => {
       onDrop={onDrop}
       onDragOver={onDragOver}
       fitView
+      onNodeClick={onNodeClick}
+     
     >
-      
+      {console.log("object",onNodeClick.node)}
     </ReactFlow>
-    {/* config menu will go here need logic tho */}
-<S3_menu />
+   
+    {console.log(configID)}
+{ ec2  && configID? <EC2_menu id={configID} />  : null}
+{ s3  && configID? <S3_menu id={configID} /> : null}
+{ rds  && configID? <RDS_menu id={configID} /> : null}
+{ dynamo  && configID? <DynamoDB_menu id={configID} /> : null}
+ 
+
   </div>
   <Controls position = "bottom-right"/>
 </div>
 
       
     
-      
-
-      
   );
 };
 

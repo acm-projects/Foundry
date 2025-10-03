@@ -1,6 +1,5 @@
 "use client"
 import React, { useRef, useCallback,useEffect } from "react";
-
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -16,11 +15,6 @@ import SingleHandleNode from "./custom";
 
 import Sidebar from "./SideBar";
 import { DnDProvider, useDnD } from "./Dnd";
-
-
-
-//use this value for initial nodes landing page
-// const initialNodes = [{ id: "1", type: "input", data: { label: "input node" }, position: { x: 250, y: 5 } },];
 
 
 
@@ -162,7 +156,7 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
     </ReactFlow>
 
   </div>
-  <Controls position = "bottom-right"/>
+
 </div>
 
       

@@ -10,11 +10,13 @@ switch(data.label) {
 
     case "EC2":
         return (
+     <button>
             <div className="w-10 h-10 rounded-2xl hover:shadow-2xl border-orange-500 shadow-sm flex items-center justify-center bg-orange-200 text-white">
+       
                 <div className = " flex justify-center items-center font-semibold">
             <Server className="w-4 h-4 text-orange-500 "/>
             </div>
-           
+        
             <Handle
               type="target"
               position={Position.Left}
@@ -27,6 +29,7 @@ switch(data.label) {
               isConnectable={true}
             />
           </div>
+          </button>
         );
     case "S3":
         return (
