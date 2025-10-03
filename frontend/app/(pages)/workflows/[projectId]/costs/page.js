@@ -3,6 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/
 import { ChartBarDefault } from '@/app/components/ChartBarDefault';
 import { ChartPieLegend } from '@/app/components/ChartPieLegend';
 import { TrendingUp } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
 
 export default function CostsPage({ params }) {
   return (
@@ -59,7 +60,7 @@ export default function CostsPage({ params }) {
         <div className="flex justify-between gap-5 w-full">
           <Card className="flex-grow
   bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-  transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-100 max-w-256">
+  transition-transform duration-200 hover:scale-[1.008] mt-8 min-h-100 max-w-256">
             <CardHeader>
               <div className="flex justify-between">
                 <div>
@@ -90,7 +91,7 @@ export default function CostsPage({ params }) {
           </Card>
           <Card className="flex-grow
   bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-  transition-transform duration-200 hover:scale-[1.02] mt-8 max-w-256 min-h-100 min-w-100">
+  transition-transform duration-200 hover:scale-[1.008] mt-8 max-w-256 min-h-100 min-w-100">
           <CardHeader>
               <div className="flex justify-between">
                 <div>
@@ -129,8 +130,21 @@ export default function CostsPage({ params }) {
   bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
   transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-80">
               <CardHeader>
-                <CardTitle>Resource and Usage Costs </CardTitle>
-                <CardDescription>Detailed breakdown of resource utilization and associated costs.</CardDescription>
+                <div className="flex justify-between">
+                  <div>
+                    <CardTitle>Resource and Usage Costs </CardTitle>
+                    <CardDescription>Detailed breakdown of resource utilization and associated costs.</CardDescription>
+                  </div>
+                  <div>
+                    <Tabs defaultValue = "ec2">
+                      <TabsList>
+                        <TabsTrigger value="ec2instances" className="px-6">EC2 Instances</TabsTrigger>
+                        <TabsTrigger value="storage" className="px-6">Storage</TabsTrigger>
+                        <TabsTrigger value="databases" className="px-6">Databases</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
+                </div>
               </CardHeader>
             </Card>
           </div>
