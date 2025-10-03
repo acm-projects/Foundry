@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { useDnD } from './DnDContext';
+import { useDnD } from './Dnd';
 import { Server,Database,Archive,Cloud } from 'lucide-react';
 
 export default function SideBar ()  {
@@ -12,9 +12,9 @@ export default function SideBar ()  {
   };
 
   return (
-    <div className=" bg-transparent mt-20 flex items-center justify-center">
-      <div className= "bg-white rounded-full">
-    <div className="flex flex-col space-y-6 justify-center items-center bg-transparent pt-6  w-25">
+    <div className=" mt-10 flex items-center justify-center">
+      <div className= "bg-orange/20 backdrop-blur-md rounded-full">
+    <div className="flex flex-col space-y-6 justify-center items-center bg-transparent pt-6  w-20">
 
     <div className="w-10 h-10 flex items-center justify-center bg-orange-500  text-white rounded-lg shadow">
   <Cloud className="w-8 h-8" />
@@ -45,7 +45,7 @@ export default function SideBar ()  {
         <Database />
       </div>
       <div className = "pb-6">
-      <div className="dndnode flex items-center justify-center p-4  text-blue-500 rounded shadow"
+      <div className="dndnode flex items-center justify-center p-4 bg-white text-blue-500 rounded shadow"
         onDragStart={(event) => onDragStart(event, "DynamoDB")}
         draggable>
         <Database/>
