@@ -2,6 +2,7 @@ import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectVa
 import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card.jsx';
 import { ChartBarDefault } from '@/app/components/ChartBarDefault';
 import { ChartPieLegend } from '@/app/components/ChartPieLegend';
+import { TrendingUp } from 'lucide-react';
 
 export default function CostsPage({ params }) {
   return (
@@ -16,7 +17,9 @@ export default function CostsPage({ params }) {
       </div>
       <div>
         <div className="flex justify-between gap-5 w-full mt-8">
-            <Card className="flex-grow min-h-50">
+            <Card className="max-w-30vw flex-1 flex-grow min-h-50 
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Current Month</CardTitle>
               </CardHeader>
@@ -24,9 +27,12 @@ export default function CostsPage({ params }) {
                 <h1 className="text-3xl font-bold">
                   $255
                 </h1>
+                <CardDescription className="flex mt-2"><TrendingUp className="h-5 w-4 mr-1" /> +8.6% from last month </CardDescription>
               </CardContent>
             </Card>
-            <Card className="flex-grow min-h-50">
+            <Card className=" flex-1 flex-grow min-h-50 
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Monthly Budget</CardTitle>
               </CardHeader>
@@ -36,7 +42,9 @@ export default function CostsPage({ params }) {
                 </h1>
               </CardContent>
             </Card>
-            <Card className="flex-grow min-h-50">
+            <Card className=" flex-1 flex-grow min-h-50 
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Daily Average</CardTitle>
               </CardHeader>
@@ -44,11 +52,14 @@ export default function CostsPage({ params }) {
                 <h1 className="text-3xl font-bold">
                   $8.50
                 </h1>
+                <CardDescription className="flex mt-2"> Based on the last 30 days </CardDescription>
               </CardContent>
             </Card>
         </div>
         <div className="flex justify-between gap-5 w-full">
-          <Card className="flex-grow mt-8 min-h-100 max-w-256">
+          <Card className="flex-grow
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-100 max-w-256">
             <CardHeader>
               <div className="flex justify-between">
                 <div>
@@ -58,16 +69,12 @@ export default function CostsPage({ params }) {
                 <div>
                   <Select>
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="This Month" />
+                    <SelectValue placeholder="Select View" />
                     <SelectContent>
                       <SelectGroup>
-                        <SelectLabel>Months</SelectLabel>
-                        <SelectItem value="december">January</SelectItem>
-                        <SelectItem value="november">February</SelectItem>
-                        <SelectItem value="october">March</SelectItem>
-                        <SelectItem value="september">April</SelectItem>
-                        <SelectItem value="august">May</SelectItem>
-                        <SelectItem value="july">June</SelectItem>
+                        <SelectLabel>Graph Views</SelectLabel>
+                        <SelectItem value="bar">Bar Graph</SelectItem>
+                        <SelectItem value="line">Line Graph</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </SelectTrigger>
@@ -81,7 +88,9 @@ export default function CostsPage({ params }) {
               </div>
             </CardContent>
           </Card>
-          <Card className="flex-grow mt-8 min-h-100 min-w-100">
+          <Card className="flex-grow
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02] mt-8 max-w-256 min-h-100 min-w-100">
           <CardHeader>
               <div className="flex justify-between">
                 <div>
@@ -116,7 +125,9 @@ export default function CostsPage({ params }) {
           </Card>
         </div>
           <div>
-            <Card className="flex-grow mt-8 min-h-80">
+            <Card className="flex-grow
+  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-80">
               <CardHeader>
                 <CardTitle>Resource and Usage Costs </CardTitle>
                 <CardDescription>Detailed breakdown of resource utilization and associated costs.</CardDescription>
