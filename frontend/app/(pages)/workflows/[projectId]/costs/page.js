@@ -1,6 +1,7 @@
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select.jsx';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card.jsx';
 import { ChartBarDefault } from '@/app/components/ChartBarDefault';
+import { ChartPieLegend } from '@/app/components/ChartPieLegend';
 
 export default function CostsPage({ params }) {
   return (
@@ -46,8 +47,8 @@ export default function CostsPage({ params }) {
               </CardContent>
             </Card>
         </div>
-        <div className="flex">
-          <Card className="flex-grow mt-8 min-h-100">
+        <div className="flex justify-between gap-5 w-full">
+          <Card className="flex-grow mt-8 min-h-100 max-w-256">
             <CardHeader>
               <div className="flex justify-between">
                 <div>
@@ -75,8 +76,41 @@ export default function CostsPage({ params }) {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="flex-grow mt-8 min-h-100">
+              <div className="flex-grow min-h-100">
                 <ChartBarDefault/>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="flex-grow mt-8 min-h-100 min-w-100">
+          <CardHeader>
+              <div className="flex justify-between">
+                <div>
+                  <CardTitle> Cost by Resource </CardTitle>
+                  <CardDescription>Current month breakdown by service</CardDescription>
+                </div>
+                <div>
+                  <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="This Month" />
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Months</SelectLabel>
+                        <SelectItem value="december">January</SelectItem>
+                        <SelectItem value="november">February</SelectItem>
+                        <SelectItem value="october">March</SelectItem>
+                        <SelectItem value="september">April</SelectItem>
+                        <SelectItem value="august">May</SelectItem>
+                        <SelectItem value="july">June</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </SelectTrigger>
+                  </Select>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex-grow mt-8 min-h-100">
+                <ChartPieLegend/>
               </div>
             </CardContent>
           </Card>
@@ -89,7 +123,7 @@ export default function CostsPage({ params }) {
               </CardHeader>
             </Card>
           </div>
-      </div>
+        </div>
 
     </div>
   );

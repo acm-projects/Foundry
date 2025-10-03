@@ -39,7 +39,7 @@ export function ChartBarDefault() {
       </CardHeader>
       <CardContent className="h-80">
         <ChartContainer config={chartConfig} className="h-full w-full">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="90%">
             <BarChart data={chartData}>
               <CartesianGrid vertical={false} />
               <XAxis
