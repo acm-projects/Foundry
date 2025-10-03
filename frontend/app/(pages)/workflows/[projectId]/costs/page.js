@@ -1,4 +1,6 @@
-import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '../../../../components/ui/card.jsx';
+import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select.jsx';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card.jsx';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from '@/app/components/ui/chart.jsx'
 
 export default function CostsPage({ params }) {
   return (
@@ -44,11 +46,37 @@ export default function CostsPage({ params }) {
               </CardContent>
             </Card>
         </div>
-          <div>
+          <div className="flex">
             <Card className="flex-grow mt-8 min-h-100">
               <CardHeader>
-                <CardTitle>Monthly Spending (This Year) </CardTitle>
+                <div className="flex justify-between">
+                  <div>
+                    <CardTitle> Monthly Spending (This Year) </CardTitle>
+                    <CardDescription>Monthly cost breakdowns for every month.</CardDescription>
+                  </div>
+                  <div>
+                    <Select>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="This Month" />
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Months</SelectLabel>
+                          <SelectItem value="december">December</SelectItem>
+                          <SelectItem value="november">November</SelectItem>
+                          <SelectItem value="october">October</SelectItem>
+                          <SelectItem value="september">September</SelectItem>
+                          <SelectItem value="august">August</SelectItem>
+                          <SelectItem value="july">July</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </SelectTrigger>
+                    </Select>
+                  </div>
+                </div>
               </CardHeader>
+              <CardContent>
+
+              </CardContent>
             </Card>
           </div>
           <div>
