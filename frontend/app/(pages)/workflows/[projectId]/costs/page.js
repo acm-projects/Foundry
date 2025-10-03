@@ -1,6 +1,6 @@
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select.jsx';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card.jsx';
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent} from '@/app/components/ui/chart.jsx'
+import { ChartBarDefault } from '@/app/components/ChartBarDefault';
 
 export default function CostsPage({ params }) {
   return (
@@ -46,39 +46,41 @@ export default function CostsPage({ params }) {
               </CardContent>
             </Card>
         </div>
-          <div className="flex">
-            <Card className="flex-grow mt-8 min-h-100">
-              <CardHeader>
-                <div className="flex justify-between">
-                  <div>
-                    <CardTitle> Monthly Spending (This Year) </CardTitle>
-                    <CardDescription>Monthly cost breakdowns for every month.</CardDescription>
-                  </div>
-                  <div>
-                    <Select>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="This Month" />
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Months</SelectLabel>
-                          <SelectItem value="december">December</SelectItem>
-                          <SelectItem value="november">November</SelectItem>
-                          <SelectItem value="october">October</SelectItem>
-                          <SelectItem value="september">September</SelectItem>
-                          <SelectItem value="august">August</SelectItem>
-                          <SelectItem value="july">July</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </SelectTrigger>
-                    </Select>
-                  </div>
+        <div className="flex">
+          <Card className="flex-grow mt-8 min-h-100">
+            <CardHeader>
+              <div className="flex justify-between">
+                <div>
+                  <CardTitle> Monthly Spending (This Year) </CardTitle>
+                  <CardDescription>Monthly cost breakdowns for every month.</CardDescription>
                 </div>
-              </CardHeader>
-              <CardContent>
-
-              </CardContent>
-            </Card>
-          </div>
+                <div>
+                  <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="This Month" />
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Months</SelectLabel>
+                        <SelectItem value="december">January</SelectItem>
+                        <SelectItem value="november">February</SelectItem>
+                        <SelectItem value="october">March</SelectItem>
+                        <SelectItem value="september">April</SelectItem>
+                        <SelectItem value="august">May</SelectItem>
+                        <SelectItem value="july">June</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </SelectTrigger>
+                  </Select>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="flex-grow mt-8 min-h-100">
+                <ChartBarDefault/>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
           <div>
             <Card className="flex-grow mt-8 min-h-80">
               <CardHeader>
