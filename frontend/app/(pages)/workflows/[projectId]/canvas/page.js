@@ -17,7 +17,8 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
-
+import Deploy from "./buttons/deploy";
+import Live from "./buttons/live";
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
@@ -36,7 +37,7 @@ const DnDFlow = () => {
   const[dynamo,setDynamo] = useState(false)
 const[configID,setConfigID] = useState(null);
 
-const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
+const[configs,setConfigs] = useState({}) // 6 77777777777777
 
 
 
@@ -120,14 +121,14 @@ const onNodeClick = useCallback((event, node) => {
         id: nanoid(),
         type,
         position,
-        data: { label: `${type}` },
+        data: { label: `${type}`,saved: false },
       };
 
   
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
-       //const next = nds.concat({id: newNode.id, type: newNode.type, position: newNode.position, data: { label: `${newNode.type}` }});
+      
    
         if (prevLast) {
           setEdges((eds) =>
@@ -135,6 +136,7 @@ const onNodeClick = useCallback((event, node) => {
               id: `e${nanoid()}`,
               source: prevLast.id,
               target: newNode.id,
+           
             })
           );
         }
@@ -185,19 +187,30 @@ localStorage.getItem("amiID")
 
 
   },[configID])
+
+
   
+    
+  
+
+
+
+ 
   return (
     
 
 
-<div className="w-full h-[80vh] flex ">
+<div className="w-full h-[80vh] flex relative">
+  <div className="pointer-events-none absolute inset-x-0 top-3 z-50 flex  items-center justify-between px-4">
+    <div className="pointer-events-auto"><Live/></div>
 
-
-  <div className="shrink-0 ">
-  
-    <Sidebar />
- 
+    <div className="pointer-events-auto"><Deploy nodes = {nodes} /></div>
   </div>
+
+  <div className="shrink-0">
+    <Sidebar />
+  </div>
+
   <div className="flex-1">
     <ReactFlow
       style={{ width: "100%", height: "100%" }}
@@ -211,21 +224,20 @@ localStorage.getItem("amiID")
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
-     
     >
-      {console.log("object",onNodeClick.node)}
+    
     </ReactFlow>
-   
-    {console.log(configID)}
-{ ec2  && configID? <EC2_menu id={configID} />  : null}
-{ s3  && configID? <S3_menu id={configID} /> : null}
-{ rds  && configID? <RDS_menu id={configID} /> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID} /> : null}
- 
 
+   
+    {ec2 && configID ? <EC2_menu id={configID}  /> : null}
+    {s3 && configID ? <S3_menu id={configID} /> : null}
+    {rds && configID ? <RDS_menu id={configID} /> : null}
+    {dynamo && configID ? <DynamoDB_menu id={configID} /> : null}
   </div>
-  <Controls position = "bottom-right"/>
+
+  <Controls position="bottom-right" />
 </div>
+
 
       
     
