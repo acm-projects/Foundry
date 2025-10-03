@@ -21,6 +21,7 @@ import Deploy from "./buttons/deploy";
 import Live from "./buttons/live";
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
+import { changeAnimation } from "./functions/changeAnimation";
 
 import {useState} from "react"
 
@@ -136,6 +137,9 @@ const onNodeClick = useCallback((event, node) => {
               id: `e${nanoid()}`,
               source: prevLast.id,
               target: newNode.id,
+              animated: true,
+            
+              style: { stroke: 'orange',opacity: 0.5 ,strokeWidth: 2 }
            
             })
           );
