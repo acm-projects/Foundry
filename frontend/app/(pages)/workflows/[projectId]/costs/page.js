@@ -1,10 +1,11 @@
-import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select.jsx';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card.jsx';
-import { ChartBarDefault } from '@/app/components/ChartBarDefault';
-import { ChartPieLegend } from '@/app/components/ChartPieLegend';
+import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/app/components/ui/card';
+import { ChartBarDefault } from '@/app/components/costCharts/ChartBarDefault';
+import { ChartPieLegend } from '@/app/components/costCharts/ChartPieLegend';
+
 import { TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
-import EC2InstancesTable from '@/app/components/EC2InstancesTable';
+import EC2InstancesTable from '@/app/components/costCharts/EC2InstancesTable';
 
 export default function CostsPage({ params }) {
   return (
