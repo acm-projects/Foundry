@@ -20,7 +20,8 @@ import SingleHandleNode from "./customNode";
 
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
-
+import Deploy from './Deployment/deploy'
+import Live from "./Deployment/live";
 import {useState} from "react"
 
 const DnDFlow = () => {
@@ -127,7 +128,7 @@ const onNodeClick = useCallback((event, node) => {
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
-       //const next = nds.concat({id: newNode.id, type: newNode.type, position: newNode.position, data: { label: `${newNode.type}` }});
+       
    
         if (prevLast) {
           setEdges((eds) =>
@@ -135,6 +136,9 @@ const onNodeClick = useCallback((event, node) => {
               id: `e${nanoid()}`,
               source: prevLast.id,
               target: newNode.id,
+              animated: true,
+              style: {  strokeWidth: 2,opacity: .8 }
+              
             })
           );
         }
@@ -179,20 +183,21 @@ const onNodeClick = useCallback((event, node) => {
     [screenToFlowPosition, type, setNodes, setEdges]
   );
 
-  useEffect(() => { 
-
-localStorage.getItem("amiID")
-
-
-  },[configID])
   
   return (
     
 
 
-<div className="w-full h-[80vh] flex ">
+<div className="w-full h-[80vh] flex relative">
 
+  <div className="absolute top-4 left-4 z-10">
+    <Live />
+  </div>
 
+  
+  <div className="absolute top-4 right-4 z-10">
+    <Deploy />
+  </div>
   <div className="shrink-0 ">
   
     <Sidebar />
@@ -217,10 +222,10 @@ localStorage.getItem("amiID")
     </ReactFlow>
    
     {console.log(configID)}
-{ ec2  && configID? <EC2_menu id={configID} />  : null}
-{ s3  && configID? <S3_menu id={configID} /> : null}
-{ rds  && configID? <RDS_menu id={configID} /> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID} /> : null}
+{ ec2  && configID? <EC2_menu id={configID} nodes = {nodes} />  : null}
+{ s3  && configID? <S3_menu id={configID}  nodes = {nodes} /> : null}
+{ rds  && configID? <RDS_menu id={configID}   nodes = {nodes}/> : null}
+{ dynamo  && configID? <DynamoDB_menu id={configID}  nodes = {nodes} /> : null}
  
 
   </div>

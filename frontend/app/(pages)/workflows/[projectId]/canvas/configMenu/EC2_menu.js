@@ -9,7 +9,7 @@ export default function EC2_menu({ id }) {
   const[securityGroup,setSecurityGroup] = useState("")
   const[subnetVPC,setSubnetVPC] = useState("")
 
-  const storageKey = `ec2:${id}`;
+  const storageKey = `${id}`;
 
 
   useEffect(() => {
@@ -30,14 +30,6 @@ export default function EC2_menu({ id }) {
     localStorage.setItem(storageKey, JSON.stringify(payload));
   };
 
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setAmiId("");
-    setKeyPair("");
-    setInstanceType("");
-    setSecurityGroup("");
-    setSubnetVPC("");
-  }
   
 
     return (
@@ -112,7 +104,7 @@ export default function EC2_menu({ id }) {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove}className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>

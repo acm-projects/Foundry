@@ -5,7 +5,7 @@ import {useState,useEffect} from "react"
 
 export default function RDS_menu({id}) { 
 
-  const storageKey = `rds:${id}`;
+  const storageKey = `${id}`;
 const[engine,setEngine] = useState("")
 const[instanceClass,setInstanceClass] = useState("") 
 const[storage,setStorage] = useState("")
@@ -28,15 +28,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
     const payload = { engine, instanceClass, storage, masterUsername, masterPassword, vpcSubnetGroup };
     localStorage.setItem(storageKey, JSON.stringify(payload));
   }
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setEngine("");
-    setInstanceClass("");
-    setStorage("");
-    setMasterUsername("");
-    setMasterPassword("");
-    setVpcSubnetGroup("");
-  }
+ 
 
 
     return (
@@ -113,7 +105,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>

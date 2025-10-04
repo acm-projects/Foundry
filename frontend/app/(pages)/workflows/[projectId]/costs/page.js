@@ -154,10 +154,10 @@ export default function CostsPage({ params }) {
                   <EC2InstancesTable />
                 </TabsContent>
                 <TabsContent value="storage">
-                  <StorageTable />
+                  
                 </TabsContent>
                 <TabsContent value="databases">
-                  <DatabaseTable/>
+            
                 </TabsContent>
               </CardContent>
             </Tabs>

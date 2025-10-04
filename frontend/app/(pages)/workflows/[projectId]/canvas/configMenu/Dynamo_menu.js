@@ -9,7 +9,7 @@ export default function DynamoDB_menu({id}) {
   const[sortKey,setSortKey] = useState("")
   const[billingMode,setBillingMode] = useState("")
 
-  const storageKey = `dynamodb:${id}`;
+  const storageKey = `${id}`;
 
   useEffect(() => {
       const local = localStorage.getItem(storageKey);
@@ -25,13 +25,7 @@ export default function DynamoDB_menu({id}) {
     const payload = { tableName, partitionKey, sortKey, billingMode };
     localStorage.setItem(storageKey, JSON.stringify(payload));
   }
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setTableName("");
-    setPartitionKey("");
-    setSortKey("");
-    setBillingMode("");
-  }
+ 
   
 
     return (
@@ -97,7 +91,7 @@ export default function DynamoDB_menu({id}) {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button  className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
