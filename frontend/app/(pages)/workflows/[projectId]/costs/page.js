@@ -23,7 +23,7 @@ export default function CostsPage({ params }) {
         <div className="flex justify-between gap-5 w-full mt-8">
             <Card className="max-w-30vw flex-1 flex-grow min-h-50 
   bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-  transition-transform duration-200 hover:scale-[1.02]">
+  transition-transform duration-200">
               <CardHeader>
                 <CardTitle>Current Month</CardTitle>
               </CardHeader>
@@ -165,7 +165,6 @@ export default function CostsPage({ params }) {
           </Card>
           </div>
         </div>
-
     </div>
   );
 }
