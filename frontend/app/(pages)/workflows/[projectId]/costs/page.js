@@ -5,6 +5,7 @@ import { ChartPieLegend } from '@/app/components/ChartPieLegend';
 import { TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
 import EC2InstancesTable from '@/app/components/EC2InstancesTable';
+import StorageTable from '@/app/components/StorageTable';
 
 export default function CostsPage({ params }) {
   return (
@@ -127,41 +128,40 @@ export default function CostsPage({ params }) {
           </Card>
         </div>
           <div>
-            <Card className="flex-grow
-  bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-  transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-80">
+          <Card className="flex-grow
+            bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+            transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-80">
+            
+            <Tabs defaultValue="ec2instances" className="w-full">
               <CardHeader>
                 <div className="flex justify-between">
                   <div>
-                    <CardTitle>Resource and Usage Costs </CardTitle>
-                    <CardDescription>Detailed breakdown of resource utilization and associated costs.</CardDescription>
+                    <CardTitle>Resource and Usage Costs</CardTitle>
+                    <CardDescription>
+                      Detailed breakdown of resource utilization and associated costs.
+                    </CardDescription>
                   </div>
-                  <div>
-                    <Tabs defaultValue = "ec2">
-                      <TabsList>
-                        <TabsTrigger value="ec2instances" className="px-6">EC2 Instances</TabsTrigger>
-                        <TabsTrigger value="storage" className="px-6">Storage</TabsTrigger>
-                        <TabsTrigger value="databases" className="px-6">Databases</TabsTrigger>
-                      </TabsList>
-                      <TabsContent value="ec2instances">
-                        <EC2InstancesTable />
-                      </TabsContent>
-                    </Tabs>
-                  </div>
+                  <TabsList>
+                    <TabsTrigger value="ec2instances" className="px-6">EC2 Instances</TabsTrigger>
+                    <TabsTrigger value="storage" className="px-6">Storage</TabsTrigger>
+                    <TabsTrigger value="databases" className="px-6">Databases</TabsTrigger>
+                  </TabsList>
                 </div>
               </CardHeader>
+
               <CardContent>
-              <Tabs defaultValue="ec2instances">
                 <TabsContent value="ec2instances">
                   <EC2InstancesTable />
                 </TabsContent>
                 <TabsContent value="storage">
+                  <StorageTable />
                 </TabsContent>
                 <TabsContent value="databases">
+                  {/* Add DatabasesTable later */}
                 </TabsContent>
-              </Tabs>
               </CardContent>
-            </Card>
+            </Tabs>
+          </Card>
           </div>
         </div>
 
