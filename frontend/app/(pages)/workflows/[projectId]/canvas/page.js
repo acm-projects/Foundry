@@ -122,7 +122,7 @@ const onNodeClick = useCallback((event, node) => {
         id: nanoid(),
         type,
         position,
-        data: { label: `${type}`,saved: false },
+        data: { label: `${type}` },
       };
 
   

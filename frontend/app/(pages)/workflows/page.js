@@ -3,12 +3,13 @@ import React from 'react'
 import { GitBranch, Plus } from "lucide-react";
 import NavBar from '../../components/navbar'
 import Link from 'next/link';
+import { User,X } from 'lucide-react';
 export default function Workflows() { 
 
 
 
     return (<div className="min-h-screen bg-gray-50"> 
-    <NavBar/>
+
       <main className="mx-auto max-w-6xl px-6 pt-8 pb-16">
       <div className="flex items-start justify-between">
         <div>
@@ -24,14 +25,21 @@ export default function Workflows() {
           </p>
       </div>
     <Link href = "/canvas">
-        <button 
-          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-white 
-                     bg-gradient-to-r from-orange-500 to-orange-600 shadow 
-                     hover:from-orange-600 hover:to-orange-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          <span className="font-medium">New Workflow</span>
-        </button>
+    <div className="flex items-center justify-between px-4 py-3 rounded-t-2xl bg-gray-300 border-b ">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-semibold text-orange-900">Profile Menu</span>
+              </div>
+              <button
+                aria-label="Close"
+                onClick={() => setUser(false)}
+                className="p-1 rounded hover:bg-orange-100"
+              >
+
+              </button>
+            </div>
         </Link>
       </div>
 
