@@ -53,6 +53,36 @@ export default function SettingsPage({ params }) {
             </div>
           </CardContent>
         </Card>
+        <Card className="max-w-30vw flex-1 flex-grow min-h-100 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl transition-transform duration-200">
+          <CardHeader>
+            <CardTitle>Team Access</CardTitle>
+            <CardDescription>Invite your team members to collaborate.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Item variant="outline">
+              <ItemContent>
+                <div className="flex gap-5">
+                  <User/>
+                  <ItemTitle>John Smith</ItemTitle>
+                </div>
+              </ItemContent>
+              <ItemActions>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Read" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="read">Read</SelectItem>
+                      <SelectItem value="modify">Modify</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </ItemActions>
+            </Item>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
