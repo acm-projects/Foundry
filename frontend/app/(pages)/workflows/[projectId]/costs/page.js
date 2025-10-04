@@ -6,6 +6,7 @@ import { TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
 import EC2InstancesTable from '@/app/components/EC2InstancesTable';
 import StorageTable from '@/app/components/StorageTable';
+import DatabaseTable from '@/app/components/DatabaseTable';
 
 export default function CostsPage({ params }) {
   return (
@@ -157,7 +158,7 @@ export default function CostsPage({ params }) {
                   <StorageTable />
                 </TabsContent>
                 <TabsContent value="databases">
-                  {/* Add DatabasesTable later */}
+                  <DatabaseTable/>
                 </TabsContent>
               </CardContent>
             </Tabs>
