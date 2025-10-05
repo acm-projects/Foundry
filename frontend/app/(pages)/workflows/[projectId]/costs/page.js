@@ -22,8 +22,8 @@ export default function CostsPage({ params }) {
       <div>
         <div className="flex justify-between gap-5 w-full mt-8">
             <Card className="max-w-30vw flex-1 flex-grow min-h-50 
-  bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-  transition-transform duration-200">
+  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Current Month</CardTitle>
               </CardHeader>
@@ -35,7 +35,7 @@ export default function CostsPage({ params }) {
               </CardContent>
             </Card>
             <Card className=" flex-1 flex-grow min-h-50 
-  bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
   transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Monthly Budget</CardTitle>
@@ -47,7 +47,7 @@ export default function CostsPage({ params }) {
               </CardContent>
             </Card>
             <Card className=" flex-1 flex-grow min-h-50 
-  bg-white/90 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
   transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Daily Average</CardTitle>
@@ -62,7 +62,7 @@ export default function CostsPage({ params }) {
         </div>
         <div className="flex justify-between gap-5 w-full">
           <Card className="flex-grow
-  bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
   transition-transform duration-200 hover:scale-[1.008] mt-8 min-h-100 max-w-256">
             <CardHeader>
               <div className="flex justify-between">
@@ -93,7 +93,7 @@ export default function CostsPage({ params }) {
             </CardContent>
           </Card>
           <Card className="flex-grow
-  bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
   transition-transform duration-200 hover:scale-[1.008] mt-8 max-w-256 min-h-100 min-w-100">
           <CardHeader>
               <div className="flex justify-between">
@@ -130,8 +130,8 @@ export default function CostsPage({ params }) {
         </div>
           <div>
           <Card className="flex-grow
-            bg-white/10 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
-            transition-transform duration-200 hover:scale-[1.02] mt-8 min-h-80">
+            bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+            transition-transform duration-200 hover:scale-[1.008] mt-8 min-h-80">
             
             <Tabs defaultValue="ec2instances" className="w-full">
               <CardHeader>
