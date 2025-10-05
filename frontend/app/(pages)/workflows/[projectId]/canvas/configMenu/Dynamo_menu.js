@@ -2,6 +2,7 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
+import { UserInput } from '../Deployment/UserServiceInput'
 export default function DynamoDB_menu({id}) { 
 
   const[tableName,setTableName] = useState("")
@@ -24,6 +25,18 @@ export default function DynamoDB_menu({id}) {
   const save = () => {
     const payload = { tableName, partitionKey, sortKey, billingMode };
     localStorage.setItem(storageKey, JSON.stringify(payload));
+
+if(tableName.length != 0 && partitionKey.length != 0 && sortKey.length != 0 && billingMode.length != 0) { 
+
+UserInput(storageKey,payload)
+
+return;
+}
+
+alert("fill missing input fields")
+
+
+
   }
  
   

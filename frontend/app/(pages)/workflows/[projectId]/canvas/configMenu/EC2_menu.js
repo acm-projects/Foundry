@@ -1,6 +1,7 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
+import { UserInput } from '../Deployment/UserServiceInput'
 export default function EC2_menu({ id }) { 
 
   const[amiId,setAmiId] = useState("")

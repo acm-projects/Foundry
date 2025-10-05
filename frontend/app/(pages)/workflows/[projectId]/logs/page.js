@@ -1,7 +1,7 @@
 "use client";
 import {Clock, Activity } from "lucide-react";
 import Switch from "./logSwitch";
-import LogPanel from "./logPanel";
+import EC2log from "./serviceLogs/ec2Log";
 import axios from "axios";
 import {useState,useEffect} from "react"
 
@@ -29,11 +29,11 @@ export default function ActivityLogging({params}) {
       <p className="text-gray-500 mb-4">
         Track all changes and activities across your workflows
       </p>
-<Switch selected={selected} onChange={setSelected}/>
+{/*<Switch selected={selected} onChange={setSelected}/>*/}
 
 
 {!empty  ? 
-selected == 'activity' ? <LogPanel/> : <LogPanel/>
+selected == 'activity' ? <EC2log/> : <EC2log/>
  
  
   :  

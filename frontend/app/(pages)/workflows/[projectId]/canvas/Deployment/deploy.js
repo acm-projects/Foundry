@@ -6,9 +6,12 @@ import { changeAnimation } from "./changeAnimation";
 export default function Deploy({nodes = []}) {
 const[status,setStatus] = useState(false)
 const nodeLength = nodes.length
+
 const userInput = JSON.parse(localStorage.getItem("service_input") || "[]")
 
-
+console.log("userInput",userInput.length)
+console.log("nodeLength",nodeLength)
+console.log("nodes",nodes)
 const goLive = ()  => { 
 
 localStorage.setItem("deployed",JSON.stringify(true))

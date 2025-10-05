@@ -196,7 +196,7 @@ const onNodeClick = useCallback((event, node) => {
 
   
   <div className="absolute top-4 right-4 z-10">
-    <Deploy />
+    <Deploy nodes={nodes} />
   </div>
   <div className="shrink-0 ">
   
@@ -221,11 +221,11 @@ const onNodeClick = useCallback((event, node) => {
       {console.log("object",onNodeClick.node)}
     </ReactFlow>
    
-    {console.log(configID)}
-{ ec2  && configID? <EC2_menu id={configID} nodes = {nodes} />  : null}
-{ s3  && configID? <S3_menu id={configID}  nodes = {nodes} /> : null}
-{ rds  && configID? <RDS_menu id={configID}   nodes = {nodes}/> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID}  nodes = {nodes} /> : null}
+    {console.log("share",nodes)}
+{ ec2  && configID? <EC2_menu id={configID}/>  : null}
+{ s3  && configID? <S3_menu id={configID}  /> : null}
+{ rds  && configID? <RDS_menu id={configID}   /> : null}
+{ dynamo  && configID? <DynamoDB_menu id={configID}   /> : null}
  
 
   </div>
