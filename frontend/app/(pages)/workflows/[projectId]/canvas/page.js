@@ -22,6 +22,7 @@ import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
 import {useState} from "react"
+import SaveWorkflowDialog from "@/app/components/SaveWorkflowModal";
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -238,6 +239,7 @@ export default function CanvasPage() {
       <DnDProvider>
         <DnDFlow />
       </DnDProvider>
+      <SaveWorkflowDialog/>
     </ReactFlowProvider>
   );
 }
