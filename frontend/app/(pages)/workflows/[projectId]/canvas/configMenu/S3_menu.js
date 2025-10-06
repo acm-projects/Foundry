@@ -2,7 +2,7 @@ import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from 'react'
 import { UserInput } from '../Deployment/UserServiceInput'
-export default function S3_menu({id,onChange,value}) { 
+export default function S3_menu({id,onClose}) { 
 
 const[region,setRegion] = useState("")
 const[bucketName,setBucketName] = useState("")
@@ -16,13 +16,23 @@ useEffect(() => {
     setDisplayName(saved.displayName || "")
 },[storageKey])
 
-const save = () => { 
 
-localStorage.setItem(storageKey,JSON.stringify({region,bucketName,displayName}))
+const save = () => {
+  const payload = { region, bucketName, displayName};
+
+
+if(region.length != 0 && bucketName.length != 0 && displayName.length != 0) { 
+localStorage.setItem(storageKey, JSON.stringify(payload));
+UserInput(storageKey,payload)
+onClose()
+return;
+}
+
+alert("fill missing input fields")
+return;
 
 
 }
-
 
     return (
     
@@ -92,7 +102,7 @@ localStorage.setItem(storageKey,JSON.stringify({region,bucketName,displayName}))
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button  onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>

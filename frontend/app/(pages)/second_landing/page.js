@@ -8,19 +8,18 @@ import {
   import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
-import DnDFlow from './second_canvas/canvas';
-import { DnDProvider } from './second_canvas/canvas';
-import TextAnimateDemo6 from '../../components/animatedText/slogan';
+import DnDFlow from '../landing/second_canvas/canvas';
+import { DnDProvider } from '../landing/second_canvas/Dnd';
+import TextAnimateDemo6 from '@/app/components/animatedText/slogan';
 
 
 export default function Land() { 
 
     return (
     
-    
-        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10" >
- 
 
+       // <div className="inset-0 w-full h-full -z-10 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]">
+<div className = " inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]" >
    <header className="sticky top-3 z-50 flex justify-center pt-4">
           <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
             <div className="flex items-center space-x-2">
@@ -31,7 +30,7 @@ export default function Land() {
             </div>
   
             <button className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition">
-        
+     
               
               Login
             </button>
@@ -68,36 +67,11 @@ export default function Land() {
     </div>
   </div>
 
-  <div className="w-1/2 flex flex-col items-center justify-center">
-  <div className="w-2/5 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50 -translate-x-20 z-30 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-100 mb-2">
-      <Server className="w-7 h-7 text-orange-600" />
-    </div>
-    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50 -mt-3 z-20 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-100 mb-2">
-      <Database className="w-7 h-7 text-blue-600" />
-    </div>
-    <h1 className="text-blue-700 font-semibold">RDS</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50 -mt-3 translate-x-20 z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-purple-100 mb-2">
-      <Archive className="w-7 h-7 text-purple-600" />
-    </div>
-    <h1 className="text-purple-700 font-semibold">S3 Bucket</h1>
-  </div>
-</div>
-
-
-</div>
-
-<div className="w-full bg-transparent flex justify-center">
+  {/**/ }
+  <div className="w-full bg-transparent flex justify-center">
   <div className="h-screen w-3/4 flex justify-center">
   
-    <div className="h-6/7 w-7/7 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
+    <div className="h-6/7 w-7/7">
      <ReactFlowProvider>
 <DnDFlow/>
 
@@ -105,6 +79,39 @@ export default function Land() {
     </div>
   </div>
 </div>
+
+
+</div>
+
+<div className="flex justify-center gap-20 py-10">
+      <div className="flex flex-col items-center">
+        <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-orange-100">
+          <Server className="h-12 w-12 text-orange-600" />
+        </div>
+        <span className="mt-4 text-slate-700 font-medium">EC2 Instance</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-green-100">
+          <Archive className="h-12 w-12 text-green-600" />
+        </div>
+        <span className="mt-4 text-slate-700 font-medium">S3 Bucket</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-blue-100">
+          <Database className="h-12 w-12 text-blue-600" />
+        </div>
+        <span className="mt-4 text-slate-700 font-medium">RDS</span>
+      </div>
+
+      <div className="flex flex-col items-center">
+        <div className="h-24 w-24 flex items-center justify-center rounded-2xl bg-purple-100">
+          <Database className="h-12 w-12 text-purple-600" />
+        </div>
+        <span className="mt-4 text-slate-700 font-medium">DynamoDB</span>
+      </div>
+    </div>
 
 
 <section className="bg-gradient-to-b from-transparent to-orange-50/40">

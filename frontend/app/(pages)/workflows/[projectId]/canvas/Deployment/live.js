@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react"
 
-export default function Live() { 
+export default function Live({deployed}) { 
 
     const [live, setLive] = useState(
         () => JSON.parse(localStorage.getItem("deployed")) || false
@@ -13,7 +13,7 @@ export default function Live() {
 
     return (<div> 
 
-{live || state ? <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-100 text-green-800 border border-green-200 shadow-md font-semibold text-sm cursor-default">
+{deployed || live ? <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-green-100 text-green-800 border border-green-200 shadow-md font-semibold text-sm cursor-default">
   <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
   <span>Live</span>
 </div> :  

@@ -12,7 +12,7 @@ export default function SideBar ()  {
   };
 
   return (
-    <div className=" mt-10 flex items-center justify-center">
+    <div className=" mt-25 flex items-center justify-center">
       <div className= "bg-orange/20 backdrop-blur-md rounded-full">
     <div className="flex flex-col space-y-6 justify-center items-center bg-transparent pt-6  w-20">
 

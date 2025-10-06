@@ -3,7 +3,7 @@ import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
 
-export default function RDS_menu({id}) { 
+export default function RDS_menu({id,onClose}) { 
 
   const storageKey = `${id}`;
 const[engine,setEngine] = useState("")
@@ -24,10 +24,24 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
       setVpcSubnetGroup(saved.vpcSubnetGroup || "");
   }
   , [storageKey]);
+  
+ 
   const save = () => {
-    const payload = { engine, instanceClass, storage, masterUsername, masterPassword, vpcSubnetGroup };
+      const payload = { engine, instanceClass, storage, masterUsername,masterPassword,vpcSubnetGroup };
+  
+  
+  if(engine.length != 0 && instanceClass.length != 0 && storage.length != 0 && masterPassword.length != 0,masterUsername.length != 0, vpcSubnetGroup.length != 0) { 
     localStorage.setItem(storageKey, JSON.stringify(payload));
+  UserInput(storageKey,payload)
+  onClose()
+  return;
   }
+  
+  alert("fill missing input fields")
+  return;
+  
+  
+    }
  
 
 
@@ -110,7 +124,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>

@@ -5,19 +5,9 @@ import DynamoDB_menu from "./configMenu/Dynamo_menu";
 import S3_menu from "./configMenu/S3_menu";
 import RDS_menu from "./configMenu/RDS_menu";
 import { nanoid } from "nanoid";
-import {
-  ReactFlow,
-  ReactFlowProvider,
-  addEdge,
-  useNodesState,
-  useEdgesState,
-  Controls,
-  useReactFlow,
-  Background
-} from "@xyflow/react";
+import { ReactFlow,ReactFlowProvider, addEdge, useNodesState,useEdgesState,Controls,useReactFlow,Background} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
-
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 import Deploy from './Deployment/deploy'
@@ -183,6 +173,24 @@ const onNodeClick = useCallback((event, node) => {
     [screenToFlowPosition, type, setNodes, setEdges]
   );
 
+function closeEc2() { 
+    setEc2(false)
+  }
+function closeS3() { 
+  setS3(false)
+}
+function closeDynamo() {
+  setDynamo(false)
+}
+function closeRDS() {
+  setRDS(false)
+}
+
+function DeleteEc2() { 
+
+
+}
+
   
   return (
     
@@ -190,12 +198,8 @@ const onNodeClick = useCallback((event, node) => {
 
 <div className="w-full h-[80vh] flex relative">
 
-  <div className="absolute top-4 left-4 z-10">
-    <Live />
-  </div>
 
-  
-  <div className="absolute top-4 right-4 z-10">
+  <div className="absolute top-4 right-4 z-10 w-full">
     <Deploy nodes={nodes} />
   </div>
   <div className="shrink-0 ">
@@ -222,10 +226,10 @@ const onNodeClick = useCallback((event, node) => {
     </ReactFlow>
    
     {console.log("share",nodes)}
-{ ec2  && configID? <EC2_menu id={configID}/>  : null}
-{ s3  && configID? <S3_menu id={configID}  /> : null}
-{ rds  && configID? <RDS_menu id={configID}   /> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID}   /> : null}
+{ ec2  && configID? <EC2_menu id={configID} onClose = {closeEc2}/>  : null}
+{ s3  && configID? <S3_menu id={configID} onClose = {closeS3}  /> : null}
+{ rds  && configID? <RDS_menu id={configID} onClose = {closeRDS}   /> : null}
+{ dynamo  && configID? <DynamoDB_menu id={configID} onClose = {closeDynamo}   /> : null}
  
 
   </div>

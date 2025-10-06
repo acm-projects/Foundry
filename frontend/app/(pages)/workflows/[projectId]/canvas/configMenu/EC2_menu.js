@@ -2,7 +2,7 @@ import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
 import { UserInput } from '../Deployment/UserServiceInput'
-export default function EC2_menu({ id }) { 
+export default function EC2_menu({ id,onClose }) { 
 
   const[amiId,setAmiId] = useState("")
   const[keyPair,setKeyPair] = useState("")
@@ -28,8 +28,20 @@ export default function EC2_menu({ id }) {
 
   const save = () => {
     const payload = { amiId, keyPair, instanceType, securityGroup, subnetVPC };
-    localStorage.setItem(storageKey, JSON.stringify(payload));
-  };
+
+
+if(amiId.length != 0 && keyPair.length != 0 && instanceType.length != 0 && securityGroup.length != 0 && subnetVPC != 0) { 
+  localStorage.setItem(storageKey, JSON.stringify(payload));
+UserInput(storageKey,payload)
+onClose()
+return;
+}
+
+alert("fill missing input fields")
+return;
+
+
+  }
 
   
 
@@ -76,7 +88,7 @@ export default function EC2_menu({ id }) {
 
           <span className="font-medium text-gray-800">Instance Type</span>
           <div className="relative mt-1">
-            <select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+            <select value={instanceType} onChange = {(e) => setInstanceType(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>t2.micro</option>
               <option>t3.small</option>
@@ -110,7 +122,7 @@ export default function EC2_menu({ id }) {
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button onClick={save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>

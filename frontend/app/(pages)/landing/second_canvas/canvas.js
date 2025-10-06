@@ -15,6 +15,7 @@ import SingleHandleNode from "./custom";
 
 import Sidebar from "./SideBar";
 import { DnDProvider, useDnD } from "./Dnd";
+import { animate } from "motion";
 
 
 
@@ -34,55 +35,100 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
 
 
     setNodes([
-      { id: "dndnode_0", type: "S3", position: { x: 431.75, y: 113.75 }, data: { label: "S3" } },
-      { id: "dndnode_1", type: "S3", position: { x: 673, y: 175.5 }, data: { label: "S3" } },
-      { id: "dndnode_2", type: "RDS", position: { x: 747, y: 258 }, data: { label: "RDS" } },
-      { id: "dndnode_3", type: "S3", position: { x: 459.5, y: 194 }, data: { label: "S3" } },
-      { id: "dndnode_0", type: "S3", position: { x: 431.75, y: 113.75 }, data: { label: "S3" } },
-      { id: "dndnode_1", type: "S3", position: { x: 673, y: 175.5 }, data: { label: "S3" } },
-      { id: "dndnode_2", type: "RDS", position: { x: 747, y: 258 }, data: { label: "RDS" } },
-      { id: "dndnode_3", type: "S3", position: { x: 459.5, y: 194 }, data: { label: "S3" } },
-      { id: "dndnode_4", type: "DynamoDB", position: { x: 649.5, y: 109 }, data: { label: "DynamoDB" } },
-      { id: "dndnode_5", type: "RDS", position: { x: 813.5, y: 104.5 }, data: { label: "RDS" } },
-      { id: "dndnode_6", type: "EC2", position: { x: 495, y: 53.6240234375 }, data: { label: "EC2" } },
-      { id: "dndnode_7", type: "DynamoDB", position: { x: 806.5, y: 158.5 }, data: { label: "DynamoDB" } },
-      { id: "dndnode_0", type: "S3", position: { x: 431.75, y: 113.75 }, data: { label: "S3" } },
-      { id: "dndnode_0", type: "S3", position: { x: 431.75, y: 113.75 }, data: { label: "S3" } },
-    ]);
+      {
+        id: "EfE9356CMdRPnIOpUi7FS",
+        type: "DynamoDB",
+        position: { x: -137, y: 93 },
+        data: { label: "DynamoDB" }
+      },
+      {
+        id: "CmVDz_2yUvDMrw-0CEqSY",
+        type: "EC2",
+        position: { x: -27, y: 156 },
+        data: { label: "EC2" }
+      },
+      {
+        id: "_fbjgqo_zp5psBgCljVoT",
+        type: "S3",
+        position: { x: 103.5, y: 117.5 },
+        data: { label: "S3" }
+      },
+      {
+        id: "C9X71Dvx41RKs4W3wnsus",
+        type: "S3",
+        position: { x: 215.5, y: 234.5 },
+        data: { label: "S3" }
+      },
+      {
+        id: "dHBi-OTCmjFlzH7G3MvwB",
+        type: "RDS",
+        position: { x: 65.5, y: 271 },
+        data: { label: "RDS" }
+      }
+    ]
+    )
+      
     setEdges([
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
-      { id: "edndnode_1-dndnode_2", source: "dndnode_1", target: "dndnode_2" },
-      { id: "edndnode_1-dndnode_2", source: "dndnode_1", target: "dndnode_2" },
-      { id: "edndnode_2-dndnode_3", source: "dndnode_2", target: "dndnode_3" },
-      { id: "edndnode_2-dndnode_3", source: "dndnode_2", target: "dndnode_3" },
-      { id: "edndnode_3-dndnode_0", source: "dndnode_3", target: "dndnode_0" },
-      { id: "edndnode_3-dndnode_0", source: "dndnode_3", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
-      { id: "edndnode_1-dndnode_2", source: "dndnode_1", target: "dndnode_2" },
-      { id: "edndnode_1-dndnode_2", source: "dndnode_1", target: "dndnode_2" },
-      { id: "edndnode_2-dndnode_3", source: "dndnode_2", target: "dndnode_3" },
-      { id: "edndnode_2-dndnode_3", source: "dndnode_2", target: "dndnode_3" },
-      { id: "edndnode_3-dndnode_4", source: "dndnode_3", target: "dndnode_4" },
-      { id: "edndnode_3-dndnode_4", source: "dndnode_3", target: "dndnode_4" },
-      { id: "edndnode_4-dndnode_5", source: "dndnode_4", target: "dndnode_5" },
-      { id: "edndnode_4-dndnode_5", source: "dndnode_4", target: "dndnode_5" },
-      { id: "edndnode_5-dndnode_6", source: "dndnode_5", target: "dndnode_6" },
-      { id: "edndnode_5-dndnode_6", source: "dndnode_5", target: "dndnode_6" },
-      { id: "edndnode_6-dndnode_7", source: "dndnode_6", target: "dndnode_7" },
-      { id: "edndnode_6-dndnode_7", source: "dndnode_6", target: "dndnode_7" },
-      { id: "xy-edge__dndnode_3-dndnode_1", source: "dndnode_3", target: "dndnode_1" },
-      { id: "edndnode_7-dndnode_0", source: "dndnode_7", target: "dndnode_0" },
-      { id: "edndnode_7-dndnode_0", source: "dndnode_7", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_0", source: "dndnode_0", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_0", source: "dndnode_0", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_0", source: "dndnode_0", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_0", source: "dndnode_0", target: "dndnode_0" },
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
-      { id: "edndnode_0-dndnode_1", source: "dndnode_0", target: "dndnode_1" },
+      {
+        id: "epw92DEIDW3DKaFO0C9Rkt",
+        source: "EfE9356CMdRPnIOpUi7FS",
+        target: "CmVDz_2yUvDMrw-0CEqSY",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "ess83VX5uiAdfxUrvM5w1Y",
+        source: "EfE9356CMdRPnIOpUi7FS",
+        target: "CmVDz_2yUvDMrw-0CEqSY",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "emzK7IgkaOItvSJveSj9dS",
+        source: "CmVDz_2yUvDMrw-0CEqSY",
+        target: "_fbjgqo_zp5psBgCljVoT",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "e_q3IOrTdiAs26NHOQouu9",
+        source: "CmVDz_2yUvDMrw-0CEqSY",
+        target: "_fbjgqo_zp5psBgCljVoT",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "ejDaXV01Cx0z2yCwkg4aKV",
+        source: "_fbjgqo_zp5psBgCljVoT",
+        target: "C9X71Dvx41RKs4W3wnsus",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "eOY92F8EzvttslxKKyDtsr",
+        source: "_fbjgqo_zp5psBgCljVoT",
+        target: "C9X71Dvx41RKs4W3wnsus",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "enqmyDpdh7dHjVPMyF4G1y",
+        source: "C9X71Dvx41RKs4W3wnsus",
+        target: "dHBi-OTCmjFlzH7G3MvwB",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      },
+      {
+        id: "eZR-ZQ6A2c_LJUTQ4RUaQ7",
+        source: "C9X71Dvx41RKs4W3wnsus",
+        target: "dHBi-OTCmjFlzH7G3MvwB",
+        style: { strokeWidth: 2, opacity: 0.8 },
+        animated: true
+      }
+    ]
     
-    ])
+    
+    )
     
     
     },[])
@@ -112,6 +158,8 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
               id: `e${prevLast.id}-${newNode.id}`,
               source: prevLast.id,
               target: newNode.id,
+              animated: true
+              
             })
           );
         }

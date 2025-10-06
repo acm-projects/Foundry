@@ -3,7 +3,7 @@ import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
 import { UserInput } from '../Deployment/UserServiceInput'
-export default function DynamoDB_menu({id}) { 
+export default function DynamoDB_menu({id,onClose}) { 
 
   const[tableName,setTableName] = useState("")
   const[partitionKey,setPartitionKey] = useState("")
@@ -24,23 +24,20 @@ export default function DynamoDB_menu({id}) {
   , [storageKey]);
   const save = () => {
     const payload = { tableName, partitionKey, sortKey, billingMode };
-    localStorage.setItem(storageKey, JSON.stringify(payload));
+
 
 if(tableName.length != 0 && partitionKey.length != 0 && sortKey.length != 0 && billingMode.length != 0) { 
-
+  localStorage.setItem(storageKey, JSON.stringify(payload));
 UserInput(storageKey,payload)
-
+onClose()
 return;
 }
 
 alert("fill missing input fields")
-
-
+return;
 
   }
  
-  
-
     return (
     
 <Panel
@@ -109,7 +106,7 @@ alert("fill missing input fields")
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>
