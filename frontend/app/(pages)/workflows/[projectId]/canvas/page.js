@@ -185,11 +185,13 @@ function closeDynamo() {
 function closeRDS() {
   setRDS(false)
 }
+ //it only deletes visual not from memory soooo like someone fix this 
+const deleteNode = (id) => {
+  setNodes((nds) => nds.filter((n) => n.id !== id));
+ 
+ 
 
-function DeleteEc2() { 
-
-
-}
+};
 
   
   return (
@@ -226,10 +228,10 @@ function DeleteEc2() {
     </ReactFlow>
    
     {console.log("share",nodes)}
-{ ec2  && configID? <EC2_menu id={configID} onClose = {closeEc2}/>  : null}
-{ s3  && configID? <S3_menu id={configID} onClose = {closeS3}  /> : null}
-{ rds  && configID? <RDS_menu id={configID} onClose = {closeRDS}   /> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID} onClose = {closeDynamo}   /> : null}
+{ ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
+{ s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
+{ rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
+{ dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
  
 
   </div>
