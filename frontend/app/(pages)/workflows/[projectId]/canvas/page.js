@@ -29,9 +29,6 @@ const[configID,setConfigID] = useState(null);
 
 const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
 
-
-
-
 const onNodeClick = useCallback((event, node) => {
   
   setConfigID(node.id);
@@ -185,7 +182,7 @@ function closeDynamo() {
 function closeRDS() {
   setRDS(false)
 }
- //it only deletes visual not from memory soooo like someone fix this 
+ //it only deletes node visual not from memory soooo like someone fix this 
 const deleteNode = (id) => {
   setNodes((nds) => nds.filter((n) => n.id !== id));
  
@@ -201,7 +198,7 @@ const deleteNode = (id) => {
 <div className="w-full h-[80vh] flex relative">
 
 
-  <div className="absolute top-4 right-4 z-10 w-full">
+  <div className="absolute top-4  right-4 z-10 w-full">
     <Deploy nodes={nodes} />
   </div>
   <div className="shrink-0 ">

@@ -184,7 +184,6 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
 
   <div className="shrink-0 ">
   
-    <Sidebar />
  
   </div>
   <div className="flex-1">
@@ -200,6 +199,8 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
       onDragOver={onDragOver}
       fitView
     >
+
+      
       
     </ReactFlow>
 

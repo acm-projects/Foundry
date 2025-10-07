@@ -17,7 +17,7 @@ export default function WorkflowsLayout({ children, params }){
        
         <AppNavbar projectId={projectId} />
        
-        <main className="flex-1 w-full max-w-7xl mt-4">
+        <main className="flex-1 w-full h-full mt-4">
           {children}
         </main>
       </div>
