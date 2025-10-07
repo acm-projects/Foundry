@@ -2,6 +2,8 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
+import { UserInput } from '../functions/UserServiceInput'
+
 export default function DynamoDB_menu({id}) { 
 
   const[tableName,setTableName] = useState("")
@@ -9,7 +11,9 @@ export default function DynamoDB_menu({id}) {
   const[sortKey,setSortKey] = useState("")
   const[billingMode,setBillingMode] = useState("")
 
-  const storageKey = `dynamodb:${id}`;
+
+
+  const storageKey = `${id}`;
 
   useEffect(() => {
       const local = localStorage.getItem(storageKey);
@@ -21,21 +25,31 @@ export default function DynamoDB_menu({id}) {
       setBillingMode(saved.billingMode || "");
   }
   , [storageKey]);
-  const save = () => {
-    const payload = { tableName, partitionKey, sortKey, billingMode };
-    localStorage.setItem(storageKey, JSON.stringify(payload));
-  }
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setTableName("");
-    setPartitionKey("");
-    setSortKey("");
-    setBillingMode("");
-  }
+
+   const save = () => {
+      const payload = { tableName, partitionKey, sortKey, billingMode };
+      if(tableName.length != 0 && partitionKey.length != 0  && sortKey.length != 0 && billingMode.length != 0) { 
+        localStorage.setItem(storageKey, JSON.stringify(payload));
+        
+  UserInput(storageKey,payload)
+  
+            return;
+      
+      }
+       alert("please fill in all fields")
+       localStorage.setItem(storageKey, JSON.stringify(payload));
+     
+     return;
+    };
+  
+  
+  
+
+ 
   
 
     return (
-    
+
 <Panel
   position="top-right"
   style={{ top: '15%', transform: 'translateY(-50%)' }}
@@ -43,7 +57,7 @@ export default function DynamoDB_menu({id}) {
   <aside className="fixed right-4  z-50 w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[60vh] flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
 
-    
+
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
        </div>
@@ -97,7 +111,7 @@ export default function DynamoDB_menu({id}) {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button  className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>

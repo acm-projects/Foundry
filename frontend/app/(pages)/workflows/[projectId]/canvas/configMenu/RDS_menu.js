@@ -2,10 +2,10 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
-
+import { UserInput } from '../functions/UserServiceInput';
 export default function RDS_menu({id}) { 
 
-  const storageKey = `rds:${id}`;
+  const storageKey = `${id}`;
 const[engine,setEngine] = useState("")
 const[instanceClass,setInstanceClass] = useState("") 
 const[storage,setStorage] = useState("")
@@ -24,19 +24,28 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
       setVpcSubnetGroup(saved.vpcSubnetGroup || "");
   }
   , [storageKey]);
-  const save = () => {
-    const payload = { engine, instanceClass, storage, masterUsername, masterPassword, vpcSubnetGroup };
-    localStorage.setItem(storageKey, JSON.stringify(payload));
-  }
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setEngine("");
-    setInstanceClass("");
-    setStorage("");
-    setMasterUsername("");
-    setMasterPassword("");
-    setVpcSubnetGroup("");
-  }
+ 
+
+const save = () => {
+    const payload = { engine, instanceClass, storage, masterUsername, masterPassword,vpcSubnetGroup };
+    if(engine.length != 0 && instanceClass.length != 0  && storage.length != 0 && masterUsername.length != 0 && masterPassword.length != 0 && vpcSubnetGroup.length != 0 ) { 
+      localStorage.setItem(storageKey, JSON.stringify(payload));
+      
+UserInput(storageKey,payload)
+
+          return;
+    
+    }
+     alert("please fill in all fields")
+     localStorage.setItem(storageKey, JSON.stringify(payload));
+   
+   return;
+  };
+
+
+
+    
+
 
 
     return (
@@ -73,7 +82,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
 
       <form className="space-y-2">
         
-          <span className="font-medium text-gray-800">Database engine <span className = 'text-red-500'>*</span></span>
+          <span className="font-medium text-gray-800">Database engine </span>
           <select value = {engine} onChange = {(e) => setEngine(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>Postgre SQL</option>
@@ -83,7 +92,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
           
           
      
-     <span className="font-medium text-gray-800">DB instance class</span>
+     <span className="font-medium text-gray-800">DB instance class </span>
      <select value = {instanceClass} onChange = {(e) => setInstanceClass(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>db.t3.micro</option>
@@ -113,7 +122,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
