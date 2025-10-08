@@ -2,13 +2,15 @@
 import { User,Cloud } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Monitor, DollarSign, FileText, Settings } from "lucide-react";
+import {useState} from 'react'
+import UserProfile from "./userProfile";
 import Link from "next/link";
 
 export default function WorkflowNavbar() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const projectId = pathSegments[2];
-
+const[user,setUser] = useState(false)
   const tabs = [
     {
       name: "Canvas",
@@ -33,7 +35,7 @@ export default function WorkflowNavbar() {
   ];
 
   return (
-    <div className="relative w-full flex items-center justify-center">
+    <div className="relative w-full flex items-center justify-center ">
   <div className="absolute left-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
     <Cloud className="w-5 h-5 text-white" />
   </div>
@@ -63,16 +65,11 @@ export default function WorkflowNavbar() {
     })}
   </div>
 
-  <div className="absolute top-1/2 right-6 -translate-y-1/2 flex items-center gap-2 px-3 py-1 rounded-xl bg-white shadow-sm">
-    <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
-      <User className="w-5 h-5 text-white" />
-    </div>
-    <div>
-      <div className="text-sm font-semibold text-gray-900">You</div>
-      <div className="text-xs text-gray-500">you@foundry.com</div>
-    </div>
+  <div className="absolute right-6 top-1/2 -translate-y-1/2">
+    <UserProfile />
   </div>
 </div>
+
 
 
   );

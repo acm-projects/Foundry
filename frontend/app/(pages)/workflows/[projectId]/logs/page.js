@@ -29,7 +29,7 @@ export default function ActivityLogging({params}) {
       <p className="text-gray-500 mb-4">
         Track all changes and activities across your workflows
       </p>
-{/*<Switch selected={selected} onChange={setSelected}/>*/}
+
 
 
 {!empty  ? 

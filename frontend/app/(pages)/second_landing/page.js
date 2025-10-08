@@ -10,16 +10,16 @@ import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
 import DnDFlow from '../landing/second_canvas/canvas';
 import { DnDProvider } from '../landing/second_canvas/Dnd';
-import TextAnimateDemo6 from '@/app/components/animatedText/slogan';
-
+import { TextAnimate } from '../landing/animatedText/text-animate';
+import TextAnimateDemo6 from '../landing/animatedText/slogan';
 
 export default function Land() { 
 
     return (
     
        // <div className = " inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]" ></div>
-
-        <div className="inset-0 w-full h-full -z-10 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]">
+<div className = "">
+        <div className="inset-0 w-full  h-full bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]">
 
    <header className="sticky top-3 z-50 flex justify-center pt-4">
           <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
@@ -37,12 +37,6 @@ export default function Land() {
             </button>
           </div>
         </header>
-
-        
-        
-        
-        
-        
         
         <div className="flex h-[85vh]">
   <div className="w-1/2  p-6 flex justify-center items-center">
@@ -68,14 +62,14 @@ export default function Land() {
     </div>
   </div>
 
-  {/**/ }
+
   <div className="w-full bg-transparent flex justify-center">
   <div className="h-screen w-3/4 flex justify-center">
   
     <div className="h-6/7 w-7/7">
      <ReactFlowProvider>
 <DnDFlow/>
-
+<FlowBackground/>
       </ReactFlowProvider>
     </div>
   </div>
@@ -167,7 +161,7 @@ export default function Land() {
 
    
 
-
+        </div>
 
 
     </div>)

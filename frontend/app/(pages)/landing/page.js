@@ -10,7 +10,7 @@ import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
 import DnDFlow from './second_canvas/canvas';
 import { DnDProvider } from './second_canvas/canvas';
-import TextAnimateDemo6 from '../../components/animatedText/slogan';
+import TextAnimateDemo6 from './animatedText/slogan';
 
 
 export default function Land() { 
