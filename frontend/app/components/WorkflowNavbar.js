@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { LineChart, Monitor, DollarSign, FileText } from "lucide-react";
+import { Monitor, DollarSign, FileText, Settings } from "lucide-react";
 import Link from "next/link";
 
 export default function WorkflowNavbar() {
@@ -16,11 +16,6 @@ export default function WorkflowNavbar() {
       href: `/workflows/${projectId}/canvas`,
     },
     {
-      name: "Dashboard",
-      icon: LineChart,
-      href: `/workflows/${projectId}/dashboard`,
-    },
-    {
       name: "Costs",
       icon: DollarSign,
       href: `/workflows/${projectId}/costs`,
@@ -29,6 +24,11 @@ export default function WorkflowNavbar() {
       name: "Logs",
       icon: FileText,
       href: `/workflows/${projectId}/logs`,
+    },
+    {
+      name: "Settings",
+      icon: Settings,
+      href: `/workflows/${projectId}/settings`,
     },
   ];
 

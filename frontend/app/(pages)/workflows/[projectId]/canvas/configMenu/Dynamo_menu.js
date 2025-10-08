@@ -39,7 +39,7 @@ return;
   }
  
     return (
-    
+
 <Panel
   position="top-right"
   style={{ top: '10%', transform: 'translateY(-50%)' }}
@@ -47,7 +47,7 @@ return;
   <aside className="fixed right-4 w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
 
-    
+
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
        </div>
