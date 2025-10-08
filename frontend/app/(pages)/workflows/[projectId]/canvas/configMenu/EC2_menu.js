@@ -16,6 +16,11 @@ export default function EC2_menu({ id,onClose,onDelete}) {
   useEffect(() => {
  
       const local = localStorage.getItem(storageKey);
+
+      
+
+
+   
    
       const saved = JSON.parse(local) || {};
       setAmiId(saved.amiId || "");
@@ -25,6 +30,9 @@ export default function EC2_menu({ id,onClose,onDelete}) {
       setSubnetVPC(saved.subnetVPC || "");
   
   }, [storageKey]);
+
+
+
 
   const save = () => {
     const payload = { amiId, keyPair, instanceType, securityGroup, subnetVPC };

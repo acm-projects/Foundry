@@ -13,6 +13,7 @@ import { DnDProvider, useDnD } from "./DnDContext";
 import Deploy from './Deployment/deploy'
 import Live from "./Deployment/live";
 import {useState} from "react"
+import SaveWorkflowDialog from "@/app/components/SaveWorkflowModal";
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -204,8 +205,8 @@ const deleteNode = (id) => {
   <div className="shrink-0 ">
   
     <Sidebar />
- 
   </div>
+
   <div className="flex-1">
     <ReactFlow
       style={{ width: "100%", height: "100%" }}
@@ -219,9 +220,8 @@ const deleteNode = (id) => {
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
-     
     >
-      {console.log("object",onNodeClick.node)}
+    
     </ReactFlow>
    
     {console.log("share",nodes)}
@@ -232,8 +232,10 @@ const deleteNode = (id) => {
  
 
   </div>
-  <Controls position = "bottom-right"/>
+
+  <Controls position="bottom-right" />
 </div>
+
 
       
     
@@ -246,6 +248,7 @@ export default function CanvasPage() {
       <DnDProvider>
         <DnDFlow />
       </DnDProvider>
+      <SaveWorkflowDialog/>
     </ReactFlowProvider>
   );
 }

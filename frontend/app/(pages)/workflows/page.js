@@ -3,6 +3,7 @@ import {React,useState} from 'react'
 import { GitBranch, Plus,User, X, LogOut } from "lucide-react";
 import NavBar from '../../components/navbar'
 import Link from 'next/link';
+import WorkflowGrid from '@/app/components/WorkflowGrid';
 export default function Workflows({id}) { 
 
 
@@ -10,7 +11,7 @@ const[user,setUser] = useState(false)
     return (<div className="min-h-screen bg-gray-100"> 
  
       <main className="mx-auto max-w-6xl px-6 pt-8 pb-16">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-8 items-start justify-between">
         <div>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
@@ -122,9 +123,6 @@ const[user,setUser] = useState(false)
       ) : null}
 
     </main>
-
-
-    
 
     </div>)
 }
