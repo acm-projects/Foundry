@@ -27,8 +27,8 @@ useEffect(() => {
   }, [nodeLength])
 
   return (
-    <div className=" flex justify-between items-center ml-10">
-  <Live deployed = {live}     />
+    <div className=" h-10 flex justify-between items-center">
+
   <button
     onClick={() => {
       goLive();
@@ -42,7 +42,7 @@ useEffect(() => {
   >
     <Rocket />
     <span className="font-semibold text-sm">Deploy</span>
-    <span className="text-xs text-gray-300">(Configure all services)</span>
+
   </button>
 </div>
 

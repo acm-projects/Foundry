@@ -42,9 +42,9 @@ return;
     
 <Panel
   position="top-right"
-  style={{ top: '15%', transform: 'translateY(-50%)' }}
+  style={{ top: '10%', transform: 'translateY(-50%)' }}
 >
-  <aside className="fixed right-4  z-50 w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[60vh] flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+  <aside className="fixed right-4 w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
 
     
