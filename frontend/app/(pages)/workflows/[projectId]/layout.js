@@ -1,5 +1,5 @@
 "use client"
-import AppNavbar from "../../../components/WorkflowNavbar";
+import AppNavbar from "./WorkflowNavbar";
 import React from 'react';
 import { usePathname } from "next/navigation";
 import {useState} from 'react'

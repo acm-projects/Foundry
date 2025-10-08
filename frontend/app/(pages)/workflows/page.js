@@ -3,7 +3,7 @@ import {React,useState} from 'react'
 import { GitBranch, Plus,User, X, LogOut } from "lucide-react";
 import NavBar from '../../components/navbar'
 import Link from 'next/link';
-import WorkflowGrid from '@/app/components/WorkflowGrid';
+
 export default function Workflows({id}) { 
 
 

@@ -14,7 +14,7 @@ import { DnDProvider, useDnD } from "./DnDContext";
 import Deploy from './Deployment/deploy'
 import Live from "./Deployment/live";
 import {useState} from "react"
-import SaveWorkflowDialog from "@/app/components/SaveWorkflowModal";
+
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -241,7 +241,7 @@ export default function CanvasPage() {
       <DnDProvider>
         <DnDFlow />
       </DnDProvider>
-      <SaveWorkflowDialog/>
+
     </ReactFlowProvider>
   );
 }
