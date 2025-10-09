@@ -5,7 +5,7 @@ import {
   } from "lucide-react";
   import Link from 'next/link';
 
-  import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
+  import { ReactFlow, Controls } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
 import DnDFlow from '../landing/second_canvas/canvas';
@@ -17,10 +17,12 @@ export default function Land() {
 
     return (
     
-       // <div className = " inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]" ></div>
-<div className = "">
-        <div className="inset-0 w-full  h-full bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]">
+      //linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)
+      // bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]
 
+
+        <div className="inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10">
+<div className = "bg-[radial-gradient(circle,rgba(0,0,0,0.15)_1px,transparent_1px)] [background-size:32px_32px,auto]">
    <header className="sticky top-3 z-50 flex justify-center pt-4">
           <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
             <div className="flex items-center space-x-2">
@@ -69,14 +71,15 @@ export default function Land() {
     <div className="h-6/7 w-7/7">
      <ReactFlowProvider>
 <DnDFlow/>
-<FlowBackground/>
+
       </ReactFlowProvider>
     </div>
   </div>
 </div>
-
+</div>
 
 </div>
+
 
 <div className="flex justify-center gap-20 py-10">
       <div className="flex flex-col items-center">
@@ -161,7 +164,7 @@ export default function Land() {
 
    
 
-        </div>
+
 
 
     </div>)
