@@ -2,7 +2,10 @@
 import {Clock, Activity } from "lucide-react";
 import Switch from "./logSwitch";
 import EC2log from "./serviceLogs/ec2Log";
+import S3Log from "./serviceLogs/s3Log";
+import RDSlog from "./serviceLogs/rdsLog";
 import axios from "axios";
+import DynamoLog from "./serviceLogs/dynamoLog";
 import {useState,useEffect} from "react"
 import InfraLog from "./serviceLogs/infraLog";
 export default function ActivityLogging({params}) {
@@ -26,7 +29,7 @@ console.log("something is chosen",selected)
 <Switch selected={selected} onChange = {handleChange}  className = "ml-20"/>
 </div>
 
-{selected === 'activity' ? <InfraLog/> : <EC2log/> }
+{selected === 'activity' ? <InfraLog/> : <DynamoLog/>}
 
 
 

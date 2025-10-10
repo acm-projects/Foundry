@@ -36,10 +36,11 @@ const[user,setUser] = useState(false)
 
   return (
     <div className="relative w-full flex items-center justify-center ">
+      <Link href='/second_landing'>
   <div className="absolute left-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
     <Cloud className="w-5 h-5 text-white" />
   </div>
-
+  </Link>
   <div className="flex flex-col sm:flex-row bg-white p-2 shadow-xl rounded-2xl border border-gray-100 sm:space-x-2 w-fit">
     {tabs.map((tab) => {
       const Icon = tab.icon;

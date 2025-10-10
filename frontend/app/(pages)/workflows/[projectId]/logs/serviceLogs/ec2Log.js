@@ -32,27 +32,23 @@ hover:shadow-lg hover:-translate-y-1 hover:border-gray-300 ">
     </div>
 
 
-    <p className="mt-1 text-gray-600">
-      Updated security group settings and instance type configuration
-    </p>
+    <h1 className=" text-gray-600">
+    how much of an EC2 instance’s CPU capacity is currently being used
+    </h1>
 
 
-    <p className="mt-2 text-sm text-gray-600">
-    in{" "}
-    <span className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
-      E-commerce Platform
-  </span>
-  </p>
+   
+    <input className = "mt-4" placeholder = "ec2 instance"/> 
 
   
-<div className="mt-4 rounded-xl bg-gray-100 p-4 flex justify-between items-start gap-6">
+<div className="mt-4 rounded-xl bg-gray-100 flex justify-between items-start gap-6">
   <div className="flex-1">
-    <ul className="list-disc space-y-1 pl-5 text-gray-700">
-      <li>TimeStamp<span>: 2025-10-08T18:00:00Z</span></li>
-      <li>Average: 37.45</li>
-      <li>minimum: 28.67<span> maximum: 46.42</span></li>
-      <li>period: 5min</li>
-    </ul>
+    <div className="list-disc space-y-1 text-gray-700">
+      <p>TimeStamp<span> - 2025-10-08T18:00:00Z</span></p>
+      <p>Average - 37.45</p>
+      <p>minimum - 28.67<span> maximum - 46.42</span></p>
+      <p>period - 5m</p>
+    </div>
   </div>
 
 

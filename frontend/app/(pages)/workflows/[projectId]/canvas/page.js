@@ -171,7 +171,7 @@ function closeDynamo() {
 function closeRDS() {
   setRDS(false)
 }
- //it only deletes node visual not from memory soooo like someone fix this 
+ 
 const deleteNode = (id) => {
   setNodes((nds) => nds.filter((n) => n.id !== id));
  

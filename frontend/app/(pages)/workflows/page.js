@@ -9,8 +9,8 @@ export default function Workflows({id}) {
 const[user,setUser] = useState(false)
 
 return (
-  <div className="min-h-screen bg-gray-100 relative">
-  <div className="absolute top-6 right-6">
+  <div className=" bg-gray-100 relative">
+  <div className="absolute right-10 top-10 -translate-y-1/2">
     <UserProfile />
   </div>
 
