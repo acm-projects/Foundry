@@ -13,16 +13,16 @@ import {
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./custom";
 
-import Sidebar from "./SideBar";
 import { DnDProvider, useDnD } from "./Dnd";
 import { animate } from "motion";
+import SideBar2 from "./Sidebar";
 
 
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const DnDFlow = () => {
+const DnDFlow2 = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -151,18 +151,6 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
         const prevLast = nds[nds.length - 1];  
         const next = nds.concat(newNode);
   
-   
-        if (prevLast) {
-          setEdges((eds) =>
-            eds.concat({
-              id: `e${prevLast.id}-${newNode.id}`,
-              source: prevLast.id,
-              target: newNode.id,
-              animated: true
-              
-            })
-          );
-        }
   
         return next;
       });
@@ -184,12 +172,11 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
 
   <div className="shrink-0 ">
   
- 
   </div>
   <div className="flex-1">
     <ReactFlow
       style={{ width: "100%", height: "100%" }}
-      nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
+      nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode, github: SingleHandleNode,workflow: SingleHandleNode,deploy: SingleHandleNode,live: SingleHandleNode }}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
@@ -220,7 +207,7 @@ export default function CanvasPage() {
   return (
     <ReactFlowProvider>
       <DnDProvider>
-        <DnDFlow />
+        <DnDFlow2 />
       </DnDProvider>
     </ReactFlowProvider>
   );

@@ -5,22 +5,29 @@ import {
   } from "lucide-react";
   import Link from 'next/link';
 
-  import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
+  import { ReactFlow, Controls } from '@xyflow/react';
+  //normal canvas
 import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
-import DnDFlow from './second_canvas/canvas';
-import { DnDProvider } from './second_canvas/canvas';
+import DnDFlow from './canvas/canvas';
+import { DnDProvider } from './canvas/Dnd';
+import { TextAnimate } from './animatedText/text-animate';
 import TextAnimateDemo6 from './animatedText/slogan';
+import SideBar from './canvas/SideBar';
 
-
+//user flow canvas
+import DndFlow2 from './flowCanvas/canvas';
+import { DnDProvider as DnDProvider2 } from './flowCanvas/Dnd';
 export default function Land() { 
 
     return (
     
-    
-        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10" >
- 
+      //linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)
+      // bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]
 
+
+        <div className="inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10">
+<div className = "bg-[radial-gradient(circle,rgba(0,0,0,0.15)_1px,transparent_1px)] [background-size:32px_32px,auto]">
    <header className="sticky top-3 z-50 flex justify-center pt-4">
           <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
             <div className="flex items-center space-x-2">
@@ -31,18 +38,12 @@ export default function Land() {
             </div>
   
             <button className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition">
-        
+     
               
               Login
             </button>
           </div>
         </header>
-
-        
-        
-        
-        
-        
         
         <div className="flex h-[85vh]">
   <div className="w-1/2  p-6 flex justify-center items-center">
@@ -67,37 +68,13 @@ export default function Land() {
       </div>
     </div>
   </div>
-
-  <div className="w-1/2 flex flex-col items-center justify-center">
-  <div className="w-2/5 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50 -translate-x-20 z-30 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-100 mb-2">
-      <Server className="w-7 h-7 text-orange-600" />
-    </div>
-    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50 -mt-3 z-20 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-100 mb-2">
-      <Database className="w-7 h-7 text-blue-600" />
-    </div>
-    <h1 className="text-blue-700 font-semibold">RDS</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50 -mt-3 translate-x-20 z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-purple-100 mb-2">
-      <Archive className="w-7 h-7 text-purple-600" />
-    </div>
-    <h1 className="text-purple-700 font-semibold">S3 Bucket</h1>
-  </div>
-</div>
+  
 
 
-</div>
-
-<div className="w-full bg-transparent flex justify-center">
+  <div className="w-full bg-transparent flex justify-center">
   <div className="h-screen w-3/4 flex justify-center">
   
-    <div className="h-6/7 w-7/7 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
+    <div className="h-6/7 w-7/7">
      <ReactFlowProvider>
 <DnDFlow/>
 
@@ -105,9 +82,52 @@ export default function Land() {
     </div>
   </div>
 </div>
+</div>
+
+</div>
+
+<div className=" flex gap-5 mt-20 mb-20  items-center justify-center">
+  <div className="w-60 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full  border bg-orange-100 mb-2">
+      <Server className="w-7 h-7 text-orange-600 " />
+    </div>
+    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
+    <p>virtual servers to run code</p>
+  </div>
+
+  <div className="w-60 h-40 border border-green-100 rounded-xl shadow-lg shadow-green-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-green-100 mb-2">
+      <Database className="w-7 h-7 text-green-600" />
+    </div>
+    <h1 className="text-green-700 font-semibold">S3</h1>
+    <p>object storage for any file</p>
+  </div>
+
+  <div className="w-60 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50  z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-purple-100 mb-2">
+      <Archive className="w-7 h-7 text-purple-600" />
+    </div>
+    <h1 className="text-purple-700 font-semibold">RDS</h1>
+    <p>managed relational databases</p>
+  </div>
+  <div className="w-60 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
+    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-blue-100 mb-2">
+      <Archive className="w-7 h-7 text-blue-600" />
+    </div>
+    <h1 className="text-blue-700 font-semibold">Dynamo</h1>
+    <p>scalable NoSQL database </p>
+  </div>
+</div>
+
+<ReactFlowProvider>
+
+<DndFlow2/>
 
 
-<section className="bg-gradient-to-b from-transparent to-orange-50/40">
+</ReactFlowProvider>
+
+
+<section className="bg-gradient-to-b mt-20 from-transparent to-orange-50/40">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold">Why Choose Foundry?</h2>
