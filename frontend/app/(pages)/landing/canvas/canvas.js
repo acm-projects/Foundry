@@ -167,7 +167,7 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
     
 
 
-<div className="w-full h-[80vh] flex ">
+<div className="w-230 h-[80vh] flex ">
 
 
   <div className="shrink-0 ">
@@ -186,6 +186,8 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
       onDrop={onDrop}
       onDragOver={onDragOver}
       fitView
+      minZoom={2}
+      maxZoom={2}
     >
 
       

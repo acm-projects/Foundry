@@ -34,101 +34,147 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
   useEffect(() => { 
 
 
-    setNodes([
-      {
-        id: "EfE9356CMdRPnIOpUi7FS",
-        type: "DynamoDB",
-        position: { x: -137, y: 93 },
-        data: { label: "DynamoDB" }
+    setNodes([{
+      "data": {"label": "github"},
+      "dragging": false,
+      "id": "dndnode_0",
+      "measured": {"width": 40, "height": 52},
+      "position": {"x": -107.5, "y": 260.703125},
+      "selected": false,
+      "type": "github"
       },
       {
-        id: "CmVDz_2yUvDMrw-0CEqSY",
-        type: "EC2",
-        position: { x: -27, y: 156 },
-        data: { label: "EC2" }
+      "data": {"label": "workflow"},
+      "dragging": false,
+      "id": "dndnode_1",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": -3, "y": 266.5546875},
+      "selected": false,
+      "type": "workflow"
+      },
+      {"data"
+        : 
+        {"label": 'deploy'},
+        "dragging"
+        : 
+        false,
+        "id"
+        : 
+        "dndnode_2",
+        "measured"
+        : 
+        {"width": 40, "height": 40},
+        "position"
+        : 
+        {"x": 349, "y": 259.5546875},
+        "selected"
+        : 
+        false,
+        "type"
+        : 
+        "deploy"},
+      {
+      "data": {"label": "live"},
+      "dragging": false,
+      "id": "dndnode_3",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": 465.5, "y": 259.5546875},
+      "selected": false,
+      "type": "live"
       },
       {
-        id: "_fbjgqo_zp5psBgCljVoT",
-        type: "S3",
-        position: { x: 103.5, y: 117.5 },
-        data: { label: "S3" }
+      "data": {"label": "DynamoDB"},
+      "dragging": false,
+      "id": "dndnode_4",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": 172.5, "y": 382.70947265625},
+      "selected": true,
+      "type": "DynamoDB"
       },
       {
-        id: "C9X71Dvx41RKs4W3wnsus",
-        type: "S3",
-        position: { x: 215.5, y: 234.5 },
-        data: { label: "S3" }
+      "data": {"label": "RDS"},
+      "dragging": false,
+      "id": "dndnode_5",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": 172, "y": 311.0546875},
+      "selected": false,
+      "type": "RDS"
       },
       {
-        id: "dHBi-OTCmjFlzH7G3MvwB",
-        type: "RDS",
-        position: { x: 65.5, y: 271 },
-        data: { label: "RDS" }
+      "data": {"label": "S3"},
+      "dragging": false,
+      "id": "dndnode_6",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": 171, "y": 227.0546875},
+      "selected": false,
+      "type": "S3"
+      },
+      {
+      "data": {"label": "EC2"},
+      "dragging": false,
+      "id": "dndnode_7",
+      "measured": {"width": 40, "height": 40},
+      "position": {"x": 171.5, "y": 153.6171875},
+      "selected": false,
+      "type": "EC2"
       }
-    ]
+      ]
+     
+    
     )
-      
+
     setEdges([
       {
-        id: "epw92DEIDW3DKaFO0C9Rkt",
-        source: "EfE9356CMdRPnIOpUi7FS",
-        target: "CmVDz_2yUvDMrw-0CEqSY",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_0-dndnode_1",
+      "source": "dndnode_0",
+      "target": "dndnode_1"
       },
       {
-        id: "ess83VX5uiAdfxUrvM5w1Y",
-        source: "EfE9356CMdRPnIOpUi7FS",
-        target: "CmVDz_2yUvDMrw-0CEqSY",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_1-dndnode_6",
+      "source": "dndnode_1",
+      "target": "dndnode_6"
       },
       {
-        id: "emzK7IgkaOItvSJveSj9dS",
-        source: "CmVDz_2yUvDMrw-0CEqSY",
-        target: "_fbjgqo_zp5psBgCljVoT",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_1-dndnode_7",
+      "source": "dndnode_1",
+      "target": "dndnode_7"
       },
       {
-        id: "e_q3IOrTdiAs26NHOQouu9",
-        source: "CmVDz_2yUvDMrw-0CEqSY",
-        target: "_fbjgqo_zp5psBgCljVoT",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_1-dndnode_5",
+      "source": "dndnode_1",
+      "target": "dndnode_5"
       },
       {
-        id: "ejDaXV01Cx0z2yCwkg4aKV",
-        source: "_fbjgqo_zp5psBgCljVoT",
-        target: "C9X71Dvx41RKs4W3wnsus",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_1-dndnode_4",
+      "source": "dndnode_1",
+      "target": "dndnode_4"
       },
       {
-        id: "eOY92F8EzvttslxKKyDtsr",
-        source: "_fbjgqo_zp5psBgCljVoT",
-        target: "C9X71Dvx41RKs4W3wnsus",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_7-dndnode_2",
+      "source": "dndnode_7",
+      "target": "dndnode_2"
       },
       {
-        id: "enqmyDpdh7dHjVPMyF4G1y",
-        source: "C9X71Dvx41RKs4W3wnsus",
-        target: "dHBi-OTCmjFlzH7G3MvwB",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_6-dndnode_2",
+      "source": "dndnode_6",
+      "target": "dndnode_2"
       },
       {
-        id: "eZR-ZQ6A2c_LJUTQ4RUaQ7",
-        source: "C9X71Dvx41RKs4W3wnsus",
-        target: "dHBi-OTCmjFlzH7G3MvwB",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
+      "id": "xy-edge__dndnode_5-dndnode_2",
+      "source": "dndnode_5",
+      "target": "dndnode_2"
+      },
+      {
+      "id": "xy-edge__dndnode_4-dndnode_2",
+      "source": "dndnode_4",
+      "target": "dndnode_2"
+      },
+      {
+      "id": "xy-edge__dndnode_2-dndnode_3",
+      "source": "dndnode_2",
+      "target": "dndnode_3"
       }
-    ]
-    
-    
-    )
+      ])
     
     
     },[])
@@ -161,8 +207,8 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
   
     
     
-  
-
+  console.log(edges)
+console.log(nodes)
   return (
     
 
@@ -185,6 +231,15 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
       onDrop={onDrop}
       onDragOver={onDragOver}
       fitView
+      zoomOnScroll={false}
+      zoomOnPinch={false}
+      zoomOnDoubleClick={false}
+     
+      panOnScroll={false}
+      panOnDrag={false}
+
+      minZoom={2}
+      maxZoom={2}
     >
 
       

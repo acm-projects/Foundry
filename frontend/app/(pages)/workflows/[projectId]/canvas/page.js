@@ -191,7 +191,7 @@ const deleteNode = (id) => {
     </div>
     <Sidebar />
   </div>
-  <div className="flex-1 relative">
+  <div className="flex-1 ">
     <ReactFlow
       defaultEdgeOptions={{
         animated: true,

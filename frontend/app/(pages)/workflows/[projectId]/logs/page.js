@@ -29,7 +29,7 @@ console.log("something is chosen",selected)
 <Switch selected={selected} onChange = {handleChange}  className = "ml-20"/>
 </div>
 
-{selected === 'activity' ? <InfraLog/> : <DynamoLog/>}
+{selected === 'activity' ? <InfraLog/> :<div> <DynamoLog/> <EC2log/></div>}
 
 
 

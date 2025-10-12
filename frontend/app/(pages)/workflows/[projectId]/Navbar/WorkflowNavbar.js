@@ -41,6 +41,7 @@ const[user,setUser] = useState(false)
     <Cloud className="w-5 h-5 text-white" />
   </div>
   </Link>
+  <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Project Name</h1>
   <div className="flex flex-col sm:flex-row bg-white p-2 shadow-xl rounded-2xl border border-gray-100 sm:space-x-2 w-fit">
     {tabs.map((tab) => {
       const Icon = tab.icon;
