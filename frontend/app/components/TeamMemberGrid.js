@@ -1,4 +1,5 @@
 import TeamMemberCard from "./TeamMemberCard";
+import { Input } from '@/app/components/ui/input'
 
 export default function TeamMemberGrid({ members, setMembers }) {
   const handleRoleChange = (index, value) => {
@@ -9,6 +10,7 @@ export default function TeamMemberGrid({ members, setMembers }) {
 
   return (
     <div className="flex flex-col gap-2">
+      <Input placeholder="Enter a GitHub username..."/>
       {members.map((member, index) => (
         <TeamMemberCard
           key={index}

@@ -23,7 +23,62 @@ export default function SettingsPage({ params }) {
 
   return (
     <div className="pt-8 pb-8">
-    
+      <h1 className="text-2xl font-bold mt-4">
+        Settings for Project {params.projectId}
+      </h1>
+      <div className="flex flex-col items-center">
+        <div className="flex w-full gap-5 mt-6">
+          <Card className="max-w-30vw flex-1 flex-grow min-h-90 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl transition-transform duration-200">
+            <CardHeader>
+              <CardTitle>Project Settings</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-4">
+                  <div className="flex flex-col w-full">
+                    <Label htmlFor="projectName" className="mb-1">Project Name</Label>
+                    <Input 
+                      id="projectName"
+                      value={projectName}
+                      onChange={(e) => setProjectName(e.target.value)}
+                      placeholder="My Foundry Workflow" 
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col w-full">
+                  <Label htmlFor="description" className="mb-1">Description</Label>
+                  <Input
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="This is an AWS deployment made easy by Foundry."
+                    className="text-top align-top py-2"
+                  />
+                </div>
+                <div className="flex flex-col w-full">
+                  <Label htmlFor="region" className="mb-1">Region</Label>
+                  <Input
+                    id="region"
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
+                    placeholder="US East"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="max-w-30vw flex-1 flex-grow min-h-100 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl transition-transform duration-200">
+            <CardHeader>
+              <CardTitle>Team Access</CardTitle>
+              <CardDescription>Invite your team members to collaborate.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TeamMemberGrid members={teamMembers} setMembers={setTeamMembers}/>
+            </CardContent>
+          </Card>
+        </div>
+        <Button onClick={handleSave} className="mt-5 w-full max-w-70 self-center bg-orange-600 hover:bg-orange-600/80 hover:cursor-pointer">Save</Button>
+      </div>
 
     </div>
   );
