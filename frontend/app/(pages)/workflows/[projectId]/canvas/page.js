@@ -34,8 +34,6 @@ const[configs,setConfigs] = useState({}) // 6 77777777777777
 
 
 
-const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
-
 const onNodeClick = useCallback((event, node) => {
   
   setConfigID(node.id);
@@ -133,7 +131,7 @@ const onNodeClick = useCallback((event, node) => {
               target: newNode.id,
               animated: true,
             
-              style: { stroke: 'orange',opacity: 0.5 ,strokeWidth: 2 }
+              style: { stroke: 'orange',opacity: 0.5 ,strokeWidth: 2 },
            
               animated: true,
               style: {  strokeWidth: 2,opacity: .8 }
