@@ -17,7 +17,7 @@ export default function UserProfile() {
        
       </div>
       {open && (
-     <div className="absolute right-0 w-40 rounded-xl border border-gray-100 bg-gray-50 shadow-lg py-1">
+     <div className="absolute right-0 w-40 rounded-xl  border border-gray-100 bg-gray-50 shadow-lg py-1">
      <div className="px-4 py-2 text-sm text-gray-800 border-b border-gray-200">
        <div className="font-medium">Efrain</div>
        <div className="text-xs text-gray-500">efrain-grubs</div>

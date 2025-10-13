@@ -7,11 +7,11 @@ export default function WorkflowCard({title, description, status, lastModified})
   return (
     <div>
       <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 
-  bg-white/50 backdrop-blur-md border border-white/20 shadow-lg rounded-2xl
+  bg-gray-100 backdrop-blur-md shadow-lg rounded-2xl
   transition duration-200 hover:scale-[1.02] hover:cursor-pointer">
         <CardHeader className="gap-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="transition-colors truncate pr-2 group-hover:text-orange-500">
+            <CardTitle className="transition-colors truncate pr-2">
               {title}
             </CardTitle>
             <DeploymentStatus status={status}/>

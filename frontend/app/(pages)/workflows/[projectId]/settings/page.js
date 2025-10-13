@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 
+import { Card , CardHeader, CardTitle, CardContent, CardDescription} from '@/app/components/ui/card'
+import { Input } from '@/app/components/ui/input'
+import { Label } from '@/app/components/ui/label'
+import { Select , SelectTrigger, SelectContent, SelectValue, SelectItem, SelectGroup} from '@/app/components/ui/select'
+import { Button } from '@/app/components/ui/button'
+import TeamMemberGrid from "@/app/components/TeamMemberGrid";
 
 
 
@@ -23,12 +29,9 @@ export default function SettingsPage({ params }) {
 
   return (
     <div className="pt-8 pb-8">
-      <h1 className="text-2xl font-bold mt-4">
-        Settings for Project {params.projectId}
-      </h1>
       <div className="flex flex-col items-center">
         <div className="flex w-full gap-5 mt-6">
-          <Card className="max-w-30vw flex-1 flex-grow min-h-90 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl transition-transform duration-200">
+          <Card className="max-w-30vw flex-1 flex-grow min-h-90 bg-gray-100 backdrop-blur-md   rounded-2xl transition-transform duration-200">
             <CardHeader>
               <CardTitle>Project Settings</CardTitle>
             </CardHeader>
@@ -67,7 +70,7 @@ export default function SettingsPage({ params }) {
               </div>
             </CardContent>
           </Card>
-          <Card className="max-w-30vw flex-1 flex-grow min-h-100 bg-white/50 backdrop-blur-md border border-white/20 rounded-2xl transition-transform duration-200">
+          <Card className="max-w-30vw flex-1 flex-grow min-h-100 bg-gray-100 backdrop-blur-md rounded-2xl transition-transform duration-200">
             <CardHeader>
               <CardTitle>Team Access</CardTitle>
               <CardDescription>Invite your team members to collaborate.</CardDescription>

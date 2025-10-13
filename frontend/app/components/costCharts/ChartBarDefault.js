@@ -32,7 +32,8 @@ const chartConfig = {
 }
 export function ChartBarDefault() {
   return (
-    <Card>
+   
+    <Card className = "bg-gray-100">
       <CardHeader>
         <CardTitle>Bar Chart</CardTitle>
         <CardDescription>January - June 2025</CardDescription>
@@ -64,5 +65,6 @@ export function ChartBarDefault() {
         </div>
       </CardFooter>
     </Card>
+
   )
 }

@@ -8,16 +8,9 @@ import { nanoid } from "nanoid";
 import { ReactFlow,ReactFlowProvider, addEdge, useNodesState,useEdgesState,Controls,useReactFlow,Background} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
-<<<<<<< HEAD
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
-=======
-import Deploy from "./buttons/deploy";
-import Live from "./buttons/live";
-import Sidebar from "./sideBar";
-import { DnDProvider, useDnD } from "./DnDContext";
->>>>>>> Enaya2
 import Deploy from './Deployment/deploy'
 import Live from "./Deployment/live";
 import {useState} from "react"
@@ -37,8 +30,6 @@ const DnDFlow = () => {
 const[configID,setConfigID] = useState(null);
 
 const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
-
-
 
 const onNodeClick = useCallback((event, node) => {
   
@@ -127,8 +118,6 @@ const onNodeClick = useCallback((event, node) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
       
-<<<<<<< HEAD
-=======
        
    
         if (prevLast) {
@@ -147,7 +136,6 @@ const onNodeClick = useCallback((event, node) => {
             })
           );
         }
->>>>>>> Enaya2
 
        
     switch(newNode.type) {
@@ -230,20 +218,10 @@ const deleteNode = (id) => {
 
 
 <div className="w-full h-[80vh] flex relative">
-<<<<<<< HEAD
   <div className="shrink-0">
     <div className = "ml-9">
     <Live/>
     </div>
-=======
-
-
-  <div className="absolute top-4  right-4 z-10 w-full">
-    <Deploy nodes={nodes} />
-  </div>
-  <div className="shrink-0 ">
-  
->>>>>>> Enaya2
     <Sidebar />
   </div>
   <div className="flex-1 ">
@@ -268,7 +246,14 @@ const deleteNode = (id) => {
     >
       {console.log("object", onNodeClick.node)}
     </ReactFlow>
-<<<<<<< HEAD
+   
+    {console.log("share",nodes)}
+{ ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
+{ s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
+{ rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
+{ dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
+ 
+
 
     {console.log("share", nodes)}
     {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2} /> : null}
@@ -279,16 +264,6 @@ const deleteNode = (id) => {
     <div className="absolute right-8 -bottom-4 mb-10 mr-4">
       <Deploy />
     </div>
-=======
-   
-    {console.log("share",nodes)}
-{ ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
-{ s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
-{ rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
-{ dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
- 
-
->>>>>>> Enaya2
   </div>
 
   <Controls position="bottom-right" />
