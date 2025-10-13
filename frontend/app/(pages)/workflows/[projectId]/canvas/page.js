@@ -8,11 +8,14 @@ import { nanoid } from "nanoid";
 import { ReactFlow,ReactFlowProvider, addEdge, useNodesState,useEdgesState,Controls,useReactFlow,Background} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
+import Deploy from "./buttons/deploy";
+import Live from "./buttons/live";
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 import Deploy from './Deployment/deploy'
 import Live from "./Deployment/live";
 import {useState} from "react"
+import SaveWorkflowDialog from "@/app/components/SaveWorkflowModal";
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -26,6 +29,10 @@ const DnDFlow = () => {
   const[rds,setRDS] = useState(false);
   const[dynamo,setDynamo] = useState(false)
 const[configID,setConfigID] = useState(null);
+
+const[configs,setConfigs] = useState({}) // 6 77777777777777
+
+
 
 const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
 
@@ -115,6 +122,7 @@ const onNodeClick = useCallback((event, node) => {
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
+      
        
    
         if (prevLast) {
@@ -123,6 +131,10 @@ const onNodeClick = useCallback((event, node) => {
               id: `e${nanoid()}`,
               source: prevLast.id,
               target: newNode.id,
+              animated: true,
+            
+              style: { stroke: 'orange',opacity: 0.5 ,strokeWidth: 2 }
+           
               animated: true,
               style: {  strokeWidth: 2,opacity: .8 }
               
@@ -170,6 +182,21 @@ const onNodeClick = useCallback((event, node) => {
     [screenToFlowPosition, type, setNodes, setEdges]
   );
 
+  useEffect(() => { 
+
+localStorage.getItem("amiID")
+
+
+  },[configID])
+
+
+  
+    
+  
+
+
+
+ 
 function closeEc2() { 
     setEc2(false)
   }
@@ -204,8 +231,8 @@ const deleteNode = (id) => {
   <div className="shrink-0 ">
   
     <Sidebar />
- 
   </div>
+
   <div className="flex-1">
     <ReactFlow
       style={{ width: "100%", height: "100%" }}
@@ -219,9 +246,8 @@ const deleteNode = (id) => {
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
-     
     >
-      {console.log("object",onNodeClick.node)}
+    
     </ReactFlow>
    
     {console.log("share",nodes)}
@@ -232,8 +258,10 @@ const deleteNode = (id) => {
  
 
   </div>
-  <Controls position = "bottom-right"/>
+
+  <Controls position="bottom-right" />
 </div>
+
 
       
     
@@ -246,6 +274,7 @@ export default function CanvasPage() {
       <DnDProvider>
         <DnDFlow />
       </DnDProvider>
+      <SaveWorkflowDialog/>
     </ReactFlowProvider>
   );
 }

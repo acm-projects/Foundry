@@ -2,7 +2,8 @@
 import { memo } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
-import { cn } from "@/lib/utils"
+
+import { cn } from "./Utils";
 
 const staggerTimings = {
   text: 0.06,

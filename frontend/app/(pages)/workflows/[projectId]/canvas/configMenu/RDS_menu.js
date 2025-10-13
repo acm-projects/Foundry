@@ -79,7 +79,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
 
       <form className="space-y-2">
         
-          <span className="font-medium text-gray-800">Database engine <span className = 'text-red-500'>*</span></span>
+          <span className="font-medium text-gray-800">Database engine </span>
           <select value = {engine} onChange = {(e) => setEngine(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>Postgre SQL</option>
@@ -89,7 +89,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
           
           
      
-     <span className="font-medium text-gray-800">DB instance class</span>
+     <span className="font-medium text-gray-800">DB instance class </span>
      <select value = {instanceClass} onChange = {(e) => setInstanceClass(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>db.t3.micro</option>

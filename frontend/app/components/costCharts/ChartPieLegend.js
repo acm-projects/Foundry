@@ -1,5 +1,5 @@
 "use client"
-import { Pie, PieChart } from "recharts"
+import { Pie, PieChart, ResponsiveContainer } from "recharts"
 import {
   ChartContainer,
   ChartLegend,
@@ -35,17 +35,27 @@ const chartConfig = {
 }
 export function ChartPieLegend() {
   return (
-    <ChartContainer
-    config={chartConfig}
-    className="mx-auto aspect-square min-h-100"
-  >
-    <PieChart>
-      <Pie data={chartData} dataKey="cost" />
-      <ChartLegend
-        content={<ChartLegendContent nameKey="browser" />}
-        className="mt-8 -translate-y-2 flex-col gap-2 *:basis-1/4 *:justify-center"
-      />
-    </PieChart>
-  </ChartContainer>
-  )
+    <ChartContainer config={chartConfig} className="mx-auto w-full max-w-xl">
+      <div className="flex flex-col items-center justify-center py-6">
+        <div className="w-full max-w-sm">
+          {/* The legend now lives INSIDE the PieChart */}
+          <ResponsiveContainer width="100%" height={350}>
+            <PieChart>
+              <Pie
+                data={chartData}
+                dataKey="cost"
+                nameKey="browser"
+              />
+              <ChartLegend
+                verticalAlign="bottom"
+                align="center"
+                content={<ChartLegendContent nameKey="browser" />}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </ChartContainer>
+  );
 }
+
