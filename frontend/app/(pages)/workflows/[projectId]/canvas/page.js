@@ -186,7 +186,7 @@ const deleteNode = (id) => {
 
 <div className="w-full h-[80vh] flex relative">
   <div className="shrink-0">
-    <div className = "ml-10">
+    <div className = "ml-9">
     <Live/>
     </div>
     <Sidebar />

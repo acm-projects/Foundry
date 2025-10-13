@@ -37,7 +37,7 @@ const[user,setUser] = useState(false)
   return (
     <div className="relative w-full flex items-center justify-center ">
       <Link href='/workflows'>
-  <div className="absolute left-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
+  <div className="absolute left-9 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-xl  bg-orange-500 shadow-sm">
     <Cloud className="w-5 h-5 text-white" />
   </div>
   </Link>

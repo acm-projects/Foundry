@@ -13,9 +13,9 @@ export default function Live() {
 
 {live ?  <div >
  
-<div className>
+<div className = "">
 <button onClick={() => setOpen(!open)}>
-<div className="inline-flex items-center gap-2 rounded-lg bg-green-200 px-4 py-2 shadow-sm border border-gray-200 mr-10">
+<div className="inline-flex items-center gap-2 rounded-lg bg-green-200 px-3 py-2 shadow-sm border  border-gray-200">
 <span className="h-2.5 w-2.5 rounded-full bg-green-400"></span>
 <span className="font-medium text-gray-700 flex  gap-1">
 Live
