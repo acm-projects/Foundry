@@ -47,22 +47,6 @@ export default function SettingsPage({ params }) {
                       placeholder="My Foundry Workflow" 
                     />
                   </div>
-                  <div className="flex flex-col w-full">
-                    <Label htmlFor="environment" className="mb-1">Environment</Label>
-                    <Select value={environment} onValueChange={setEnvironment} id="environment">
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Development" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="development">Development</SelectItem>
-                          <SelectItem value="staging">Staging</SelectItem>
-                          <SelectItem value="production">Production</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-
-                  </div>
                 </div>
                 <div className="flex flex-col w-full">
                   <Label htmlFor="description" className="mb-1">Description</Label>
@@ -71,6 +55,7 @@ export default function SettingsPage({ params }) {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="This is an AWS deployment made easy by Foundry."
+                    className="text-top align-top py-2"
                   />
                 </div>
                 <div className="flex flex-col w-full">
