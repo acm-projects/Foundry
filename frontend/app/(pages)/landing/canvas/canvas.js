@@ -33,102 +33,86 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
 
   useEffect(() => { 
 
+setNodes( [
+  {
+    data: { label: 'EC2' },
+    dragging: false,
+    id: 'dndnode_0',
+    measured: { width: 40, height: 40 },
+    position: { x: -283.2451171875, y: 97 },
+    selected: false,
+    type: 'EC2'
+  },
+  {
+    data: { label: 'RDS' },
+    dragging: false,
+    id: 'dndnode_1',
+    measured: { width: 40, height: 40 },
+    position: { x: -133.2646484375, y: 9.5 },
+    selected: false,
+    type: 'RDS'
+  },
+  {
+    data: { label: 'S3' },
+    dragging: false,
+    id: 'dndnode_2',
+    measured: { width: 40, height: 40 },
+    position: { x: -125.2646484375, y: 162 },
+    selected: false,
+    type: 'S3'
+  },
+  {
+    data: { label: 'DynamoDB' },
+    dragging: false,
+    id: 'dndnode_3',
+    measured: { width: 40, height: 40 },
+    position: { x: 45.7353515625, y: 92.5 },
+    selected: false,
+    type: 'DynamoDB'
+  },
+  {
+    data: { label: 'EC2' },
+    dragging: false,
+    id: 'dndnode_4',
+    measured: { width: 40, height: 40 },
+    position: { x: -62.2646484375, y: 196 },
+    selected: true,
+    type: 'EC2'
+  }
+]);
 
-    setNodes([
-      {
-        id: "EfE9356CMdRPnIOpUi7FS",
-        type: "DynamoDB",
-        position: { x: -137, y: 93 },
-        data: { label: "DynamoDB" }
-      },
-      {
-        id: "CmVDz_2yUvDMrw-0CEqSY",
-        type: "EC2",
-        position: { x: -27, y: 156 },
-        data: { label: "EC2" }
-      },
-      {
-        id: "_fbjgqo_zp5psBgCljVoT",
-        type: "S3",
-        position: { x: 103.5, y: 117.5 },
-        data: { label: "S3" }
-      },
-      {
-        id: "C9X71Dvx41RKs4W3wnsus",
-        type: "S3",
-        position: { x: 215.5, y: 234.5 },
-        data: { label: "S3" }
-      },
-      {
-        id: "dHBi-OTCmjFlzH7G3MvwB",
-        type: "RDS",
-        position: { x: 65.5, y: 271 },
-        data: { label: "RDS" }
-      }
-    ]
-    )
-      
-    setEdges([
-      {
-        id: "epw92DEIDW3DKaFO0C9Rkt",
-        source: "EfE9356CMdRPnIOpUi7FS",
-        target: "CmVDz_2yUvDMrw-0CEqSY",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "ess83VX5uiAdfxUrvM5w1Y",
-        source: "EfE9356CMdRPnIOpUi7FS",
-        target: "CmVDz_2yUvDMrw-0CEqSY",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "emzK7IgkaOItvSJveSj9dS",
-        source: "CmVDz_2yUvDMrw-0CEqSY",
-        target: "_fbjgqo_zp5psBgCljVoT",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "e_q3IOrTdiAs26NHOQouu9",
-        source: "CmVDz_2yUvDMrw-0CEqSY",
-        target: "_fbjgqo_zp5psBgCljVoT",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "ejDaXV01Cx0z2yCwkg4aKV",
-        source: "_fbjgqo_zp5psBgCljVoT",
-        target: "C9X71Dvx41RKs4W3wnsus",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "eOY92F8EzvttslxKKyDtsr",
-        source: "_fbjgqo_zp5psBgCljVoT",
-        target: "C9X71Dvx41RKs4W3wnsus",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "enqmyDpdh7dHjVPMyF4G1y",
-        source: "C9X71Dvx41RKs4W3wnsus",
-        target: "dHBi-OTCmjFlzH7G3MvwB",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      },
-      {
-        id: "eZR-ZQ6A2c_LJUTQ4RUaQ7",
-        source: "C9X71Dvx41RKs4W3wnsus",
-        target: "dHBi-OTCmjFlzH7G3MvwB",
-        style: { strokeWidth: 2, opacity: 0.8 },
-        animated: true
-      }
-    ]
-    
-    
-    )
+setEdges([
+  {
+    animated: true,
+    id: 'xy-edge__dndnode_0-dndnode_1',
+    source: 'dndnode_0',
+    style: { strokeWidth: 2, opacity: 0.9 },
+    target: 'dndnode_1'
+  },
+  {
+    animated: true,
+    id: 'xy-edge__dndnode_0-dndnode_2',
+    source: 'dndnode_0',
+    style: { strokeWidth: 2, opacity: 0.9 },
+    target: 'dndnode_2'
+  },
+  {
+    animated: true,
+    id: 'xy-edge__dndnode_0-dndnode_3',
+    source: 'dndnode_0',
+    style: { strokeWidth: 2, opacity: 0.9 },
+    target: 'dndnode_3'
+  },
+  {
+    animated: true,
+    id: 'xy-edge__dndnode_4-dndnode_3',
+    source: 'dndnode_4',
+    style: { strokeWidth: 2, opacity: 0.9 },
+    target: 'dndnode_3'
+  }
+])
+
+   
     
     
     },[])
@@ -158,24 +142,41 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
     [screenToFlowPosition, type, setNodes, setEdges]
   );
   
+  const wrapperRef = React.useRef(null);
+  React.useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+  
+    const onWheel = (e) => {
+      
+      window.scrollBy({ top: e.deltaY, left: e.deltaX, behavior: 'auto' });
+      e.preventDefault();
+    };
+  
+    
+    el.addEventListener('wheel', onWheel, { capture: true, passive: false });
+    return () => el.removeEventListener('wheel', onWheel, { capture: true });
+  }, []);
   
     
     
-  
+  console.log(nodes)
+  console.log(edges)
 
   return (
     
 
 
-<div className="w-230 h-[80vh] flex ">
+<div className="w-[100vh] h-[80vh] flex ">
 
 
   <div className="shrink-0 ">
   
 
   </div>
-  <div className="flex-1">
+  <div ref = {wrapperRef} className="flex-1">
     <ReactFlow
+    proOptions={{ hideAttribution: true }}
       style={{ width: "100%", height: "100%" }}
       nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
       nodes={nodes}
@@ -188,6 +189,11 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
       fitView
       minZoom={2}
       maxZoom={2}
+      defaultEdgeOptions={{
+        animated: true,
+        style: { strokeWidth: 2, opacity: 0.9 }
+        
+      }}
     >
 
       

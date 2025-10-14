@@ -12,7 +12,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className="bg-transparent mt-25 flex items-center absolute ml-9 justify-center">
+    <div className="bg-transparent mt-25 flex items-center absolute justify-center">
       <div className="bg-white rounded-xl p-3">
         <div className="flex flex-col space-y-3 justify-center items-center bg-transparent">
 

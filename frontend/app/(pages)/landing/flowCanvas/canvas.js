@@ -39,7 +39,7 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
       "dragging": false,
       "id": "dndnode_0",
       "measured": {"width": 40, "height": 52},
-      "position": {"x": -107.5, "y": 260.703125},
+      "position": {x: -114, y: 266.703125},
       "selected": false,
       "type": "github"
       },
@@ -203,25 +203,41 @@ const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)
     },
     [screenToFlowPosition, type, setNodes, setEdges]
   );
+
+const wrapperRef = React.useRef(null);
+React.useEffect(() => {
+  const el = wrapperRef.current;
+  if (!el) return;
+
+  const onWheel = (e) => {
+    
+    window.scrollBy({ top: e.deltaY, left: e.deltaX, behavior: 'auto' });
+    e.preventDefault();
+  };
+
+  
+  el.addEventListener('wheel', onWheel, { capture: true, passive: false });
+  return () => el.removeEventListener('wheel', onWheel, { capture: true });
+}, []);
   
   
     
     
   console.log(edges)
 console.log(nodes)
+
+
   return (
     
 
 
-<div className="w-full h-[80vh] flex ">
+<div className="w-full h-[80vh] flex relative ">
 
-
-  <div className="shrink-0 ">
-  
-  </div>
-  <div className="flex-1">
+  <div ref = {wrapperRef} className="flex-1">
+    
     <ReactFlow
-      style={{ width: "100%", height: "100%" }}
+   
+      style={{ width: "100%", height: "100%", }}
       nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode, github: SingleHandleNode,workflow: SingleHandleNode,deploy: SingleHandleNode,live: SingleHandleNode }}
       nodes={nodes}
       edges={edges}
@@ -231,15 +247,17 @@ console.log(nodes)
       onDrop={onDrop}
       onDragOver={onDragOver}
       fitView
-      zoomOnScroll={false}
-      zoomOnPinch={false}
-      zoomOnDoubleClick={false}
-     
-      panOnScroll={false}
-      panOnDrag={false}
-
       minZoom={2}
       maxZoom={2}
+      proOptions={{ hideAttribution: true }}
+      defaultEdgeOptions={{
+        animated: true,
+        style: { strokeWidth: 2, opacity: 0.9 }
+      }}
+     
+     
+     
+
     >
 
       

@@ -4,7 +4,7 @@ import {
     Server, Archive, Database
   } from "lucide-react";
   import Link from 'next/link';
-
+import DeploymentTimeline from './timeline/deploymentTimeline';
   import { ReactFlow, Controls } from '@xyflow/react';
   //normal canvas
 import '@xyflow/react/dist/style.css';
@@ -86,57 +86,84 @@ export default function Land() {
 
 </div>
 
-<div className=" flex gap-5 mt-20 mb-20  items-center justify-center">
-  <div className="w-60 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full  border bg-orange-100 mb-2">
-      <Server className="w-7 h-7 text-orange-600 " />
-    </div>
-    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
-    <p>virtual servers to run code</p>
+<div className=" flex gap-10 mt-20 mb-20   items-center justify-center">
+<div className="w-[40vh] h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center mr-6">
+    <Server className="w-10 h-10 text-orange-600" />
   </div>
+  <div className="flex flex-col">
+    <h1 className="text-orange-700 font-semibold text-lg mb-1">ECS Instance</h1>
+    <p className="text-xs text-gray-700 leading-snug">
+    EC2 offers scalable virtual servers to run applications without 
+    managing hardware, giving full control over OS, storage, and performance.
 
-  <div className="w-60 h-40 border border-green-100 rounded-xl shadow-lg shadow-green-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-green-100 mb-2">
-      <Database className="w-7 h-7 text-green-600" />
-    </div>
-    <h1 className="text-green-700 font-semibold">S3</h1>
-    <p>object storage for any file</p>
-  </div>
-
-  <div className="w-60 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50  z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-purple-100 mb-2">
-      <Archive className="w-7 h-7 text-purple-600" />
-    </div>
-    <h1 className="text-purple-700 font-semibold">RDS</h1>
-    <p>managed relational databases</p>
-  </div>
-  <div className="w-60 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50  flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full border bg-blue-100 mb-2">
-      <Archive className="w-7 h-7 text-blue-600" />
-    </div>
-    <h1 className="text-blue-700 font-semibold">Dynamo</h1>
-    <p>scalable NoSQL database </p>
+  </p>
   </div>
 </div>
 
+
+<div className="w-[40vh] h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center  mr-6">
+    <Archive className="w-10 h-10 text-green-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-green-700 font-semibold text-lg mb-1">S3 Bucket</h1>
+    <p className="text-xs text-gray-700 leading-snug">
+    Amazon S3 provides secure, scalable object 
+    storage for any type of file, allowing easy access, backup, and data management from anywhere.
+    </p>
+  </div>
+</div>
+<div className="w-[40vh] h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center mr-6">
+    <Database className="w-10 h-10 text-purple-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-purple-700 font-semibold text-lg mb-1">RDS</h1>
+    <p className="text-xs text-gray-700 leading-snug">
+    Amazon RDS offers managed relational databases that handle
+     setup, scaling, and maintenance, allowing developers to focus on building applications efficiently.
+    </p>
+  </div>
+</div>
+
+
+<div className="w-[40vh] h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center  mr-6">
+    <Database className="w-10 h-10 text-blue-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-blue-700 font-semibold text-lg mb-1">DynamoDB</h1>
+    <p className="text-xs text-gray-700 leading-snug">
+    Amazon DynamoDB is a fully managed, 
+    scalable NoSQL database that delivers fast performance
+     and automatically handles data distribution and scaling.
+    </p>
+  </div>
+</div>
+</div>
+<div className = "mt-30">
+<DeploymentTimeline/>
+</div>
+<div className = "mt-20">
 <ReactFlowProvider>
 
 <DndFlow2/>
 
 
 </ReactFlowProvider>
+</div>
 
-
-<section className="bg-gradient-to-b mt-20 from-transparent to-orange-50/40">
+<section className="bg-gradient-to-b mb-20 from-transparent to-orange-50/40">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold">Why Choose Foundry?</h2>
               <p className="mt-2 text-gray-500">Built for developers, by developers</p>
             </div>
   
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="mt-10 grid  grid-cols-1 md:grid-cols-3 gap-6">
               <Card
-                icon={<Bolt className="w-6 h-6 text-orange-600" />}
+                icon={<Bolt className="w-6 h-6  text-orange-600" />}
                 title="Lightning Fast"
                 desc="Deploy AWS infrastructure in minutes, not hours. Our visual interface streamlines the entire process."
               />
@@ -186,7 +213,7 @@ export default function Land() {
 }
 function Card({ icon, title, desc }) {
     return (
-      <div className="rounded-2xl border border-orange-100 bg-white shadow-sm p-8 text-center">
+      <div className="rounded-2xl border  bg-orange-50 shadow-sm p-8 text-center">
         <div className="w-12 h-12 rounded-xl bg-orange-100 mx-auto flex items-center justify-center">
           {icon}
         </div>

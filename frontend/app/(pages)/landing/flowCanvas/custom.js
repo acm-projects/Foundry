@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { Handle, Position } from "@xyflow/react";
-import { Archive,Server,Database,Github, MousePointer2 } from "lucide-react";
+import { Archive,Server,Database,Github, MousePointer2,Rocket,Globe } from "lucide-react";
+
 export default function SingleHandleNode({ data }) {
 
 
@@ -106,14 +107,14 @@ switch(data.label) {
         <div className="flex flex-col items-center">
         <div className="w-10 h-10 rounded-2xl hover:shadow-2xl bg-white shadow-sm flex items-center justify-center text-black">
           <div className="flex justify-center items-center font-semibold">
-            <Github />
+            <Github className = "w-6 h-6" />
           </div>
   
           <Handle type="target" position={Position.Left} isConnectable={true} />
           <Handle type="source" position={Position.Right} isConnectable={true} />
         </div>
   
-        <p className="text-[8px] font-semibold">log in</p>
+        
       </div>
       
     
@@ -123,7 +124,7 @@ switch(data.label) {
             <div className="flex flex-col items-center">
             <div className="w-10 h-10 rounded-2xl hover:shadow-2xl bg-white shadow-sm flex items-center justify-center text-black relative">
               <div className="flex justify-center items-center font-semibold">
-                <MousePointer2 />
+                <MousePointer2 className = "w-6 h-6" />
               </div>
           
               <Handle type="target" position={Position.Left} isConnectable={true} />
@@ -131,7 +132,7 @@ switch(data.label) {
             </div>
           
             <p className="absolute text-[8px] font-semibold mt-10 text-center w-20 truncate">
-              pick your services
+      
             </p>
           </div>
           )
@@ -140,7 +141,7 @@ switch(data.label) {
                 <div className="flex flex-col items-center">
                 <div className="w-10 h-10 rounded-2xl hover:shadow-2xl bg-white shadow-sm flex items-center justify-center text-black relative">
                   <div className="flex justify-center items-center font-semibold">
-                    <p className = "font-bold text-[8px]">Deploy</p>
+                    <Rocket className = "w-6 h-6"/>
                   </div>
               
                   <Handle type="target" position={Position.Left} isConnectable={true} />
@@ -155,8 +156,8 @@ switch(data.label) {
                 <div className="flex flex-col items-center">
                 <div className="w-10 h-10 rounded-2xl hover:shadow-2xl bg-white shadow-sm flex items-center justify-center text-black relative">
                   <div className="flex justify-center items-center font-semibold">
-                    
-                    <p className = "font-bold text-[8px]"><span></span>Live</p>
+                    <Globe className = "w-6 h-6"/>
+                   
                   </div>
               
                   <Handle type="target" position={Position.Left} isConnectable={true} />

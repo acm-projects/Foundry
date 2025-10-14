@@ -120,22 +120,6 @@ const onNodeClick = useCallback((event, node) => {
       
        
    
-        if (prevLast) {
-          setEdges((eds) =>
-            eds.concat({
-              id: `e${nanoid()}`,
-              source: prevLast.id,
-              target: newNode.id,
-              animated: true,
-            
-              style: { stroke: 'orange',opacity: 0.5 ,strokeWidth: 2 },
-           
-              animated: true,
-              style: {  strokeWidth: 2,opacity: .8 }
-              
-            })
-          );
-        }
 
        
     switch(newNode.type) {
@@ -231,6 +215,7 @@ const deleteNode = (id) => {
         style: { strokeWidth: 2, opacity: 0.9 }
       }}
 
+
       style={{ width: "100%", height: "100%" }}
     
       nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
@@ -243,6 +228,8 @@ const deleteNode = (id) => {
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
+  
+
     >
       {console.log("object", onNodeClick.node)}
     </ReactFlow>
