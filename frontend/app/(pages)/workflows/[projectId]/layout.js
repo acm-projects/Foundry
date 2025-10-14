@@ -3,7 +3,7 @@ import AppNavbar from "./Navbar/WorkflowNavbar";
 import React from 'react';
 import { usePathname } from "next/navigation";
 import {useState} from 'react'
-
+import Live from "./canvas/Deployment/live";
 
 export default function WorkflowsLayout({ children, params }){
   const { projectId } = params;
@@ -13,10 +13,13 @@ export default function WorkflowsLayout({ children, params }){
   if(path.includes("canvas")) { 
 
     return (
-      <div className="bg-gray-100  flex flex-col items-center p-4 min-h-screen bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
-       
+      <div className="bg-gray-100  flex flex-col items-center min-h-screen bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
+
+
         <AppNavbar projectId={projectId} />
-       
+<div  className = " absolute mr-[60%] mt-7">
+        <Live/>
+</div>
         <main className="flex-1 w-full h-full mt-4">
           {children}
         </main>
@@ -25,7 +28,7 @@ export default function WorkflowsLayout({ children, params }){
   }
 
   return(
-    <div className="bg-gray-100 flex flex-col items-center p-4 min-h-screen ">
+    <div className="bg-gray-100  flex flex-col items-center min-h-screen ">
       <AppNavbar projectId={projectId} />
       <main className="flex-1 w-full max-w-7xl mt-4">
         {children}

@@ -122,39 +122,7 @@ const onNodeClick = useCallback((event, node) => {
    
 
        
-    switch(newNode.type) {
-    case "EC2":
-      setEc2(true);
-      setS3(false);
-    setRDS(false);
-    setDynamo(false);
-     setConfigID(newNode.id);
-              break;
-    case "S3":
-      setEc2(false);
-      setS3(true);
-      setRDS(false);
-      setDynamo(false);
-      setConfigID(newNode.id);
-            
-          break;
-    case "RDS":
-      setEc2(true);
-      setS3(false);
-      setRDS(true);
-      setDynamo(false);
-      setConfigID(newNode.id);
-            
-         break;
-   case "DynamoDB":  
-     setEc2(false);
-     setS3(false);
-     setRDS(false);
-     setDynamo(true);
-    setConfigID(newNode.id);
-          break;}
-     
-  
+    
         return next;
       });
     },
@@ -204,9 +172,11 @@ const deleteNode = (id) => {
 <div className="w-full h-[80vh] flex relative">
   <div className="shrink-0">
     <div className = "ml-9">
-    <Live/>
+
     </div>
-    <Sidebar />
+    <div className = "flex h-full items-center ml-4">
+    <Sidebar  />
+    </div>
   </div>
   <div className="flex-1 ">
     <ReactFlow
@@ -228,6 +198,7 @@ const deleteNode = (id) => {
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
+      proOptions={{ hideAttribution: true }}
   
 
     >

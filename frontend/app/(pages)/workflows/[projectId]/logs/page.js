@@ -25,7 +25,7 @@ console.log("something is chosen",selected)
 
 
       
-<div className = "ml-20 mt-5">
+<div className = "ml-20 mt-8">
 <Switch selected={selected} onChange = {handleChange}  className = "ml-20"/>
 </div>
 
