@@ -16,7 +16,7 @@ export default function SettingsPage({ params }) {
   const [projectName, setProjectName] = useState("My Foundry Workflow");
   const [environment, setEnvironment] = useState("development");
   const [description, setDescription] = useState("This is an AWS deployment made easy by Foundry.");
-  const [region, setRegion] = useState("US East");
+  const [region, setRegion] = useState("us-east-1");
   const [teamMembers, setTeamMembers] = useState([
     { name: "John Smith", role: "read" },
     { name: "Jane Doe", role: "modify" },
@@ -61,10 +61,11 @@ export default function SettingsPage({ params }) {
                 <div className="flex flex-col w-full">
                   <Label htmlFor="region" className="mb-1">Region</Label>
                   <Input
+                    disabled
                     id="region"
                     value={region}
                     onChange={(e) => setRegion(e.target.value)}
-                    placeholder="US East"
+                    placeholder="us-east-1"
                   />
                 </div>
               </div>
