@@ -18,7 +18,8 @@ import SideBar from './canvas/SideBar';
 //user flow canvas
 import DndFlow2 from './flowCanvas/canvas';
 import { DnDProvider as DnDProvider2 } from './flowCanvas/Dnd';
-export default function Land() { 
+import LandingNavbar from '@/app/components/LandingNavbar';
+export default function Landing() { 
 
     return (
     
@@ -26,27 +27,12 @@ export default function Land() {
       // bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]
 
 
-        <div className="inset-0 w-full min-h-screen bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10">
+        <div className="inset-0 pt-20 w-full min-h-screen bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10">
 <div className = "bg-[radial-gradient(circle,rgba(0,0,0,0.15)_1px,transparent_1px)] [background-size:32px_32px,auto]">
-   <header className="sticky top-3 z-50 flex justify-center pt-4 px-4 sm:px-6">
-          <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between w-full max-w-5xl">
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-600 shadow-sm">
-                <Cloud className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-orange-600 font-extrabold text-lg">Foundry</span>
-            </div>
-  
-            <button className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition">
-     
-              
-              Login
-            </button>
-          </div>
-        </header>
+<LandingNavbar/>
         
         <div className="flex flex-col md:flex-row min-h-[70vh]">
-  <div className="w-full md:w-1/2 p-6 md:p-8 flex justify-center items-center">
+          <div className="w-full md:w-1/2 p-6 md:p-8 flex justify-center items-center">
     <div className="flex flex-col items-start space-y-6 sm:space-y-8">
       <div className="text-orange-600 font-bold pl-6 sm:pl-10 text-4xl sm:text-5xl md:text-6xl">
         <h1 className = "mb-3">The visual</h1>
@@ -83,10 +69,7 @@ export default function Land() {
   </div>
 </div>
 </div>
-
-</div>
-
-<div className="flex flex-wrap items-stretch justify-center gap-6 sm:gap-8 md:gap-10 mt-30 mb-25 px-4">
+<div className="max-w-full mx-auto flex flex-wrap items-stretch justify-center gap-6 sm:gap-8 md:gap-10 px-6 mt-20">
 <div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
   <div className="w-20 h-20 flex items-center justify-center mr-6">
     <Server className="w-10 h-10 text-orange-600" />
@@ -141,6 +124,8 @@ export default function Land() {
   </div>
 </div>
 </div>
+</div>
+
 <div className = "mt-30 px-4">
 <DeploymentTimeline/>
 </div>
