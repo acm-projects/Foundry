@@ -70,7 +70,7 @@ async signIn({ user,account,profile }) {
     console.log("Account", account);
     console.log("Profile", profile);
 
-    console.log("porfile login",profile?.login)
+    console.log("profile login",profile?.login)
 
     const username = profile?.login || user.name
 

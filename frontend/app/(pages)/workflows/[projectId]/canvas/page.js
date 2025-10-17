@@ -191,6 +191,7 @@ const addConfigs = (reactJSON) =>{
     </ReactFlow>
    
     {console.log("share",nodes)}
+
 { ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
 { s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
 { rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
@@ -201,10 +202,11 @@ const addConfigs = (reactJSON) =>{
     {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
     {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
+    </div>
 
     <div className="absolute right-8 -bottom-4 mb-10 mr-4">
       <Deploy onClick = {deployClicked}/>
-    </div>
+
   </div>
 
   <Controls position="bottom-right" />
