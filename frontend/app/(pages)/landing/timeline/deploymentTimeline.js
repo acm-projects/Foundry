@@ -1,9 +1,9 @@
 
-import { LogIn, MousePointer2, Rocket, CheckCircle2 } from "lucide-react";
+import { LogIn,Github, MousePointer2, Rocket, CheckCircle2 } from "lucide-react";
 import "./edge.css"; 
 
 const steps = [
-  { title: "Log in", icon: LogIn, desc: "Authenticate to start" },
+  { title: "Log in", icon: Github, desc: "Authenticate to start" },
   { title: "Pick your service", icon: MousePointer2, desc: "Choose EC2/RDS/etc." },
   { title: "Deploy", icon: Rocket, desc: "Provision + configure" },
   { title: "Your service is live", icon: CheckCircle2, desc: "Reachable & healthy" },
@@ -14,7 +14,7 @@ function Connector() {
     <svg width="92" height="20" viewBox="0 0 92 20" className="mx-2  text-#b1b1b7 ">
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
-          markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          markerWidth="10" markerHeight="10" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 Z" fill=" #b1b1b7" />
         </marker>
       </defs>
@@ -26,9 +26,9 @@ function Connector() {
 function Step({ title, desc, Icon }) {
   return (
     <div className="flex flex-col items-center text-center ">
-      <div className="w-12 h-12 rounded-2xl shadow-sm border bg-white border-gray-200
+      <div className="w-20 h-20 rounded-2xl shadow-sm border bg-white border-gray-200
                       flex items-center justify-center">
-        <Icon className="w-6 h-6 text-gray-800 " />
+        <Icon className="w-10 h-10 text-gray-800 " />
       </div>
       <div className="mt-2">
         <p className="text-sm font-semibold text-gray-900">{title}</p>

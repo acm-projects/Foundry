@@ -6,6 +6,7 @@ import {useState} from 'react'
 
 import UserProfile from "./userProfile";
 import Link from "next/link";
+import Live from "../canvas/Deployment/live";
 
 export default function WorkflowNavbar() {
   const pathname = usePathname();
@@ -57,7 +58,7 @@ const[user,setUser] = useState(false)
 
       return (
         <div>
-     
+
         <Link
           key={tab.name}
           href={tab.href}

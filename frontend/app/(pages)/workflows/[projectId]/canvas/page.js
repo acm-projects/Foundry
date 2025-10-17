@@ -12,7 +12,7 @@ import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
 import Deploy from './Deployment/deploy'
-import Live from "./Deployment/live";
+
 import {useState} from "react"
 
 
