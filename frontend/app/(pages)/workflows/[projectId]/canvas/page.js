@@ -15,12 +15,11 @@ import Deploy from './Deployment/deploy'
 
 import {useState} from "react"
 
-
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, getNodes, getEdges, getViewport } = useReactFlow();
   const [type] = useDnD();
 
   const[ec2,setEc2] = useState(false);
@@ -64,7 +63,6 @@ const onNodeClick = useCallback((event, node) => {
  }, 
   []);
 
-
   useEffect(() => { 
 
     if(nodes.length === 0 && edges.length === 0) return; 
@@ -74,8 +72,6 @@ const onNodeClick = useCallback((event, node) => {
     localStorage.setItem("edges", JSON.stringify(edges));
 
   },[nodes,edges])
-
- 
 
   useEffect(() => { 
 
@@ -90,14 +86,10 @@ const onNodeClick = useCallback((event, node) => {
       setEdges(storedEdges);
     }
 
-
-
   },[])
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }, []);
-
-  
 
   const onDrop = useCallback(
     (e) => {
@@ -112,17 +104,9 @@ const onNodeClick = useCallback((event, node) => {
         position,
         data: { label: `${type}` },
       };
-
-  
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
-      
-       
-   
-
-       
-    
         return next;
       });
     },
@@ -133,16 +117,7 @@ const onNodeClick = useCallback((event, node) => {
 
 localStorage.getItem("amiID")
 
-
   },[configID])
-
-
-  
-    
-  
-
-
-
  
 function closeEc2() { 
     setEc2(false)
@@ -159,31 +134,42 @@ function closeRDS() {
  
 const deleteNode = (id) => {
   setNodes((nds) => nds.filter((n) => n.id !== id));
- 
- 
 
 };
 
-  
+const deployClicked = () => {
+  let reactJSON = {
+    nodes: getNodes(),
+    edges: getEdges(),
+    viewport: getViewport(),
+  }
+  reactJSON = addConfigs(reactJSON) 
+  console.log("DEPLOY WAS CLICKED!!!!!")
+  return reactJSON 
+}
+const addConfigs = (reactJSON) =>{
+  //we need to add specific configuration info here based on what the user adds to the configuration
+  //maybe updating an already existing config file and then append it to reactJSON and return it
+  return reactJSON
+}
+
   return (
-    
 
+  <div className="w-full h-[80vh] flex relative">
+    <div className="shrink-0">
+      <div className = "ml-9">
 
-<div className="w-full h-[80vh] flex relative">
-  <div className="shrink-0">
-    <div className = "ml-9">
-
+      </div>
+      <div className = "flex h-full items-center ml-4">
+      <Sidebar  />
+      </div>
     </div>
-    <div className = "flex h-full items-center ml-4">
-    <Sidebar  />
-    </div>
-  </div>
-  <div className="flex-1 ">
-    <ReactFlow
-      defaultEdgeOptions={{
-        animated: true,
-        style: { strokeWidth: 2, opacity: 0.9 }
-      }}
+    <div className="flex-1 ">
+      <ReactFlow
+        defaultEdgeOptions={{
+          animated: true,
+          style: { strokeWidth: 2, opacity: 0.9 }
+        }}
 
 
       style={{ width: "100%", height: "100%" }}
@@ -199,7 +185,6 @@ const deleteNode = (id) => {
       fitView
       onNodeClick={onNodeClick}
       proOptions={{ hideAttribution: true }}
-  
 
     >
       {console.log("object", onNodeClick.node)}
@@ -210,8 +195,6 @@ const deleteNode = (id) => {
 { s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
 { rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
 { dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
- 
-
 
     {console.log("share", nodes)}
     {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2} /> : null}
@@ -220,16 +203,12 @@ const deleteNode = (id) => {
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
 
     <div className="absolute right-8 -bottom-4 mb-10 mr-4">
-      <Deploy />
+      <Deploy onClick = {deployClicked}/>
     </div>
   </div>
 
   <Controls position="bottom-right" />
 </div>
-
-
-
-      
     
   );
 };
@@ -240,7 +219,6 @@ export default function CanvasPage() {
       <DnDProvider>
         <DnDFlow />
       </DnDProvider>
-
     </ReactFlowProvider>
   );
 }
