@@ -40,8 +40,8 @@ return;
   position="top-right"
   style={{
     top: "50%",
-    right: "10px",      // distance from the right edge
-    transform: "translateY(-50%)", // vertical centering
+    right: "10px",     
+    transform: "translateY(-50%)",
   }}
 >
   <aside className=" w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
