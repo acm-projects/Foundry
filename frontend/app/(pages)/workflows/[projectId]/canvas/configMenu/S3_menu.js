@@ -1,13 +1,13 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from 'react'
-
-export default function S3_menu({id,onChange,value}) { 
+import { UserInput } from '../Deployment/UserServiceInput'
+export default function S3_menu({id,onClose,onDelete}) { 
 
 const[region,setRegion] = useState("")
 const[bucketName,setBucketName] = useState("")
 const[displayName,setDisplayName] = useState("")
-const storageKey = `s3:${id}`;
+const storageKey = `${id}`;
 useEffect(() => {
     const local = localStorage.getItem(storageKey);
     const saved = JSON.parse(local) || {};
@@ -16,26 +16,31 @@ useEffect(() => {
     setDisplayName(saved.displayName || "")
 },[storageKey])
 
-const save = () => { 
 
-localStorage.setItem(storageKey,JSON.stringify({region,bucketName,displayName}))
+const save = () => {
+  const payload = { region, bucketName, displayName};
 
 
+if(region.length != 0 && bucketName.length != 0 && displayName.length != 0) { 
+localStorage.setItem(storageKey, JSON.stringify(payload));
+UserInput(storageKey,payload)
+onClose()
+return;
 }
-const remove = () =>  { 
-  localStorage.removeItem(storageKey)
-  setRegion("")
-  setBucketName("")
-  setDisplayName("")
+
+alert("fill missing input fields")
+return;
+
+
 }
 
     return (
     
 <Panel
   position="top-right"
-  style={{ top: '15%', transform: 'translateY(-50%)' }}
+  style={{ top: '10%', transform: 'translateY(-50%)' }}
 >
-  <aside className="fixed right-4  z-50 w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[75vh] flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+  <aside className="fixed right-4 w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
@@ -92,12 +97,14 @@ const remove = () =>  {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button onClick = {() => {onDelete(storageKey)
+        onClose(storageKey)}
+      } className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button  onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>

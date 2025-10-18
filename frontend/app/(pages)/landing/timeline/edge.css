@@ -1,0 +1,12 @@
+
+@keyframes dash {
+    to { stroke-dashoffset: -120; }
+  }
+  .edge {
+    stroke: #b1b1b7;
+    stroke-width: 2;
+    opacity: .9;
+    stroke-dasharray: 8 6;      
+    animation: dash 2s linear infinite;  
+  }
+  

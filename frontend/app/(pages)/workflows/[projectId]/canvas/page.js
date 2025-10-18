@@ -5,29 +5,21 @@ import DynamoDB_menu from "./configMenu/Dynamo_menu";
 import S3_menu from "./configMenu/S3_menu";
 import RDS_menu from "./configMenu/RDS_menu";
 import { nanoid } from "nanoid";
-import {
-  ReactFlow,
-  ReactFlowProvider,
-  addEdge,
-  useNodesState,
-  useEdgesState,
-  Controls,
-  useReactFlow,
-  Background
-} from "@xyflow/react";
+import { ReactFlow,ReactFlowProvider, addEdge, useNodesState,useEdgesState,Controls,useReactFlow,Background} from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
-
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 
+import Deploy from './Deployment/deploy'
+import Live from "./Deployment/live";
 import {useState} from "react"
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const { screenToFlowPosition } = useReactFlow();
+  const { screenToFlowPosition, getNodes, getEdges, getViewport } = useReactFlow();
   const [type] = useDnD();
 
   const[ec2,setEc2] = useState(false);
@@ -37,9 +29,6 @@ const DnDFlow = () => {
 const[configID,setConfigID] = useState(null);
 
 const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
-
-
-
 
 const onNodeClick = useCallback((event, node) => {
   
@@ -74,7 +63,6 @@ const onNodeClick = useCallback((event, node) => {
  }, 
   []);
 
-
   useEffect(() => { 
 
     if(nodes.length === 0 && edges.length === 0) return; 
@@ -84,8 +72,6 @@ const onNodeClick = useCallback((event, node) => {
     localStorage.setItem("edges", JSON.stringify(edges));
 
   },[nodes,edges])
-
- 
 
   useEffect(() => { 
 
@@ -100,14 +86,10 @@ const onNodeClick = useCallback((event, node) => {
       setEdges(storedEdges);
     }
 
-
-
   },[])
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }, []);
-
-  
 
   const onDrop = useCallback(
     (e) => {
@@ -117,62 +99,14 @@ const onNodeClick = useCallback((event, node) => {
       const position = screenToFlowPosition({ x: e.clientX, y: e.clientY });
   
       const newNode = {
-        id: nanoid(),
+        id: `${type}:${nanoid()}`,
         type,
         position,
         data: { label: `${type}` },
       };
-
-  
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
        const next = nds.concat(newNode);
-       //const next = nds.concat({id: newNode.id, type: newNode.type, position: newNode.position, data: { label: `${newNode.type}` }});
-   
-        if (prevLast) {
-          setEdges((eds) =>
-            eds.concat({
-              id: `e${nanoid()}`,
-              source: prevLast.id,
-              target: newNode.id,
-            })
-          );
-        }
-
-       
-    switch(newNode.type) {
-    case "EC2":
-      setEc2(true);
-      setS3(false);
-    setRDS(false);
-    setDynamo(false);
-     setConfigID(newNode.id);
-              break;
-    case "S3":
-      setEc2(false);
-      setS3(true);
-      setRDS(false);
-      setDynamo(false);
-      setConfigID(newNode.id);
-            
-          break;
-    case "RDS":
-      setEc2(true);
-      setS3(false);
-      setRDS(true);
-      setDynamo(false);
-      setConfigID(newNode.id);
-            
-         break;
-   case "DynamoDB":  
-     setEc2(false);
-     setS3(false);
-     setRDS(false);
-     setDynamo(true);
-    setConfigID(newNode.id);
-          break;}
-     
-  
         return next;
       });
     },
@@ -183,24 +117,63 @@ const onNodeClick = useCallback((event, node) => {
 
 localStorage.getItem("amiID")
 
-
   },[configID])
-  
-  return (
-    
-
-
-<div className="w-full h-[80vh] flex ">
-
-
-  <div className="shrink-0 ">
-  
-    <Sidebar />
  
-  </div>
-  <div className="flex-1">
-    <ReactFlow
+function closeEc2() { 
+    setEc2(false)
+  }
+function closeS3() { 
+  setS3(false)
+}
+function closeDynamo() {
+  setDynamo(false)
+}
+function closeRDS() {
+  setRDS(false)
+}
+ 
+const deleteNode = (id) => {
+  setNodes((nds) => nds.filter((n) => n.id !== id));
+
+};
+
+const deployClicked = () => {
+  let reactJSON = {
+    nodes: getNodes(),
+    edges: getEdges(),
+    viewport: getViewport(),
+  }
+  reactJSON = addConfigs(reactJSON) 
+  console.log("DEPLOY WAS CLICKED!!!!!")
+  return reactJSON 
+}
+const addConfigs = (reactJSON) =>{
+  //we need to add specific configuration info here based on what the user adds to the configuration
+  //maybe updating an already existing config file and then append it to reactJSON and return it
+  return reactJSON
+}
+
+  return (
+
+  <div className="w-full h-[80vh] flex relative">
+    <div className="shrink-0">
+      <div className = "ml-9">
+
+      </div>
+      <div className = "flex h-full items-center ml-4">
+      <Sidebar  />
+      </div>
+    </div>
+    <div className="flex-1 ">
+      <ReactFlow
+        defaultEdgeOptions={{
+          animated: true,
+          style: { strokeWidth: 2, opacity: 0.9 }
+        }}
+
+
       style={{ width: "100%", height: "100%" }}
+    
       nodeTypes={{ EC2: SingleHandleNode, S3: SingleHandleNode, RDS: SingleHandleNode, DynamoDB: SingleHandleNode }}
       nodes={nodes}
       edges={edges}
@@ -211,23 +184,31 @@ localStorage.getItem("amiID")
       onDragOver={onDragOver}
       fitView
       onNodeClick={onNodeClick}
-     
+      proOptions={{ hideAttribution: true }}
+
     >
-      {console.log("object",onNodeClick.node)}
+      {console.log("object", onNodeClick.node)}
     </ReactFlow>
    
-    {console.log(configID)}
-{ ec2  && configID? <EC2_menu id={configID} />  : null}
-{ s3  && configID? <S3_menu id={configID} /> : null}
-{ rds  && configID? <RDS_menu id={configID} /> : null}
-{ dynamo  && configID? <DynamoDB_menu id={configID} /> : null}
- 
+    {console.log("share",nodes)}
+{ ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
+{ s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
+{ rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
+{ dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
 
+    {console.log("share", nodes)}
+    {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2} /> : null}
+    {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
+    {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
+    {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
+
+    <div className="absolute right-8 -bottom-4 mb-10 mr-4">
+      <Deploy onClick = {deployClicked}/>
+    </div>
   </div>
-  <Controls position = "bottom-right"/>
-</div>
 
-      
+  <Controls position="bottom-right" />
+</div>
     
   );
 };

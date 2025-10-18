@@ -1,7 +1,8 @@
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import {useState,useEffect} from "react"
-export default function EC2_menu({ id }) { 
+import { UserInput } from '../Deployment/UserServiceInput'
+export default function EC2_menu({ id,onClose,onDelete}) { 
 
   const[amiId,setAmiId] = useState("")
   const[keyPair,setKeyPair] = useState("")
@@ -9,12 +10,17 @@ export default function EC2_menu({ id }) {
   const[securityGroup,setSecurityGroup] = useState("")
   const[subnetVPC,setSubnetVPC] = useState("")
 
-  const storageKey = `ec2:${id}`;
+  const storageKey = `${id}`;
 
 
   useEffect(() => {
  
       const local = localStorage.getItem(storageKey);
+
+      
+
+
+   
    
       const saved = JSON.parse(local) || {};
       setAmiId(saved.amiId || "");
@@ -25,28 +31,36 @@ export default function EC2_menu({ id }) {
   
   }, [storageKey]);
 
+
+
+
   const save = () => {
     const payload = { amiId, keyPair, instanceType, securityGroup, subnetVPC };
-    localStorage.setItem(storageKey, JSON.stringify(payload));
-  };
 
-  const remove = () => {
-    localStorage.removeItem(storageKey);
-    setAmiId("");
-    setKeyPair("");
-    setInstanceType("");
-    setSecurityGroup("");
-    setSubnetVPC("");
+
+if(amiId.length != 0 && keyPair.length != 0 && instanceType.length != 0 && securityGroup.length != 0 && subnetVPC != 0) { 
+  localStorage.setItem(storageKey, JSON.stringify(payload));
+UserInput(storageKey,payload)
+onClose()
+return;
+}
+
+alert("fill missing input fields")
+
+return;
+
+
   }
+
   
 
     return (
-    
+    // w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[60vh]
 <Panel
   position="top-right"
-  style={{ top: '15%', transform: 'translateY(-50%)' }}
+  style={{ top: '10%', transform: 'translateY(-50%)' }}
 >
-  <aside className="fixed right-4  z-50 w-[min(92vw,210px)] md:w-[min(90vw,220px)] max-h-[60vh] flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+  <aside className="fixed right-4 w-75 z-50 flex h-120 flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
@@ -83,7 +97,7 @@ export default function EC2_menu({ id }) {
 
           <span className="font-medium text-gray-800">Instance Type</span>
           <div className="relative mt-1">
-            <select className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
+            <select value={instanceType} onChange = {(e) => setInstanceType(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
               <option value="" disabled>Select type</option>
               <option>t2.micro</option>
               <option>t3.small</option>
@@ -112,12 +126,13 @@ export default function EC2_menu({ id }) {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {remove}className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button onClick = {() => {onDelete(storageKey)
+         onClose(storageKey)}} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
         <button onClick={save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>

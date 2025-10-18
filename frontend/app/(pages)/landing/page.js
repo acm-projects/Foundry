@@ -4,25 +4,32 @@ import {
     Server, Archive, Database
   } from "lucide-react";
   import Link from 'next/link';
-
-  import { ReactFlow, Background as FlowBackground, Controls } from '@xyflow/react';
+import DeploymentTimeline from './timeline/deploymentTimeline';
+  import { ReactFlow, Controls } from '@xyflow/react';
+  //normal canvas
 import '@xyflow/react/dist/style.css';
 import { ReactFlowProvider } from '@xyflow/react';
-import DnDFlow from './second_canvas/canvas';
-import { DnDProvider } from './second_canvas/canvas';
-import TextAnimateDemo6 from '../../components/animatedText/slogan';
+import DnDFlow from './canvas/canvas';
+import { DnDProvider } from './canvas/Dnd';
+import { TextAnimate } from './animatedText/text-animate';
+import TextAnimateDemo6 from './animatedText/slogan';
+import SideBar from './canvas/SideBar';
 
-
+//user flow canvas
+import DndFlow2 from './flowCanvas/canvas';
+import { DnDProvider as DnDProvider2 } from './flowCanvas/Dnd';
 export default function Land() { 
 
     return (
     
-    
-        <div className=" inset-0 w-full h-full bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10" >
- 
+      //linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)
+      // bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px),linear-gradient(to_bottom_right,#fed7aa,#fff7ed,transparent)] [background-size:32px_32px,auto]
 
-   <header className="sticky top-3 z-50 flex justify-center pt-4">
-          <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-6 py-3 flex items-center justify-between w-[90%] max-w-5xl">
+
+        <div className="inset-0 w-full min-h-screen bg-gradient-to-br from-orange-200 via-orange-50 to-transparent -z-10">
+<div className = "bg-[radial-gradient(circle,rgba(0,0,0,0.15)_1px,transparent_1px)] [background-size:32px_32px,auto]">
+   <header className="sticky top-3 z-50 flex justify-center pt-4 px-4 sm:px-6">
+          <div className="bg-white/30 backdrop-blur-md shadow-md rounded-2xl px-4 sm:px-6 py-3 flex items-center justify-between w-full max-w-5xl">
             <div className="flex items-center space-x-2">
               <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-orange-600 shadow-sm">
                 <Cloud className="w-4 h-4 text-white" />
@@ -31,31 +38,25 @@ export default function Land() {
             </div>
   
             <button className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition">
-               {/* login logic */}
+     
               
               Login
             </button>
           </div>
         </header>
-
         
-        
-        
-        
-        
-        
-        <div className="flex h-[85vh]">
-  <div className="w-1/2  p-6 flex justify-center items-center">
-    <div className="flex flex-col items-start space-y-8">
-      <div className="text-orange-600 font-bold pl-10 text-6xl">
+        <div className="flex flex-col md:flex-row min-h-[70vh]">
+  <div className="w-full md:w-1/2 p-6 md:p-8 flex justify-center items-center">
+    <div className="flex flex-col items-start space-y-6 sm:space-y-8">
+      <div className="text-orange-600 font-bold pl-6 sm:pl-10 text-4xl sm:text-5xl md:text-6xl">
         <h1 className = "mb-3">The visual</h1>
         <h1 className = "mb-3">AWS infrastructure</h1>
         <h1 >builder</h1>
 
       
       </div>
-      <div className = "pl-10">
-        <div className = "w-full  text-5xl">
+      <div className = "pl-6 sm:pl-10">
+        <div className = "w-full text-2xl sm:text-4xl md:text-5xl">
         <TextAnimateDemo6/>
         </div>
         
@@ -67,37 +68,13 @@ export default function Land() {
       </div>
     </div>
   </div>
-
-  <div className="w-1/2 flex flex-col items-center justify-center">
-  <div className="w-2/5 h-40 border border-orange-100 rounded-xl shadow-lg shadow-orange-500/50 -translate-x-20 z-30 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-100 mb-2">
-      <Server className="w-7 h-7 text-orange-600" />
-    </div>
-    <h1 className="text-orange-700 font-semibold">ECS Instance</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-blue-100 rounded-xl shadow-lg shadow-blue-500/50 -mt-3 z-20 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-100 mb-2">
-      <Database className="w-7 h-7 text-blue-600" />
-    </div>
-    <h1 className="text-blue-700 font-semibold">RDS</h1>
-  </div>
-
-  <div className="w-2/5 h-40 border border-purple-100 rounded-xl shadow-lg shadow-purple-500/50 -mt-3 translate-x-20 z-10 flex flex-col items-center justify-center transition-transform duration-300 hover:scale-105">
-    <div className="w-14 h-14 flex items-center justify-center rounded-full bg-purple-100 mb-2">
-      <Archive className="w-7 h-7 text-purple-600" />
-    </div>
-    <h1 className="text-purple-700 font-semibold">S3 Bucket</h1>
-  </div>
-</div>
-
-
-</div>
-
-<div className="w-full bg-transparent flex justify-center">
-  <div className="h-screen w-3/4 flex justify-center">
   
-    <div className="h-6/7 w-7/7 bg-[radial-gradient(circle,rgba(0,0,0,0.3)_1px,transparent_1px)] [background-size:32px_32px]">
+
+
+  <div className="w-full bg-transparent flex justify-center">
+  <div className="h-[50vh] sm:h-[60vh] md:h-[75vh] w-full md:w-3/4 flex justify-center">
+  
+    <div className="h-full w-full">
      <ReactFlowProvider>
 <DnDFlow/>
 
@@ -105,18 +82,87 @@ export default function Land() {
     </div>
   </div>
 </div>
+</div>
+
+</div>
+
+<div className="flex flex-wrap items-stretch justify-center gap-6 sm:gap-8 md:gap-10 mt-30 mb-25 px-4">
+<div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center mr-6">
+    <Server className="w-10 h-10 text-orange-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-orange-700 font-semibold text-lg mb-1">ECS Instance</h1>
+    <p className="text-xs sm:text-sm text-gray-700 leading-snug">
+    EC2 offers scalable virtual servers to run applications without 
+    managing hardware, giving full control over OS, storage, and performance.
+  </p>
+  </div>
+</div>
 
 
-<section className="bg-gradient-to-b from-transparent to-orange-50/40">
+<div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center  mr-6">
+    <Archive className="w-10 h-10 text-green-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-green-700 font-semibold text-lg mb-1">S3 Bucket</h1>
+    <p className="text-xs sm:text-sm text-gray-700 leading-snug">
+    Amazon S3 provides secure, scalable object 
+    storage for any type of file, allowing easy access, backup, and data management from anywhere.
+    </p>
+  </div>
+</div>
+<div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center mr-6">
+    <Database className="w-10 h-10 text-purple-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-purple-700 font-semibold text-lg mb-1">RDS</h1>
+    <p className="text-xs sm:text-sm text-gray-700 leading-snug">
+    Amazon RDS offers managed relational databases that handle
+     setup, scaling, and maintenance, allowing developers to focus on building applications efficiently.
+    </p>
+  </div>
+</div>
+
+
+<div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
+  <div className="w-20 h-20 flex items-center justify-center  mr-6">
+    <Database className="w-10 h-10 text-blue-600" />
+  </div>
+  <div className="flex flex-col">
+    <h1 className="text-blue-700 font-semibold text-lg mb-1">DynamoDB</h1>
+    <p className="text-xs sm:text-sm text-gray-700 leading-snug">
+    Amazon DynamoDB is a fully managed, 
+    scalable NoSQL database that delivers fast performance
+     and automatically handles data distribution and scaling.
+    </p>
+  </div>
+</div>
+</div>
+<div className = "mt-30 px-4">
+<DeploymentTimeline/>
+</div>
+<div className = "mt-20 px-4">
+<ReactFlowProvider>
+
+<DndFlow2/>
+
+
+</ReactFlowProvider>
+</div>
+
+<section className="bg-gradient-to-b mb-20 from-transparent to-orange-50/40">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
               <h2 className="text-3xl font-extrabold">Why Choose Foundry?</h2>
               <p className="mt-2 text-gray-500">Built for developers, by developers</p>
             </div>
   
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="mt-10 grid  grid-cols-1 md:grid-cols-3 gap-6">
               <Card
-                icon={<Bolt className="w-6 h-6 text-orange-600" />}
+                icon={<Bolt className="w-6 h-6  text-orange-600" />}
                 title="Lightning Fast"
                 desc="Deploy AWS infrastructure in minutes, not hours. Our visual interface streamlines the entire process."
               />
@@ -166,7 +212,7 @@ export default function Land() {
 }
 function Card({ icon, title, desc }) {
     return (
-      <div className="rounded-2xl border border-orange-100 bg-white shadow-sm p-8 text-center">
+      <div className="rounded-2xl border  bg-orange-50 shadow-sm p-8 text-center">
         <div className="w-12 h-12 rounded-xl bg-orange-100 mx-auto flex items-center justify-center">
           {icon}
         </div>
