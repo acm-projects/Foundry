@@ -198,7 +198,7 @@ const addConfigs = (reactJSON) =>{
 { dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
 
     {console.log("share", nodes)}
-    {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2} /> : null}
+    {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2}  /> : null}
     {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
     {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}

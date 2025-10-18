@@ -29,7 +29,7 @@ Live
 </button>
 
 {open && (
-  <div className="absolute bg-white border border-gray-200 rounded-lg shadow-md max-h-20 overflow-y-auto">
+  <div className="absolute bg-white border border-gray-200 rounded-lg shadow-md z-50 w-full max-h-20 overflow-y-auto">
     {options.map((option) => (
       <button
         key={option}

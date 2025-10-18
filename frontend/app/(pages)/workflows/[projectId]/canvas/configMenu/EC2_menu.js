@@ -11,23 +11,41 @@ const schema = z.object({name: z.string().min(1, "Required").max(255).regex(name
 instanceType: z.string().min(1, "Select an instance type"),
 imageID: z.enum(["Amazon Linux", "Ubuntu", "Windows", "macOS"]),
 keyName: z.string().min(1, "Required").max(255),
-storage: z.coerce.number().int().min(8, "must be a positive number").max(255,"less than 255 characters"),
+rootVolumeSizeGiB: z.coerce.number().int().min(8, "must be a greater than 8").max(16384,"less than 16384"),
 rootVolumeType: z.enum(["gp3", "gp2", "io1", "io2"], { required_error: "Select a root volume type" }),
 deleteOnTermination: z.enum(["true", "false"]),
 userData: z.string().optional(),
 });
 
-export default function EC2PanelForm({ id, onClose, onDelete}) {
+export default function EC2PanelForm({ id, onClose, onDelete,label}) {
 const storageKey = `${id}`;
 
-const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair",storage: 20,rootVolumeType: "gp3",
+const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
 deleteOnTermination: "true", userData: ""}
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
 const submit = (values) => {
 //where actual submit logic goes
-console.log(id,values)
+
+const label = id.slice(0,3)
+const betterFormatting = {
+  label: label,
+  name: values.name,
+  instanceType: values.instanceType,
+  imageID: values.imageID,
+  keyName: values.keyName,
+  storage: {
+    rootVolumeSizeGiB: values.rootVolumeSizeGiB,
+    rootVolumeType: values.rootVolumeType,
+    deleteOnTermination: values.deleteOnTermination
+  },
+}
+
+console.log("better", betterFormatting);
+
+
+
 };
 
 return (
@@ -123,14 +141,14 @@ className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 
 />
 {errors.keyName && <p className="text-red-600 text-[10px]  -mt-1">{errors.keyName.message}</p>}
 
-<span className="font-medium text-gray-800">storage</span>
+<span className="font-medium text-gray-800">rootVolumeSizeGiB</span>
 <input
 type="number"
-{...register("storage")}
+{...register("rootVolumeSizeGiB")}
 placeholder="20"
 className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
 />
-{errors.storage && <p className="text-red-600 text-[10px]  -mt-1">{errors.storage.message}</p>}
+{errors.rootVolumeSizeGiB && <p className="text-red-600 text-[10px]  -mt-1">{errors.rootVolumeSizeGiB.message}</p>}
 
 <span className="font-medium text-gray-800">rootVolumeType</span>
 <Controller

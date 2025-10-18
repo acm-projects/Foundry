@@ -18,7 +18,7 @@ const pool = await new Pool({
 if(!clientId || !clientSecret) {    
 
    
- throw new Error("Missing GITHUB_ID or GITHUB_SECRET environment variables");
+ throw new Error("Missing GITHUB_ID or GITHUB_SECRET");
     }
     
 export const authOptions = { 
