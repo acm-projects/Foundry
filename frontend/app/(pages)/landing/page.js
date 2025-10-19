@@ -84,10 +84,7 @@ return (
 </div>
 </div>
 </div>
-
-</div>
-
-<div className="flex flex-wrap items-stretch justify-center gap-6 sm:gap-8 md:gap-10 mt-30 mb-25 px-4">
+<div className="max-w-full mx-auto flex flex-wrap items-stretch justify-center gap-6 sm:gap-8 md:gap-10 px-6 mt-20">
 <div className="w-full sm:w-[40vh] max-w-sm min-h-40 border border-orange-100 bg-white/30 backdrop-blur-md shadow-md rounded-xl flex items-center justify-start px-6 transition-transform duration-300 hover:scale-105">
 <div className="w-20 h-20 flex items-center justify-center mr-6">
 <Server className="w-10 h-10 text-orange-600" />
@@ -142,6 +139,8 @@ and automatically handles data distribution and scaling.
 </div>
 </div>
 </div>
+</div>
+
 <div className = "mt-30 px-4">
 <DeploymentTimeline/>
 </div>
