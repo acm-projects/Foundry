@@ -1,0 +1,101 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2 (S3/RDS/DynamoDB to be added later)",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "EC2ec21Id": {
+      "Value": {
+        "Ref": "EC2ec21"
+      }
+    },
+    "EC2ec21NameTag": {
+      "Value": "web-01"
+    },
+    "EC2ec21PrivateIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2ec21",
+          "PrivateIp"
+        ]
+      }
+    },
+    "EC2ec21PublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2ec21",
+          "PublicIp"
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "EC2ec21": {
+      "Properties": {
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "VolumeSize": 20,
+              "VolumeType": "gp3"
+            }
+          }
+        ],
+        "ImageId": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
+        "InstanceType": "t3.micro",
+        "KeyName": "my-keypair",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ],
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "web-01"
+          }
+        ]
+      },
+      "Type": "AWS::EC2::Instance"
+    }
+  }
+}
