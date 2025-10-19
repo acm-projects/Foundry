@@ -16,8 +16,6 @@ import TextAnimateDemo6 from './animatedText/slogan';
 import SideBar from './canvas/SideBar';
 
 //user flow canvas
-import DndFlow2 from './flowCanvas/canvas';
-import { DnDProvider as DnDProvider2 } from './flowCanvas/Dnd';
 import LandingNavbar from '@/app/components/LandingNavbar';
 export default function Landing() { 
 
@@ -132,7 +130,6 @@ export default function Landing() {
 <div className = "mt-20 px-4">
 <ReactFlowProvider>
 
-<DndFlow2/>
 
 
 </ReactFlowProvider>
