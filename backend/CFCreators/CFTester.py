@@ -5,8 +5,9 @@ import json
 # Add parent directory to path to allow imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from CFCreators import CFCreator
 
+from CFCreators import CFCreator
+from CFCreators.aws_discovery import suggest_stack_parameters
 
 def load_json_template(filename="EC2_template.json"):
     """
@@ -61,6 +62,14 @@ def test_cf_generation():
     
     # Call the CF generation pipeline and get the template
     cf_template = CFCreator.createGeneration(frontend_json)
+
+    # show the real VPC/Subnet/SecurityGroup IDs
+    try:
+        params = suggest_stack_parameters()
+        print("\nSuggested Parameters for deployment:")
+        print(json.dumps(params, indent=2))
+    except Exception as e:
+        print(f"\n  Could not discover default networking: {e}")
     
     # Save the template to createdCFs folder
     output_path = save_cf_template(cf_template, "EC2CF.json")
