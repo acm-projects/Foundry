@@ -49,9 +49,13 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
     
 <Panel
   position="top-right"
-  style={{ top: '10%', transform: 'translateY(-50%)' }}
+  style={{
+    top: "50%",
+    right: "10px",     
+    transform: "translateY(-50%)",
+  }}
 >
-  <aside className="fixed right-4 w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+  <aside className=" w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
       <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-orange-100">
        <Settings className = "text-orange-500"/>
@@ -118,7 +122,7 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
 
     <div className="h-px w-full " />
 
-    <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
+    <div className="sticky rounded-lg flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
       <button onClick = {() => {onDelete(storageKey)
         onClose(storageKey)
       }} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">

@@ -1,15 +1,31 @@
 'use client';
 import { Rocket } from "lucide-react";
 import { useState,useEffect } from "react";
-
+import api from "@/app/api";
 import Live from "./live";
-export default function Deploy({nodes = []}) {
+
+
+
+function Deploy({onClick}) {
+
 const[status,setStatus] = useState(false)
 const[live,setLive] = useState(true)
-const nodeLength = nodes.length
+// const nodeLength = nodes.length
 
 
+  let reactJson = null
+  const deployClicked = () =>{
+    reactJson = onClick()
+    
+    sendCanvas()
+    //  goLive();//this isn't defined: ak
+      setLive(true)
+      // changeAnimation() //this isn't defined: ak
 
+  }
+  const sendCanvas = async () =>{
+    const response = await api.post('/canvas/deploy', reactJson)
+  }
 
 
 
@@ -17,11 +33,7 @@ const nodeLength = nodes.length
     <div className=" h-10 flex justify-between items-center">
 
   <button
-    onClick={() => {
-      goLive();
-      setLive(true)
-      changeAnimation()
-    }}
+    onClick={deployClicked}
     disabled={status}
     className={`flex items-center gap-2 rounded-lg px-3 py-3 text-white shadow-md
       ${!status ? "bg-black" : "bg-gray-300"}
@@ -37,3 +49,4 @@ const nodeLength = nodes.length
 }
 
 
+export default Deploy

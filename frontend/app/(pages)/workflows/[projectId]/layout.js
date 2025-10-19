@@ -17,9 +17,7 @@ export default function WorkflowsLayout({ children, params }){
 
 
         <AppNavbar projectId={projectId} />
-<div  className = " absolute mr-[60%] mt-7">
-        <Live/>
-</div>
+
         <main className="flex-1 w-full h-full mt-4">
           {children}
         </main>

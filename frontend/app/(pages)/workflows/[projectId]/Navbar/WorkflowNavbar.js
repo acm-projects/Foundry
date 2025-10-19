@@ -6,6 +6,7 @@ import {useState} from 'react'
 
 import UserProfile from "./userProfile";
 import Link from "next/link";
+import Live from "../canvas/Deployment/live";
 
 export default function WorkflowNavbar() {
   const pathname = usePathname();
@@ -38,26 +39,32 @@ const[user,setUser] = useState(false)
 
   return (
 
-    <div className="relative w-full h-10">
+    <div className="relative w-full justify-center">
     <div className="flex items-center justify-between pt-5 px-4 sm:px-6 lg:px-8">
-      <div className="pl-0">
-        <Link href='/workflows'>
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
+      <div className="">
+        
+      <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
+          <Link href='/workflows'>
             <Cloud className="w-5 h-5 text-white" />
+            </Link>
             <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Project Name</h1>
+            <div className = "absolute left-65"> 
+            <Live/>
+            </div>
+            
           </div>
-        </Link>
+
       </div>
       
       
-      <div className = "flex ml-10 flex-col sm:flex-row bg-white p-2 shadow-xl rounded-2xl border border-gray-100 sm:space-x-2 w-fit">
+      <div className = "flex flex-col sm:flex-row bg-white  p-2 shadow-xl rounded-2xl border justify-center border-gray-100 sm:space-x-2 w-fit">
       {tabs.map((tab) => {
       const Icon = tab.icon;
       const isActive = pathname.startsWith(tab.href);
 
       return (
         <div>
-     
+
         <Link
           key={tab.name}
           href={tab.href}
@@ -102,4 +109,4 @@ const[user,setUser] = useState(false)
   );
 }
 
-{/* <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Project Name</h1>*/}
+

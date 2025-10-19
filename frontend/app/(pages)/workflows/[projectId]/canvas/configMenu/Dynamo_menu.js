@@ -42,9 +42,13 @@ return;
 
 <Panel
   position="top-right"
-  style={{ top: '10%', transform: 'translateY(-50%)' }}
+  style={{
+    top: "50%",
+    right: "10px",      
+    transform: "translateY(-50%)", 
+  }}
 >
-  <aside className="fixed right-4 w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
+  <aside className=" w-75 z-50 h-120 flex flex-col rounded-lg border border-gray-200 bg-white shadow-lg">
     <div className="flex items-start gap-2 p-3">
 
 
@@ -54,8 +58,10 @@ return;
      
       
       <div className="flex-1">
-        <h2 className="text-sm font-semibold text-gray-900">DynamoDB</h2>
-        
+
+        <h2 className="text-sm font-semibold text-gray-900">DynamoDB </h2>
+
+
    
         <p className="text-xs text-gray-500">{id}</p>
         <p className="text-xs text-gray-500">Compute</p>
@@ -100,7 +106,7 @@ return;
 
     <div className="h-px w-full " />
 
-    <div className="sticky rounded-lg bottom-0 flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
+    <div className="sticky rounded-lg flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
       <button onClick = {() => {onDelete(storageKey)
         onClose(storageKey)
       }} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
