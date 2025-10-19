@@ -6,16 +6,11 @@ import {
   addEdge,
   useNodesState,
   useEdgesState,
-  Controls,
   useReactFlow,
-  Background
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./custom";
-
-import Sidebar from "./SideBar";
 import { DnDProvider, useDnD } from "./Dnd";
-import { animate } from "motion";
 
 
 

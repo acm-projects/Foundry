@@ -26,9 +26,9 @@ function Connector() {
 function Step({ title, desc, Icon }) {
   return (
     <div className="flex flex-col items-center text-center ">
-      <div className="w-12 h-12 rounded-2xl shadow-sm border bg-white border-gray-200
+      <div className="w-20 h-20 rounded-4xl shadow-sm border bg-white border-gray-200
                       flex items-center justify-center">
-        <Icon className="w-6 h-6 text-gray-800 " />
+        <Icon className="w-12 h-12 text-gray-800 " />
       </div>
       <div className="mt-2">
         <p className="text-sm font-semibold text-gray-900">{title}</p>
