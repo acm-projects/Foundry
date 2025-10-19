@@ -4,7 +4,7 @@ import {useSession,signIn, signOut} from "next-auth/react"
 export default function LoginButton() { 
 
 const {data, status}= useSession()
-
+const signInHandler = async () => await signIn("github",{callbackUrl: "/workflows"});
 return (
 <div> 
 
@@ -16,7 +16,7 @@ return (
     
     </div>: <div>
 
-        <button  className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition"  onClick={()=>signIn()}>Login</button> 
+        <button  className="px-4 py-1 rounded-xl border border-gray-300 text-orange-600 font-semibold hover:bg-orange-600 hover:text-white hover:border-orange-600 transition"  onClick={()=>signInHandler()}>Login</button> 
         </div>
         
         

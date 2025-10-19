@@ -103,6 +103,7 @@ const onNodeClick = useCallback((event, node) => {
         type,
         position,
         data: { label: `${type}` },
+     
       };
       setNodes((nds) => {
         const prevLast = nds[nds.length - 1];  
@@ -155,12 +156,13 @@ const addConfigs = (reactJSON) =>{
 
   return (
 
+    <div className = "flex flex-col">
   <div className="w-full h-[80vh] flex relative">
     <div className="shrink-0">
       <div className = "ml-9">
 
       </div>
-      <div className = "flex h-full items-center ml-4">
+      <div className = "flex h-full items-center ml-8">
       <Sidebar  />
       </div>
     </div>
@@ -204,12 +206,15 @@ const addConfigs = (reactJSON) =>{
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
     </div>
 
-    <div className="absolute right-8 -bottom-4 mb-10 mr-4">
-      <Deploy onClick = {deployClicked}/>
 
-  </div>
 
   <Controls position="bottom-right" />
+
+   
+</div>
+<div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-50">
+  <Deploy deployClicked={deployClicked} />
+</div>
 </div>
     
   );

@@ -144,6 +144,7 @@ and automatically handles data distribution and scaling.
 <div className = "mt-30 px-4">
 <DeploymentTimeline/>
 </div>
+
 <div className = "mt-20 px-4">
 <ReactFlowProvider>
 
