@@ -1,59 +1,53 @@
-import { useState,useEffect } from "react"
+"use client";
+import { useState } from "react";
 
-export default function Live() { 
+export default function Live() {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState("version 1");
 
-    const [live, setLive] = useState(true);
-    const[open,setOpen] = useState(false)
-    const [selected, setSelected] = useState("") 
+  const options = ["version 1", "version 2", "version 3"];
 
-    const options = ["version 1", "version 2", "version 3"]
-     
-    
-    return (<div> 
 
-{live ?  <div >
- 
-<div className = "">
-<button onClick={() => setOpen(!open)}>
-<div className="inline-flex items-center gap-2 rounded-lg bg-green-200 px-3 py-2 shadow-sm border  border-gray-200">
-<span className="h-2.5 w-2.5 rounded-full bg-green-400"></span>
-<span className="font-medium text-gray-700 flex  gap-1">
-Live
-{selected && (
-  <span className="text-[10px] text-gray-500 ml-1">
-    {selected}
-  </span>
-)}
-</span>
-</div>
-</button>
-
-{open && (
-  <div className="absolute bg-white border border-gray-200 rounded-lg shadow-md max-h-20 overflow-y-auto">
-    {options.map((option) => (
+  return (
+    <div className="ml-4 relative inline-block text-left">
+      {/* Dropdown button */}
       <button
-        key={option}
-        onClick={() => {
-          setSelected(option);
-          setOpen(false);
-        }}
-        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+        onClick={() => setOpen(!open)}
+        className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 shadow-sm border border-gray-300 hover:bg-gray-200 transition-all"
       >
-        {option}
+        <span className="font-medium text-gray-700">{selected}</span>
+        <svg
+          className={`w-4 h-4 text-gray-600 transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
-    ))}
-  </div>
-)}
 
-</div>
-</div> :  
-null
-}
-
-
-
-
-
-
-    </div>)
+      {/* Dropdown menu */}
+      {open && (
+        <div className="absolute mt-2 bg-white border border-gray-200 rounded-lg shadow-md z-10 w-full">
+          {options.map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                setSelected(option);
+                setOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                option === selected ? "text-blue-600 font-medium" : "text-gray-700"
+              }`}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
