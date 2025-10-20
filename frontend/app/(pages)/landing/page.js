@@ -15,8 +15,6 @@ import TextAnimateDemo6 from './animatedText/slogan';
 import SideBar from './canvas/SideBar';
 
 //user flow canvas
-import DndFlow2 from './flowCanvas/canvas';
-import { DnDProvider as DnDProvider2 } from './flowCanvas/Dnd';
 import LoginButton from './login/LoginButton';
 import GetStarted from './login/getStarted';
 
