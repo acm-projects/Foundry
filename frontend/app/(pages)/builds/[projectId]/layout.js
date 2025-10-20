@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {useState} from 'react'
 import Live from "./canvas/Deployment/live";
 
-export default function WorkflowsLayout({ children, params }){
+export default function BuildsLayout({ children, params }){
   const { projectId } = params;
 
   const path = usePathname();

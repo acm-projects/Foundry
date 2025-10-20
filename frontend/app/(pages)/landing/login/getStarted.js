@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function GetStarted() { 
 
-    const signInHandler = async () => await signIn("github",{callbackUrl: "/workflows"});
+    const signInHandler = async () => await signIn("github",{callbackUrl: "/builds"});
 
   return(
 

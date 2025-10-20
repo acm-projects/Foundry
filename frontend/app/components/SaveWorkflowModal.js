@@ -23,15 +23,15 @@ export default function SaveWorkflowDialog() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save your workflow</DialogTitle>
+            <DialogTitle>Save your build</DialogTitle>
             <DialogDescription>
-              Add a title and description before saving your workflow.
+              Add a title and description before saving your build.
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col gap-4 py-4">
-            <Input placeholder="Workflow title" />
-            <Input placeholder="Workflow description" />
+            <Input placeholder="Build title" />
+            <Input placeholder="Build description" />
           </div>
 
           <DialogFooter>

@@ -18,22 +18,22 @@ const[user,setUser] = useState(false)
     {
       name: "Canvas",
       icon: Monitor,
-      href: `/workflows/${projectId}/canvas`,
+      href: `/builds/${projectId}/canvas`,
     },
     {
       name: "Costs",
       icon: DollarSign,
-      href: `/workflows/${projectId}/costs`,
+      href: `/builds/${projectId}/costs`,
     },
     {
       name: "Logs",
       icon: FileText,
-      href: `/workflows/${projectId}/logs`,
+      href: `/builds/${projectId}/logs`,
     },
     {
       name: "Settings",
       icon: Settings,
-      href: `/workflows/${projectId}/settings`,
+      href: `/builds/${projectId}/settings`,
     },
   ];
 
@@ -44,10 +44,10 @@ const[user,setUser] = useState(false)
       <div className="">
         
       <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
-          <Link href='/workflows'>
+          <Link href='/builds'>
             <Cloud className="w-5 h-5 text-white" />
             </Link>
-            <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Project Name</h1>
+            <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Build Name</h1>
             <div className = "absolute left-65"> 
             <Live/>
             </div>

@@ -4,7 +4,7 @@ import {useSession,signIn, signOut} from "next-auth/react"
 export default function LoginButton() { 
 
 const {data, status}= useSession()
-const signInHandler = async () => await signIn("github",{callbackUrl: "/workflows"});
+const signInHandler = async () => await signIn("github",{callbackUrl: "/builds"});
 return (
 <div> 
 
