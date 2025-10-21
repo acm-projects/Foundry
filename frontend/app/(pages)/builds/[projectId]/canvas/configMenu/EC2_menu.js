@@ -4,7 +4,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Settings } from "lucide-react";
-
+import { useReactFlow } from "@xyflow/react";
+import { useEffect } from "react";
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 
 const schema = z.object({name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
@@ -19,6 +20,8 @@ userData: z.string().optional(),
 
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
 const storageKey = `${id}`;
+
+const {setNodes,getNode} = useReactFlow();
 
 const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
 deleteOnTermination: "true", userData: ""}
@@ -47,6 +50,11 @@ console.log("better", betterFormatting);
 
 
 };
+
+useEffect(() => {
+  const node = getNode(id);
+  console.log("Node here:", node);
+}, []); //make a better dependacy to get name 
 
 
 
