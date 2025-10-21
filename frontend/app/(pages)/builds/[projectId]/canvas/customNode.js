@@ -27,6 +27,9 @@ console.log("sources",src,dst)
     [getNode]
   );
 
+  const nodeInfo = getNode(id)
+
+  console.log("name please",nodeInfo)
   switch (data.label) {
     case 'EC2':
       return (
