@@ -36,6 +36,7 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
         root_prefix = rootFolder.split("/")[0] + "/"
 
         target_path = root_prefix + "buildspec.yml"
+        print("Target path for buildspec:", target_path)
 
         has_buildspec = target_path in names
 
@@ -69,7 +70,7 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
           
             else:
                 print("Injected buildspec.yml into ZIP.")
-                print(names)
+               # print(names)
         finally:
            
             if os.path.exists(tmp_zip_path):

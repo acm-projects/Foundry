@@ -4,12 +4,16 @@ import os
 from boto3.exceptions import S3UploadFailedError
 from addYamlZip import addBuildSpec, dummyTemplate
 
-OWNER = "enayas"
+OWNER = "efrain-grubs"
 REPO = "my-next-app"
 REF = "main"
 
 
 zip_url = f"https://api.github.com/repos/{OWNER}/{REPO}/zipball/{REF}"  # download zip from github repo
+
+
+
+
 
 
 out_file = f"{REPO}-{REF}.zip"  #output file name

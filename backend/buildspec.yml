@@ -3,17 +3,80 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.11
+      nodejs: 20
+      python: 3.10
     commands:
-      - echo "Installing Python dependencies..."
-      - python3 -m venv venv
-      - source venv/bin/activate
-      - pip install --upgrade pip
-      - pip install -r requirements.txt
+      - echo "== Installing dependencies =="
+
+     
+      - |
+        if [ -d "backend" ] && [ -f "backend/requirements.txt" ]; then
+          echo "Installing FastAPI dependencies..."
+          pip install -r backend/requirements.txt -t backend/package
+        else
+          echo "No backend detected — skipping Python install."
+        fi
+
+     
+      - |
+        if [ -d "frontend" ] && [ -f "frontend/package.json" ]; then
+          echo "Installing Next.js dependencies..."
+          cd frontend && npm ci && cd ..
+        else
+          echo "No frontend detected — skipping npm install."
+        fi
+
   build:
     commands:
-      - echo "Building and packaging FastAPI app..."
-      - zip -r ../app.zip ./*
+      - echo "== Build phase =="
+
+      
+      - |
+        if [ -d "frontend" ] && [ -f "frontend/package.json" ]; then
+          echo "Building Next.js frontend..."
+          cd frontend && npm run build && cd ..
+        else
+          echo "No frontend detected — skipping build."
+        fi
+
+      
+      - |
+        if [ -d "backend" ]; then
+          echo "Packaging FastAPI backend..."
+          cd backend && zip -r ../backend.zip . && cd ..
+        else
+          echo "No backend detected — skipping zip."
+        fi
+
 artifacts:
   files:
-    - ../app.zip
+    - frontend/.next/**/* 
+    - backend.zip
+  discard-paths: no
+
+
+
+
+
+
+
+
+# version: 0.2
+
+# phases:
+#   install:
+#     runtime-versions:
+#       python: 3.11
+#     commands:
+#       - echo "Installing Python dependencies..."
+#       - python3 -m venv venv
+#       - source venv/bin/activate
+#       - pip install --upgrade pip
+#       - pip install -r requirements.txt
+#   build:
+#     commands:
+#       - echo "Building and packaging FastAPI app..."
+#       - zip -r ../app.zip ./*
+# artifacts:
+#   files:
+#     - ../app.zip
