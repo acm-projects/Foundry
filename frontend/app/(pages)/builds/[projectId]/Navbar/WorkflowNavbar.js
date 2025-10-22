@@ -46,11 +46,11 @@ const[user,setUser] = useState(false)
       <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
           <Link href='/builds'>
             <Cloud className="w-5 h-5 text-white" />
-            </Link>
-            <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Build Name</h1>
-            <div className = "absolute left-65"> 
+          </Link>
+          <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Build Name</h1>
+          <div className = "absolute left-60"> 
             <Live/>
-            </div>
+          </div>
             
           </div>
 
