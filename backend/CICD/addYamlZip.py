@@ -4,22 +4,38 @@ import shutil
 import os
 dummyTemplate = """version: 0.2
 
+cache:
+  paths:
+    - 'efrain-grubs-my-next-app-f8a940d/frontend/node_modules/**/*'
+    - 'efrain-grubs-my-next-app-f8a940d/frontend/.next/cache/**/*'
+
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 20
     commands:
-      - echo "Installing dependencies"
+
+     
+      - echo "Installing dependencies..."
+      - cd $CODEBUILD_SRC_DIR
+      - pwd && ls -la
+      - cd efrain-grubs-my-next-app-f8a940d/frontend
+     
+  
       - npm ci
   build:
     commands:
-      - echo "Building Next.js app"
-      - npm run build
+      - echo "Building frontend..."
+      - npm run build 
+  post_build:
+    commands:
+      - echo "complete build"
 
 artifacts:
+  # base-directory: efrain-grubs-my-next-app-f8a940d/frontend/.next
   files:
     - '**/*'
-  discard-paths: no
+
 """
 def addBuildSpec(zip_path,buildSpec,overWrite=True): 
 

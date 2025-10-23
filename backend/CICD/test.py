@@ -13,9 +13,6 @@ zip_url = f"https://api.github.com/repos/{OWNER}/{REPO}/zipball/{REF}"  # downlo
 
 
 
-
-
-
 out_file = f"{REPO}-{REF}.zip"  #output file name
 
 headers = {"user":"test"}
@@ -28,11 +25,15 @@ if response.status_code == 200:
         file.write(response.content)  #write the content to a file. should appear inside the cicd folder 
     print(f"Downloaded {out_file} successfully.")
     addBuildSpec(out_file, dummyTemplate, overWrite=True) #should be adding yaml file to the zip
+
+
+
     #verifying injection:
     import zipfile
     with zipfile.ZipFile(out_file, "r") as z:
         print("Contents of the zip after injection:")
-        print(z.namelist())  # Should now include 'buildspec.yml'
+        z.namelist() # Should now include 'buildspec.yml'
+        
 else: 
     print(f"Failed to download file: {response.status_code} - {response.text}")
 

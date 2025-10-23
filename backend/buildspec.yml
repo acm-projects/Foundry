@@ -3,56 +3,27 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20
-      python: 3.10
+      nodejs: 20     
     commands:
-      - echo "== Installing dependencies =="
-
-     
-      - |
-        if [ -d "backend" ] && [ -f "backend/requirements.txt" ]; then
-          echo "Installing FastAPI dependencies..."
-          pip install -r backend/requirements.txt -t backend/package
-        else
-          echo "No backend detected — skipping Python install."
-        fi
-
-     
-      - |
-        if [ -d "frontend" ] && [ -f "frontend/package.json" ]; then
-          echo "Installing Next.js dependencies..."
-          cd frontend && npm ci && cd ..
-        else
-          echo "No frontend detected — skipping npm install."
-        fi
+      - echo "SRC: $CODEBUILD_SRC_DIR"
+      - cd $CODEBUILD_SRC_DIR
+      - pwd && ls -la
+      - cd frontend
+      - echo "Installing dependencies..."
+      - npm ci
 
   build:
     commands:
-      - echo "== Build phase =="
-
-      
-      - |
-        if [ -d "frontend" ] && [ -f "frontend/package.json" ]; then
-          echo "Building Next.js frontend..."
-          cd frontend && npm run build && cd ..
-        else
-          echo "No frontend detected — skipping build."
-        fi
-
-      
-      - |
-        if [ -d "backend" ]; then
-          echo "Packaging FastAPI backend..."
-          cd backend && zip -r ../backend.zip . && cd ..
-        else
-          echo "No backend detected — skipping zip."
-        fi
+      - echo "Building Next.js app..."
+      - npm run build
 
 artifacts:
   files:
-    - frontend/.next/**/* 
-    - backend.zip
+    - frontend/.next/**/*     
+    - frontend/package.json   
+    - frontend/next.config.mjs
   discard-paths: no
+
 
 
 
