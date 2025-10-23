@@ -6,8 +6,8 @@ dummyTemplate = """version: 0.2
 
 cache:
   paths:
-    - 'efrain-grubs-my-next-app-f8a940d/frontend/node_modules/**/*'
-    - 'efrain-grubs-my-next-app-f8a940d/frontend/.next/cache/**/*'
+    - '*/frontend/node_modules/**/*'
+    - '*/frontend/.next/cache/**/*'
 
 phases:
   install:
@@ -19,7 +19,7 @@ phases:
       - echo "Installing dependencies..."
       - cd $CODEBUILD_SRC_DIR
       - pwd && ls -la
-      - cd efrain-grubs-my-next-app-f8a940d/frontend
+      - cd */frontend
      
   
       - npm ci
@@ -32,7 +32,7 @@ phases:
       - echo "complete build"
 
 artifacts:
-  # base-directory: efrain-grubs-my-next-app-f8a940d/frontend/.next
+  # base-directory: */frontend/.next
   files:
     - '**/*'
 
