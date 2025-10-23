@@ -1,6 +1,6 @@
 # make_stack.py
 from troposphere import Template, Parameter, Ref
-from . import EC2_creation
+from .singleServiceCreator import EC2_creation, S3_creation
 
 def make_stack_template(normalized: dict) -> Template:
     t = Template()
@@ -38,11 +38,15 @@ def make_stack_template(normalized: dict) -> Template:
             EC2_creation.add_ec2_instance(t, node, subnet_param, sg_param, logical_id=logical_id)
         
         if node.get("type") == "S3":
-            pass
+            # unique logical id based on node id (sanitize for CloudFormation)
+            node_id = node.get('id', 'Bucket').replace('-', '').replace(':', '').replace('_', '')
+            logical_id = f"S3{node_id}"
+            S3_creation.add_s3_bucket(t, node, logical_id=logical_id)
+        
         if node.get("type") == "RDS":
             pass
         if node.get("type") == "DynamoDB":
             pass
-        # S3/RDS/DynamoDB → add later in the same pattern
+        # RDS/DynamoDB → add later in the same pattern
 
     return t

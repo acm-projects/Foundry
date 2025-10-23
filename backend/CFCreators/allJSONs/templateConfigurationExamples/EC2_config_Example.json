@@ -47,8 +47,7 @@
           "_choices": [
             "Amazon Linux",
             "Ubuntu",
-            "Windows",
-            "macOS"
+            "Windows"
           ],
           "_note": "These friendly names are automatically mapped to the latest AWS AMI via SSM parameters"
         },
@@ -80,16 +79,6 @@
             "required": true
           },
           "_note": "This key pair must exist in your AWS account in the deployment region"
-        },
-        "userData": {
-          "_value": null,
-          "_inputType": "textarea",
-          "_description": "Optional bash script to run when the instance first starts",
-          "_validation": {
-            "required": false
-          },
-          "_example": "#!/bin/bash\nyum update -y\nyum install -y httpd\nsystemctl start httpd",
-          "_note": "Use for automated setup and configuration"
         },
         "storage": {
           "_description": "Root volume configuration for the EC2 instance",
@@ -216,6 +205,16 @@
         "_description": "Automatically set from the 'name' field in user configuration",
         "_source": "data.name"
       }
+    },
+    "userData": {
+      "_value": null,
+      "_inputType": "textarea",
+      "_description": "Optional bash script to run when the instance first starts",
+      "_validation": {
+        "required": false
+      },
+      "_example": "#!/bin/bash\nyum update -y\nyum install -y httpd\nsystemctl start httpd",
+      "_note": "Use for automated setup and configuration"
     }
   },
   "_metadata": {

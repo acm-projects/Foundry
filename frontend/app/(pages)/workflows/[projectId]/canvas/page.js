@@ -144,7 +144,6 @@ const deployClicked = () => {
     viewport: getViewport(),
   }
   reactJSON = addConfigs(reactJSON) 
-  console.log("DEPLOY WAS CLICKED!!!!!")
   return reactJSON 
 }
 const addConfigs = (reactJSON) =>{

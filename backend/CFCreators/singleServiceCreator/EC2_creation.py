@@ -9,7 +9,8 @@ IMAGE_NAME_TO_SSM = {
     "Amazon Linux": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64",
     "Ubuntu": "/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id",
     "Windows": "/aws/service/ami-windows-latest/Windows_Server-2022-English-Full-Base",
-    "macOS": "ami-placeholder-macos"  # macOS requires dedicated hosts and specific setup
+    # Note: macOS is not included as it requires dedicated hosts and cannot use standard SSM parameters
+    # If macOS support is needed, user must provide a specific AMI ID from their dedicated host setup
 }
 
 def resolve_image_id(image_input: str) -> str:

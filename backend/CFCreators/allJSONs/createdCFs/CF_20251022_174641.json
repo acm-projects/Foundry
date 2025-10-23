@@ -1,0 +1,155 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2 (S3/RDS/DynamoDB to be added later)",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "EC2reactflowid2Id": {
+      "Value": {
+        "Ref": "EC2reactflowid2"
+      }
+    },
+    "EC2reactflowid2NameTag": {
+      "Value": "dayum"
+    },
+    "EC2reactflowid2PrivateIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid2",
+          "PrivateIp"
+        ]
+      }
+    },
+    "EC2reactflowid2PublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid2",
+          "PublicIp"
+        ]
+      }
+    },
+    "EC2reactflowidId": {
+      "Value": {
+        "Ref": "EC2reactflowid"
+      }
+    },
+    "EC2reactflowidNameTag": {
+      "Value": "nokizzyonsquizzy"
+    },
+    "EC2reactflowidPrivateIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PrivateIp"
+        ]
+      }
+    },
+    "EC2reactflowidPublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PublicIp"
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "EC2reactflowid": {
+      "Properties": {
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "VolumeSize": 20,
+              "VolumeType": "gp3"
+            }
+          }
+        ],
+        "ImageId": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
+        "InstanceType": "t3.micro",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ],
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "nokizzyonsquizzy"
+          }
+        ]
+      },
+      "Type": "AWS::EC2::Instance"
+    },
+    "EC2reactflowid2": {
+      "Properties": {
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "VolumeSize": 20,
+              "VolumeType": "gp3"
+            }
+          }
+        ],
+        "ImageId": "{{resolve:ssm:/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64}}",
+        "InstanceType": "t3.micro",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ],
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "dayum"
+          }
+        ]
+      },
+      "Type": "AWS::EC2::Instance"
+    }
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2 (S3/RDS/DynamoDB to be added later)",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "EC2reactflowidId": {
+      "Value": {
+        "Ref": "EC2reactflowid"
+      }
+    },
+    "EC2reactflowidNameTag": {
+      "Value": "web-01"
+    },
+    "EC2reactflowidPrivateIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PrivateIp"
+        ]
+      }
+    },
+    "EC2reactflowidPublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PublicIp"
+        ]
+      }
+    },
+    "S3s3bucket1Arn": {
+      "Description": "ARN of the S3 bucket",
+      "Value": {
+        "Fn::GetAtt": [
+          "S3s3bucket1",
+          "Arn"
+        ]
+      }
+    },
+    "S3s3bucket1DomainName": {
+      "Description": "Domain name of the S3 bucket",
+      "Value": {
+        "Fn::GetAtt": [
+          "S3s3bucket1",
+          "DomainName"
+        ]
+      }
+    },
+    "S3s3bucket1Name": {
+      "Description": "Name of the S3 bucket",
+      "Value": {
+        "Ref": "S3s3bucket1"
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "EC2reactflowid": {
+      "Properties": {
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "VolumeSize": 20,
+              "VolumeType": "gp3"
+            }
+          }
+        ],
+        "ImageId": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
+        "InstanceType": "t3.micro",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ],
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "web-01"
+          }
+        ]
+      },
+      "Type": "AWS::EC2::Instance"
+    },
+    "S3s3bucket1": {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "BucketName": "s3e1f68f04-my-app-storage-bucket",
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "Type": "AWS::S3::Bucket"
+    }
+  }
+}

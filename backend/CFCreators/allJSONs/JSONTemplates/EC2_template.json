@@ -1,0 +1,55 @@
+{
+  "nodes": [
+    {
+      "id": "react_flow_id",
+      "type": "EC2",
+      "position": {
+        "x": -60,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "web-01",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro",
+        "storage": {
+          "rootVolumeSizeGiB": 20,
+          "rootVolumeType": "gp3",
+          "deleteOnTermination": true
+        }
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },{
+      "id": "reactflowid2",
+      "type": "EC2",
+      "position": {
+        "x": -60,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "web-02",
+        "imageId": "Amazon Linux",
+        "instanceType": "t3.micro",
+        "storage": {
+          "rootVolumeSizeGiB": 20,
+          "rootVolumeType": "gp3",
+          "deleteOnTermination": true
+        }
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {
+      "id": "s3_bucket_1",
+      "type": "S3",
+      "position": {
+        "x": 200,
+        "y": 100
+      },
+      "data": {
+        "label": "S3",
+        "bucketName": "my-app-storage-bucket"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}
+
