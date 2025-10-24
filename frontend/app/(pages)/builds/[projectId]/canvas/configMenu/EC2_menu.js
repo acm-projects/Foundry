@@ -18,13 +18,13 @@ deleteOnTermination: z.enum(["true", "false"]),
 userData: z.string().optional(),
 });
 
-export default function EC2PanelForm({ id, onClose, onDelete,label}) {
+export default function EC2PanelForm({ id, onClose, onDelete,label,repos}) {
 const storageKey = `${id}`;
 
 const {setNodes,getNode} = useReactFlow();
 
 const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
-deleteOnTermination: "true", userData: ""}
+deleteOnTermination: "true", userData: "",repositories: repos && repos.length > 0 ? repos[0].name : "no repositories",};
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
@@ -55,6 +55,10 @@ useEffect(() => {
   const node = getNode(id);
   console.log("Node here:", node);
 }, []); //make a better dependacy to get name 
+
+console.log("repositories",repos)
+
+
 
 
 
@@ -93,6 +97,23 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 {errors.name && (
   <p className="text-red-600 text-[10px]  -mt-1">{errors.name.message}</p>
 )}
+<span className="font-medium text-gray-800">repositories</span>
+<Controller
+control={control}
+name="repositories"
+render={({ field }) => (
+  <Select value={field.value} onValueChange={field.onChange}>
+    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+      <SelectValue placeholder="Select type" />
+    </SelectTrigger>
+    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+      {repos?.map((repo) => (
+        <SelectItem key={repo.id} value={repo.name}>{repo.name}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+/>
 
 
 <span className="font-medium text-gray-800">Instance Type</span>
@@ -198,10 +219,11 @@ render={({ field }) => (
 />
 {errors.deleteOnTermination && <p className="text-red-600 text-[10px]  -mt-1">{errors.deleteOnTermination.message}</p>}
 
-<span className="font-medium text-gray-800">userData (optional)</span>
-<textarea
-{...register("userData")}className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-/>
+
+
+
+
+
 </form>
 </div>
 

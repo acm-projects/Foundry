@@ -32,19 +32,56 @@ phases:
       - echo "complete build"
 
 artifacts:
-  # base-directory: */frontend/.next
+
   files:
     - '**/*'
 
 """
 
 
+appspecTemplate = """
+version: 0.0
+os: linux
 
+files:
+  - source: /
+    destination: /home/ubuntu/my-next-app
 
+permissions:
+  - object: /home/ubuntu/my-next-app
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+    type:
+      - directory
+      - file
 
-
-
-
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_app.sh
+      timeout: 60
+      runas: ubuntu
+      
+  BeforeInstall:
+    - location: scripts/cleanup.sh
+      timeout: 60
+      runas: ubuntu
+      
+  AfterInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: ubuntu
+      
+  ApplicationStart:
+    - location: scripts/start_app.sh
+      timeout: 60
+      runas: ubuntu
+      
+  ValidateService:
+    - location: scripts/validate.sh
+      timeout: 60
+      runas: ubuntu
+"""
 
 def addBuildSpec(zip_path,buildSpec,overWrite=True): 
 
@@ -65,16 +102,10 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
 
         has_buildspec = target_path in names
 
-        if has_buildspec and not overWrite:
-            print("Buildspec.yml already exists")
-            return
-        
+   
+        tmp_dir,tmp_zip_path = tempfile.mkstemp() #makes temporary empty file
 
-
-        tmp_dir,tmp_zip_path = tempfile.mkstemp()
-
-        os.close(tmp_dir) #left off here
-
+        os.close(tmp_dir) #temp_dir is a file descriptor not needed so we close it
         try:
             with zipfile.ZipFile(tmp_zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zout:
                 for item in names:
@@ -103,6 +134,58 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
                     os.remove(tmp_zip_path)
                 except OSError:
                     pass
+def addAppSpec(zip_path,buildSpec,overWrite=True): 
+
+    with zipfile.ZipFile(zip_path, 'r') as zin:  #open zip file and read it 
+        names = zin.namelist() #returns a list of file paths 
+
+        if not names: 
+           
+            raise ValueError("Zip file is empty.")
+            return
+        
+        rootFolder = names[0]
+
+        root_prefix = rootFolder.split("/")[0] + "/"
+
+        target_path = root_prefix + "appspec.yml"
+        print("Target path for appspec:", target_path)
+
+        has_buildspec = target_path in names
+
+   
+        tmp_dir,tmp_zip_path = tempfile.mkstemp() #makes temporary empty file
+
+        os.close(tmp_dir) #temp_dir is a file descriptor not needed so we close it
+        try:
+            with zipfile.ZipFile(tmp_zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+                for item in names:
+                    # Skip the old buildspec if we're overwriting
+                    if overWrite and item == target_path:
+                        continue
+                    data = zin.read(item)
+                    zout.writestr(item, data)
+
+    
+                zout.writestr(target_path, buildSpec)
+
+            
+            shutil.move(tmp_zip_path, zip_path)
+
+            if has_buildspec and overWrite:
+                print("Replaced existing buildspec.yml in ZIP.")
+          
+            else:
+                print("Injected appSpec into ZIP.")
+               # print(names)
+        finally:
+           
+            if os.path.exists(tmp_zip_path):
+                try:
+                    os.remove(tmp_zip_path)
+                except OSError:
+                    pass
+            
             
 
     

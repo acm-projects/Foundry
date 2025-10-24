@@ -8,7 +8,7 @@ from routers import canvas
 
 app = FastAPI(title="FOUNDRYFORGER")
 
-origins = ['http://localhost:3000']
+origins = ['http://localhost:3000',]
 
 app.add_middleware(
     CORSMiddleware,

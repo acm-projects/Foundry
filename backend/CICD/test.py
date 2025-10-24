@@ -2,8 +2,8 @@ import requests
 import boto3
 import os 
 from boto3.exceptions import S3UploadFailedError
-from addYamlZip import addBuildSpec, dummyTemplate
-
+from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate,addAppSpec
+import time
 OWNER = "efrain-grubs"
 REPO = "my-next-app"
 REF = "main"
@@ -24,16 +24,12 @@ if response.status_code == 200:
     with open(out_file, "wb") as file:
         file.write(response.content)  #write the content to a file
     print(f"Downloaded {out_file} successfully.")
+   
     addBuildSpec(out_file, dummyTemplate, overWrite=True) #should be adding yaml file to the zip
+    addAppSpec(out_file, appspecTemplate, overWrite=True)
 
 
-
-    #verifying injection:
-    import zipfile
-    with zipfile.ZipFile(out_file, "r") as z:
-        print("Contents of the zip after injection:")
-        z.namelist() # Should now include 'buildspec.yml'
-        
+     
 else: 
     print(f"Failed to download file: {response.status_code} - {response.text}")
 
@@ -47,29 +43,50 @@ S3_KEY = f"{S3_PREFIX}/{OWNER}/{out_file}"  # the path for the file in the s3 bu
 
 
 #this function basically calls codebuild to start a build with the s3 location
+
+
+def codeDeploy(): 
+    print("code deploy called")
+
+
+
 def trigger_codebuild(project_name, s3_bucket, s3_key):
 
     codebuild_client = boto3.client('codebuild',region_name='us-east-1')
     
     try:
-        print("s3 location:", f's3://{s3_bucket}/{s3_key}') #location of the s3
+       
         response = codebuild_client.start_build(
             projectName=project_name,
       
         )
 
-        print("response",response)
+        #print("response",response)
         
-        build_id = response['build']['id']
-        build_status = response['build']['buildStatus']
         
         print(f"CodeBuild started successfully!")
 
-        #this is going to check when the build is complete
-      
+        while True: #checking for the build status every 10 seconds until it is complete
+            build_id = response['build']['id']
+            build_info = codebuild_client.batch_get_builds(ids=[build_id]) #api call to get build info
+            build_status = build_info['builds'][0]['buildStatus'] 
+            print(f"Current build status: {build_status}")
+            if build_status in ['SUCCEEDED', 'FAILED', 'FAULT', 'STOPPED', 'TIMED_OUT']:
+                break
+            time.sleep(10)
+
+
+            if(build_status == 'SUCCEEDED'):
+                codeDeploy()
+
+               
         
-       
-        
+        return {
+            'build_status': build_status
+        }
+    
+
+  
     except Exception as e:
         print(f"Failed to trigger CodeBuild: {e}")
         return {

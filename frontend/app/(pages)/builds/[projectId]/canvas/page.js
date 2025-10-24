@@ -10,10 +10,13 @@ import "@xyflow/react/dist/style.css";
 import SingleHandleNode from "./customNode";
 import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
-
+import { useSession } from "next-auth/react";
 import Deploy from './Deployment/deploy'
 
 import {useState} from "react"
+import axios from "axios";
+import { set } from "zod";
+
 
 const DnDFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -114,12 +117,6 @@ const onNodeClick = useCallback((event, node) => {
     [screenToFlowPosition, type, setNodes, setEdges]
   );
 
-  useEffect(() => { 
-
-localStorage.getItem("amiID")
-
-  },[configID])
- 
 function closeEc2() { 
     setEc2(false)
   }
@@ -153,6 +150,48 @@ const addConfigs = (reactJSON) =>{
   //maybe updating an already existing config file and then append it to reactJSON and return it
   return reactJSON
 }
+
+
+
+ //logic to get existing canvas from backend
+
+
+
+ const token = useSession()
+
+const [repos,setRepos] = useState([])
+ useEffect(() => { 
+
+
+
+  const getRepos = async () => { 
+
+
+    console.log("token",token)
+    try { 
+
+
+  
+      const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${token.data?.user?.login}`}});
+
+      console.log("response",response)
+
+      console.log("roarrrrr",response.data)
+
+      setRepos(response.data)
+
+
+  
+    }catch(err) { 
+  
+      console.error("error getting repos")
+    }
+  }
+  getRepos()
+    },[token])
+
+
+    console.log("repos in canvas",repos)
 
   return (
 
@@ -200,7 +239,7 @@ const addConfigs = (reactJSON) =>{
 { dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
 
     {console.log("share", nodes)}
-    {ec2 && configID ? <EC2_menu onDelete={deleteNode} id={configID} onClose={closeEc2}  /> : null}
+    {ec2 && configID ? <EC2_menu repos = {repos} onDelete={deleteNode} id={configID} onClose={closeEc2}  /> : null}
     {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
     {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
