@@ -1,0 +1,86 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+FoundryEnv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Backend - CloudFormation Generated Files
+backend/CFCreators/allJSONs/createdCFs/
+backend/CFCreators/testFiles/
+
+# Backend - Temporary Files
+backend/tempfile.txt
+
+# Frontend - Next.js
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+frontend/.env*.local
+
+# Frontend - Build
+frontend/build/
+frontend/dist/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.bak
+*.tmp
+*.temp
