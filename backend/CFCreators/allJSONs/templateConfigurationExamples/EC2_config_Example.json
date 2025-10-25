@@ -58,16 +58,8 @@
           "_choices": [
             "t3.micro",
             "t3.small",
-            "t3.medium",
-            "t3.large",
-            "t4g.micro",
-            "t4g.small",
-            "t4g.medium",
             "c7i-flex.large",
-            "m7i-flex.large",
-            "m5.large",
-            "c6i.large",
-            "r6g.large"
+            "m7i-flex.large"
           ],
           "_note": "t4g and r6g are ARM-based (Graviton) instances; ensure OS compatibility"
         },

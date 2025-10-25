@@ -26,6 +26,7 @@ class CloudFormationDeployer:
             self.region = region
             self.cf_client = boto3.client('cloudformation', region_name=region)
             self.ec2_client = boto3.client('ec2', region_name=region)
+            self.rds_client = boto3.client('rds', region_name=region)
         except NoCredentialsError:
             raise AWSDeploymentError(
                 "AWS credentials not found. Please configure AWS credentials."
@@ -80,6 +81,76 @@ class CloudFormationDeployer:
             
         except ClientError as e:
             raise AWSDeploymentError(f"Failed to get VPC resources: {str(e)}")
+    
+    def get_or_create_db_subnet_group(self, vpc_id: str, subnet_ids: list = None) -> str:
+        """
+        Get existing DB Subnet Group or create a new one for RDS.
+        DB Subnet Group must span at least 2 availability zones.
+        
+        Args:
+            vpc_id: VPC ID to create subnet group in
+            subnet_ids: List of subnet IDs (will auto-discover if not provided)
+            
+        Returns:
+            DB Subnet Group name
+        """
+        try:
+            db_subnet_group_name = f"foundry-db-subnet-group-{vpc_id}"
+            
+            # Check if it already exists
+            try:
+                response = self.rds_client.describe_db_subnet_groups(
+                    DBSubnetGroupName=db_subnet_group_name
+                )
+                print(f"  ✓ Using existing DB Subnet Group: {db_subnet_group_name}")
+                return db_subnet_group_name
+            except ClientError as e:
+                if e.response['Error']['Code'] != 'DBSubnetGroupNotFoundFault':
+                    raise
+            
+            # Doesn't exist, create it
+            # Get at least 2 subnets in different AZs
+            if not subnet_ids:
+                subnets_response = self.ec2_client.describe_subnets(
+                    Filters=[{'Name': 'vpc-id', 'Values': [vpc_id]}]
+                )
+                
+                if len(subnets_response['Subnets']) < 2:
+                    raise AWSDeploymentError(
+                        f"VPC {vpc_id} must have at least 2 subnets in different AZs for RDS"
+                    )
+                
+                # Get subnets from different AZs
+                az_subnets = {}
+                for subnet in subnets_response['Subnets']:
+                    az = subnet['AvailabilityZone']
+                    if az not in az_subnets:
+                        az_subnets[az] = subnet['SubnetId']
+                
+                if len(az_subnets) < 2:
+                    raise AWSDeploymentError(
+                        f"VPC {vpc_id} must have subnets in at least 2 different AZs for RDS"
+                    )
+                
+                subnet_ids = list(az_subnets.values())[:2]  # Use first 2 AZs
+            
+            # Create DB Subnet Group
+            self.rds_client.create_db_subnet_group(
+                DBSubnetGroupName=db_subnet_group_name,
+                DBSubnetGroupDescription=f"Foundry auto-generated DB subnet group for VPC {vpc_id}",
+                SubnetIds=subnet_ids,
+                Tags=[
+                    {'Key': 'Name', 'Value': db_subnet_group_name},
+                    {'Key': 'ManagedBy', 'Value': 'Foundry'}
+                ]
+            )
+            
+            print(f"  ✓ Created new DB Subnet Group: {db_subnet_group_name}")
+            print(f"    - Subnets: {subnet_ids}")
+            return db_subnet_group_name
+            
+        except ClientError as e:
+            raise AWSDeploymentError(f"Failed to get/create DB subnet group: {str(e)}")
     
     def deploy_stack(
         self, 

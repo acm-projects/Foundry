@@ -1,0 +1,99 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2/S3/RDS/DynamoDB",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "DBSubnetGroupName": {
+          "default": "DB Subnet Group"
+        },
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "DynamoDBdynamodbtable1Arn": {
+      "Description": "ARN of the DynamoDB table",
+      "Value": {
+        "Fn::GetAtt": [
+          "DynamoDBdynamodbtable1",
+          "Arn"
+        ]
+      }
+    },
+    "DynamoDBdynamodbtable1Name": {
+      "Description": "Name of the DynamoDB table",
+      "Value": {
+        "Ref": "DynamoDBdynamodbtable1"
+      }
+    }
+  },
+  "Parameters": {
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "DynamoDBdynamodbtable1": {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "DeletionProtectionEnabled": false,
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "TableName": "foundry-build-my-table",
+        "Tags": [
+          {
+            "Key": "ManagedBy",
+            "Value": "CloudFormation"
+          },
+          {
+            "Key": "Name",
+            "Value": "foundry-build-my-table"
+          }
+        ]
+      },
+      "Type": "AWS::DynamoDB::Table"
+    }
+  }
+}

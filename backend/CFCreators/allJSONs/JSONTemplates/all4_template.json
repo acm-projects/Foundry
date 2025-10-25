@@ -1,0 +1,87 @@
+{
+  "nodes": [
+    {
+      "id": "dynamodb_table_2",
+      "type": "DynamoDB",
+      "position": {
+        "x": 200,
+        "y": 100
+      },
+      "data": {
+        "label": "DynamoDB",
+        "tableName": "my-table-1",
+        "partitionKey": "id",
+        "partitionKeyType": "S",
+        "sortKey": "",
+        "sortKeyType": "S"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },{
+      "id": "s3_bucket_4",
+      "type": "S3",
+      "position": {
+        "x": 200,
+        "y": 100
+      },
+      "data": {
+        "label": "S3",
+        "bucketName": "my-app-storage-bucket"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },
+    {
+      "id": "react_flow_id_1",
+      "type": "EC2",
+      "position": {
+        "x": -60,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "web-01",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro",
+        "storage": {
+          "rootVolumeSizeGiB": 20,
+          "rootVolumeType": "gp3",
+          "deleteOnTermination": true
+        }
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },
+       {
+      "id": "rds_instance_2",
+      "type": "RDS",
+      "position": {
+        "x": 200,
+        "y": 100
+      },
+      "data": {
+        "label": "RDS",
+        "dbName": "mydatabase",
+        "engine": "postgres",
+        "masterUsername": "dbadmin",
+        "masterUserPassword": "MySecurePassword123!"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

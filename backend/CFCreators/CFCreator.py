@@ -96,6 +96,13 @@ def deployToAWS(canvas_data: dict, stack_name: str = None, region: str = 'us-eas
         print(f"  - Subnet: {vpc_resources['SubnetId']}")
         print(f"  - Security Group: {vpc_resources['SecurityGroupId']}")
         
+        # Check if template has RDS and setup DB Subnet Group if needed
+        has_rds = any(node.get("type") == "RDS" for node in canvas_data.get("nodes", []))
+        if has_rds:
+            print("\n  → RDS detected, setting up DB Subnet Group...")
+            db_subnet_group = deployer.get_or_create_db_subnet_group(vpc_resources['VpcId'])
+            vpc_resources['DBSubnetGroupName'] = db_subnet_group
+        
         # Step 4: Deploy to AWS
         if not stack_name:
             timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -104,7 +111,8 @@ def deployToAWS(canvas_data: dict, stack_name: str = None, region: str = 'us-eas
         print(f"\n[4/4] Deploying stack '{stack_name}' to AWS...")
         stack_id = deployer.deploy_stack(
             template_body=template_json,
-            stack_name=stack_name
+            stack_name=stack_name,
+            parameters=vpc_resources  # Pass all parameters including DBSubnetGroupName if RDS
         )
         
         # Get initial status

@@ -1,0 +1,123 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2/S3/RDS/DynamoDB",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId",
+            "DBSubnetGroupName"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "DBSubnetGroupName": {
+          "default": "DB Subnet Group"
+        },
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "RDSrdsinstance1Arn": {
+      "Description": "ARN of foundry-build-mydatabase",
+      "Value": {
+        "Fn::Sub": "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:${RDSrdsinstance1}"
+      }
+    },
+    "RDSrdsinstance1Endpoint": {
+      "Description": "Connection endpoint for foundry-build-mydatabase",
+      "Value": {
+        "Fn::GetAtt": [
+          "RDSrdsinstance1",
+          "Endpoint.Address"
+        ]
+      }
+    },
+    "RDSrdsinstance1InstanceId": {
+      "Description": "DB Instance Identifier",
+      "Value": {
+        "Ref": "RDSrdsinstance1"
+      }
+    },
+    "RDSrdsinstance1Port": {
+      "Description": "Port number for foundry-build-mydatabase",
+      "Value": {
+        "Fn::GetAtt": [
+          "RDSrdsinstance1",
+          "Endpoint.Port"
+        ]
+      }
+    }
+  },
+  "Parameters": {
+    "DBSubnetGroupName": {
+      "Description": "DB Subnet Group for RDS instances (must span at least 2 AZs)",
+      "Type": "String"
+    },
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "RDSrdsinstance1": {
+      "Properties": {
+        "AllocatedStorage": 20,
+        "BackupRetentionPeriod": 7,
+        "DBInstanceClass": "db.t4g.micro",
+        "DBInstanceIdentifier": "foundry-build-mydatabase",
+        "DBName": "mydatabase",
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroupName"
+        },
+        "DeletionProtection": false,
+        "Engine": "postgres",
+        "MasterUserPassword": "MySecurePassword123!",
+        "MasterUsername": "dbadmin",
+        "MultiAZ": false,
+        "PubliclyAccessible": false,
+        "StorageEncrypted": true,
+        "StorageType": "gp3",
+        "Tags": [
+          {
+            "Key": "Engine",
+            "Value": "postgres"
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CloudFormation"
+          },
+          {
+            "Key": "Name",
+            "Value": "foundry-build-mydatabase"
+          }
+        ],
+        "VPCSecurityGroups": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ]
+      },
+      "Type": "AWS::RDS::DBInstance"
+    }
+  }
+}

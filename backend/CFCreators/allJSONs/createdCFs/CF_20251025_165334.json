@@ -1,0 +1,281 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Foundry v1 - Single stack for EC2/S3/RDS/DynamoDB",
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
+            "default": "Networking"
+          },
+          "Parameters": [
+            "SubnetId",
+            "SecurityGroupId",
+            "DBSubnetGroupName"
+          ]
+        }
+      ],
+      "ParameterLabels": {
+        "DBSubnetGroupName": {
+          "default": "DB Subnet Group"
+        },
+        "SecurityGroupId": {
+          "default": "Instance Security Group"
+        },
+        "SubnetId": {
+          "default": "Target Subnet"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "DynamoDBdynamodbtable1Arn": {
+      "Description": "ARN of the DynamoDB table",
+      "Value": {
+        "Fn::GetAtt": [
+          "DynamoDBdynamodbtable1",
+          "Arn"
+        ]
+      }
+    },
+    "DynamoDBdynamodbtable1Name": {
+      "Description": "Name of the DynamoDB table",
+      "Value": {
+        "Ref": "DynamoDBdynamodbtable1"
+      }
+    },
+    "EC2reactflowidId": {
+      "Value": {
+        "Ref": "EC2reactflowid"
+      }
+    },
+    "EC2reactflowidNameTag": {
+      "Value": "web-01"
+    },
+    "EC2reactflowidPrivateIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PrivateIp"
+        ]
+      }
+    },
+    "EC2reactflowidPublicIp": {
+      "Value": {
+        "Fn::GetAtt": [
+          "EC2reactflowid",
+          "PublicIp"
+        ]
+      }
+    },
+    "RDSrdsinstance1Arn": {
+      "Description": "ARN of foundry-build-mydatabase",
+      "Value": {
+        "Fn::Sub": "arn:aws:rds:${AWS::Region}:${AWS::AccountId}:db:${RDSrdsinstance1}"
+      }
+    },
+    "RDSrdsinstance1Endpoint": {
+      "Description": "Connection endpoint for foundry-build-mydatabase",
+      "Value": {
+        "Fn::GetAtt": [
+          "RDSrdsinstance1",
+          "Endpoint.Address"
+        ]
+      }
+    },
+    "RDSrdsinstance1InstanceId": {
+      "Description": "DB Instance Identifier",
+      "Value": {
+        "Ref": "RDSrdsinstance1"
+      }
+    },
+    "RDSrdsinstance1Port": {
+      "Description": "Port number for foundry-build-mydatabase",
+      "Value": {
+        "Fn::GetAtt": [
+          "RDSrdsinstance1",
+          "Endpoint.Port"
+        ]
+      }
+    },
+    "S3s3bucket3Arn": {
+      "Description": "ARN of the S3 bucket",
+      "Value": {
+        "Fn::GetAtt": [
+          "S3s3bucket3",
+          "Arn"
+        ]
+      }
+    },
+    "S3s3bucket3DomainName": {
+      "Description": "Domain name of the S3 bucket",
+      "Value": {
+        "Fn::GetAtt": [
+          "S3s3bucket3",
+          "DomainName"
+        ]
+      }
+    },
+    "S3s3bucket3Name": {
+      "Description": "Name of the S3 bucket",
+      "Value": {
+        "Ref": "S3s3bucket3"
+      }
+    }
+  },
+  "Parameters": {
+    "DBSubnetGroupName": {
+      "Description": "DB Subnet Group for RDS instances (must span at least 2 AZs)",
+      "Type": "String"
+    },
+    "SecurityGroupId": {
+      "Description": "Security group",
+      "Type": "AWS::EC2::SecurityGroup::Id"
+    },
+    "SubnetId": {
+      "Description": "Target subnet",
+      "Type": "AWS::EC2::Subnet::Id"
+    },
+    "VpcId": {
+      "Description": "(Reserved for future use)",
+      "Type": "AWS::EC2::VPC::Id"
+    }
+  },
+  "Resources": {
+    "DynamoDBdynamodbtable1": {
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "id",
+            "AttributeType": "S"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "DeletionProtectionEnabled": false,
+        "KeySchema": [
+          {
+            "AttributeName": "id",
+            "KeyType": "HASH"
+          }
+        ],
+        "PointInTimeRecoverySpecification": {
+          "PointInTimeRecoveryEnabled": true
+        },
+        "SSESpecification": {
+          "SSEEnabled": true
+        },
+        "TableName": "foundry-build-my-table",
+        "Tags": [
+          {
+            "Key": "ManagedBy",
+            "Value": "CloudFormation"
+          },
+          {
+            "Key": "Name",
+            "Value": "foundry-build-my-table"
+          }
+        ]
+      },
+      "Type": "AWS::DynamoDB::Table"
+    },
+    "EC2reactflowid": {
+      "Properties": {
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "VolumeSize": 20,
+              "VolumeType": "gp3"
+            }
+          }
+        ],
+        "ImageId": "{{resolve:ssm:/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id}}",
+        "InstanceType": "t3.micro",
+        "SecurityGroupIds": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ],
+        "SubnetId": {
+          "Ref": "SubnetId"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "web-01"
+          }
+        ]
+      },
+      "Type": "AWS::EC2::Instance"
+    },
+    "RDSrdsinstance1": {
+      "Properties": {
+        "AllocatedStorage": 20,
+        "BackupRetentionPeriod": 7,
+        "DBInstanceClass": "db.t4g.micro",
+        "DBInstanceIdentifier": "foundry-build-mydatabase",
+        "DBName": "mydatabase",
+        "DBSubnetGroupName": {
+          "Ref": "DBSubnetGroupName"
+        },
+        "DeletionProtection": false,
+        "Engine": "postgres",
+        "MasterUserPassword": "MySecurePassword123!",
+        "MasterUsername": "dbadmin",
+        "MultiAZ": false,
+        "PubliclyAccessible": false,
+        "StorageEncrypted": true,
+        "StorageType": "gp3",
+        "Tags": [
+          {
+            "Key": "Engine",
+            "Value": "postgres"
+          },
+          {
+            "Key": "ManagedBy",
+            "Value": "CloudFormation"
+          },
+          {
+            "Key": "Name",
+            "Value": "foundry-build-mydatabase"
+          }
+        ],
+        "VPCSecurityGroups": [
+          {
+            "Ref": "SecurityGroupId"
+          }
+        ]
+      },
+      "Type": "AWS::RDS::DBInstance"
+    },
+    "S3s3bucket3": {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              }
+            }
+          ]
+        },
+        "BucketName": "s3322f1e33-my-app-storage-bucket",
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "Type": "AWS::S3::Bucket"
+    }
+  }
+}

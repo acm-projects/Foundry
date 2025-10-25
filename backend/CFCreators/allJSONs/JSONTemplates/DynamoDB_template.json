@@ -1,18 +1,19 @@
 {
   "nodes": [
     {
-      "id": "rds_instance_1",
-      "type": "RDS",
+      "id": "dynamodb_table_1",
+      "type": "DynamoDB",
       "position": {
         "x": 200,
         "y": 100
       },
       "data": {
-        "label": "RDS",
-        "dbName": "mydatabase",
-        "engine": "postgres",
-        "masterUsername": "dbadmin",
-        "masterUserPassword": "MySecurePassword123!"
+        "label": "DynamoDB",
+        "tableName": "my-table",
+        "partitionKey": "id",
+        "partitionKeyType": "S",
+        "sortKey": "",
+        "sortKeyType": "S"
       },
       "measured": {
         "width": 40,

@@ -1,10 +1,32 @@
 annotated-types==0.7.0
 anyio==4.11.0
+awacs @ file:///home/conda/feedstock_root/build_artifacts/awacs_1703296242741/work
+awscli==1.42.56
+boto3==1.40.56
+botocore==1.40.56
+certifi==2025.10.5
+cfn-flip @ file:///home/conda/feedstock_root/build_artifacts/cfn-flip_1642740617533/work
+charset-normalizer==3.4.4
+click==8.3.0
+colorama==0.4.6
+docutils==0.19
 fastapi==0.118.3
+h11==0.16.0
 idna==3.10
+jmespath==1.0.1
+pyasn1==0.6.1
 pydantic==2.12.0
 pydantic_core==2.41.1
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+requests==2.32.5
+rsa==4.7.2
+s3transfer==0.14.0
+six @ file:///Users/ec2-user/buildout/croot/six_1759951952559/work
 sniffio==1.3.1
 starlette==0.48.0
+troposphere==4.9.4
 typing-inspection==0.4.2
 typing_extensions==4.15.0
+urllib3==2.5.0
+uvicorn==0.37.0
