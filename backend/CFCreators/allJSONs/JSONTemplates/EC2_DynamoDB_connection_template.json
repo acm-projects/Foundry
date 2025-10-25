@@ -1,0 +1,56 @@
+{
+  "nodes": [
+    {
+      "id": "dynamodb_table_1",
+      "type": "DynamoDB",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "data": {
+        "label": "DynamoDB",
+        "tableName": "users-table",
+        "partitionKey": "userId",
+        "partitionKeyType": "S",
+        "sortKey": "timestamp",
+        "sortKeyType": "N"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },
+    {
+      "id": "ec2_instance_1",
+      "type": "EC2",
+      "position": {
+        "x": 300,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "api-server",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_1",
+      "source": "dynamodb_table_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "buildId": "foundry-test"
+}

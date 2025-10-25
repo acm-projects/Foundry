@@ -1,5 +1,5 @@
 # EC2_creation.py
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from troposphere import Template, Ref, Base64, Sub, Tags, Output, GetAtt
 import troposphere.ec2 as ec2
 
@@ -47,6 +47,8 @@ def add_ec2_instance(
     sg_param,
     *,
     logical_id: str = "EC2Instance",
+    instance_profile: Optional[Any] = None,
+    environment_variables: Optional[Dict[str, str]] = None,
 ) -> ec2.Instance:
     """
     Add an AWS::EC2::Instance to the given Template.
@@ -56,13 +58,47 @@ def add_ec2_instance(
     - A direct AMI ID: "ami-xxxxx"
     
     Networking comes from Parameters: SubnetId, SecurityGroupId.
+    
+    Args:
+        t: Troposphere Template object
+        node: Node dictionary from ReactFlow canvas
+        subnet_param: Parameter reference for subnet
+        sg_param: Parameter reference for security group
+        logical_id: CloudFormation logical resource ID
+        instance_profile: Optional IAM instance profile for permissions
+        environment_variables: Optional dict of env vars to inject into UserData
+    
+    Returns:
+        The created EC2 Instance resource
     """
     data = node["data"]
     storage = data.get("storage") or {}
-    user_data = data.get("userData")
+    user_data = data.get("userData", "")
 
     # Resolve the image ID (convert friendly name to SSM parameter or use AMI ID directly)
     resolved_image_id = resolve_image_id(data["imageId"])
+    
+    # Build environment variable exports for UserData
+    env_var_script = ""
+    if environment_variables:
+        env_var_lines = []
+        for key, value in environment_variables.items():
+            # Add to current session and to /etc/environment for persistence
+            env_var_lines.append(f'export {key}="{value}"')
+            env_var_lines.append(f'echo "export {key}=\\"{value}\\"" >> /etc/environment')
+        env_var_script = "\n".join(env_var_lines)
+    
+    # Combine environment variables with user's custom UserData
+    if env_var_script:
+        combined_user_data = f"""#!/bin/bash
+# Auto-generated environment variables for service connections
+{env_var_script}
+
+# User-provided UserData
+{user_data}
+"""
+    else:
+        combined_user_data = user_data if user_data else ""
     
     # Root volume (locked defaults with per-node overrides)
     block_devices = [
@@ -86,10 +122,14 @@ def add_ec2_instance(
         Tags=Tags(Name=data["name"]),
     )
     
+    # Add IAM instance profile if provided
+    if instance_profile:
+        props["IamInstanceProfile"] = Ref(instance_profile)
+    
     if data.get("keyName"):
         props["KeyName"] = data["keyName"]
-    if user_data:
-        props["UserData"] = Base64(Sub(user_data))
+    if combined_user_data:
+        props["UserData"] = Base64(Sub(combined_user_data))
 
     instance = ec2.Instance(logical_id, **props)
     t.add_resource(instance)

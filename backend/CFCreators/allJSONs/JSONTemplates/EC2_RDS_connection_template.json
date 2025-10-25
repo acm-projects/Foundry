@@ -1,0 +1,55 @@
+{
+  "nodes": [
+    {
+      "id": "rds_instance_1",
+      "type": "RDS",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "data": {
+        "label": "RDS",
+        "dbName": "appdb",
+        "engine": "postgres",
+        "masterUsername": "dbadmin",
+        "masterUserPassword": "SecurePass123!"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },
+    {
+      "id": "ec2_instance_1",
+      "type": "EC2",
+      "position": {
+        "x": 300,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "app-server",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_1",
+      "source": "rds_instance_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "buildId": "foundry-test"
+}

@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "id": "EC2:00ufAoQboAmxRZXN8D7Uk",
+      "type": "EC2",
+      "position": {"x": 511.15625, "y": 217},
+      "data": {
+        "label": "EC2",
+        "name": "web-server",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "S3:W-ZIB0MGQCHHjN-JJ0DZH",
+      "type": "S3",
+      "position": {"x": 422.484375, "y": 52},
+      "data": {
+        "label": "S3",
+        "bucketName": "bucket-1"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "S3:BJjXNDQinG_agO-fL9zdS",
+      "type": "S3",
+      "position": {"x": 168.984375, "y": 59.5},
+      "data": {
+        "label": "S3",
+        "bucketName": "bucket-2"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "S3:Khmq8PzlYJm0TFx8VBwNd",
+      "type": "S3",
+      "position": {"x": 267.90234375, "y": 227},
+      "data": {
+        "label": "S3",
+        "bucketName": "bucket-3"
+      },
+      "measured": {"width": 40, "height": 40}
+    }
+  ],
+  "edges": [
+    {
+      "source": "S3:BJjXNDQinG_agO-fL9zdS",
+      "target": "EC2:00ufAoQboAmxRZXN8D7Uk",
+      "id": "xy-edge__S3:BJjXNDQinG_agO-fL9zdS-EC2:00ufAoQboAmxRZXN8D7Uk"
+    },
+    {
+      "source": "S3:W-ZIB0MGQCHHjN-JJ0DZH",
+      "target": "EC2:00ufAoQboAmxRZXN8D7Uk",
+      "id": "xy-edge__S3:W-ZIB0MGQCHHjN-JJ0DZH-EC2:00ufAoQboAmxRZXN8D7Uk"
+    },
+    {
+      "source": "S3:Khmq8PzlYJm0TFx8VBwNd",
+      "target": "EC2:00ufAoQboAmxRZXN8D7Uk",
+      "id": "xy-edge__S3:Khmq8PzlYJm0TFx8VBwNd-EC2:00ufAoQboAmxRZXN8D7Uk"
+    }
+  ],
+  "viewport": {"x": -121.640625, "y": 119, "zoom": 2},
+  "buildId": "foundry-test"
+}

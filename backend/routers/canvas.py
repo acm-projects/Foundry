@@ -24,7 +24,7 @@ def deploy_initiate(canvas: dict):
     print("=" * 80)
     print("DEPLOYMENT REQUEST RECEIVED")
     print("=" * 80)
-    
+    print(canvas)
     # TODO: Remove this once frontend sends proper canvas data
     # For now, load the test template
     template_path = Path(__file__).parent.parent / "CFCreators" / "allJSONs" / "JSONTemplates" / "EC2_template.json"

@@ -1,0 +1,52 @@
+{
+  "nodes": [
+    {
+      "id": "s3_bucket_1",
+      "type": "S3",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "data": {
+        "label": "S3",
+        "bucketName": "my-app-data"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    },
+    {
+      "id": "ec2_instance_1",
+      "type": "EC2",
+      "position": {
+        "x": 300,
+        "y": 100
+      },
+      "data": {
+        "label": "EC2",
+        "name": "web-server",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro"
+      },
+      "measured": {
+        "width": 40,
+        "height": 40
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_1",
+      "source": "s3_bucket_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "buildId": "foundry-test"
+}

@@ -181,10 +181,12 @@ class CloudFormationDeployer:
             ]
             
             # Create the stack
+            # Note: CAPABILITY_IAM is required when template creates IAM resources
             response = self.cf_client.create_stack(
                 StackName=stack_name,
                 TemplateBody=template_body,
                 Parameters=cf_parameters,
+                Capabilities=['CAPABILITY_IAM'],  # Allow IAM role/policy creation
                 OnFailure='ROLLBACK'
             )
             

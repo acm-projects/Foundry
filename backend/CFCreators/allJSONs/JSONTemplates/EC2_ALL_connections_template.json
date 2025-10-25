@@ -1,0 +1,75 @@
+{
+  "nodes": [
+    {
+      "id": "s3_bucket_1",
+      "type": "S3",
+      "position": {"x": 100, "y": 50},
+      "data": {
+        "label": "S3",
+        "bucketName": "app-storage"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "rds_instance_1",
+      "type": "RDS",
+      "position": {"x": 100, "y": 150},
+      "data": {
+        "label": "RDS",
+        "dbName": "appdb",
+        "engine": "postgres",
+        "masterUsername": "dbadmin",
+        "masterUserPassword": "SecurePass123!"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "dynamodb_table_1",
+      "type": "DynamoDB",
+      "position": {"x": 100, "y": 250},
+      "data": {
+        "label": "DynamoDB",
+        "tableName": "sessions",
+        "partitionKey": "sessionId",
+        "partitionKeyType": "S",
+        "sortKey": "",
+        "sortKeyType": "S"
+      },
+      "measured": {"width": 40, "height": 40}
+    },
+    {
+      "id": "ec2_instance_1",
+      "type": "EC2",
+      "position": {"x": 400, "y": 150},
+      "data": {
+        "label": "EC2",
+        "name": "full-stack-server",
+        "imageId": "Ubuntu",
+        "instanceType": "t3.micro"
+      },
+      "measured": {"width": 40, "height": 40}
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_s3",
+      "source": "s3_bucket_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    },
+    {
+      "id": "edge_rds",
+      "source": "rds_instance_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    },
+    {
+      "id": "edge_dynamodb",
+      "source": "dynamodb_table_1",
+      "target": "ec2_instance_1",
+      "type": "default"
+    }
+  ],
+  "viewport": {"x": 0, "y": 0, "zoom": 1},
+  "buildId": "foundry-test"
+}
