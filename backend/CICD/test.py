@@ -4,8 +4,10 @@ import os
 from boto3.exceptions import S3UploadFailedError
 from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate,addAppSpec
 import time
+
+
 OWNER = "efrain-grubs"
-REPO = "my-next-app"
+REPO = "ai-vs-human-written-text"
 REF = "main"
 
 
@@ -25,7 +27,9 @@ if response.status_code == 200:
         file.write(response.content)  #write the content to a file
     print(f"Downloaded {out_file} successfully.")
    
-    addBuildSpec(out_file, dummyTemplate, overWrite=True) #should be adding yaml file to the zip
+    path = addBuildSpec(out_file, dummyTemplate, overWrite=True) #should be adding yaml file to the zip
+
+    print("magical path for zip file",path)
     addAppSpec(out_file, appspecTemplate, overWrite=True)
 
 
@@ -58,6 +62,8 @@ def trigger_codebuild(project_name, s3_bucket, s3_key):
        
         response = codebuild_client.start_build(
             projectName=project_name,
+            sourceTypeOverride='S3',
+            sourceLocationOverride=f"{s3_bucket}/{s3_key}"
       
         )
 
@@ -109,7 +115,7 @@ def upload_to_s3(file_name, bucket, object_name):
 
 #s3://foundry-codebuild-zip/artifacts/efrain-grubs/my-next-app-main.zip
         # Trigger CodeBuild after successful upload
-        trigger_codebuild("foundryCICD", bucket, object_name)
+        #trigger_codebuild("foundryCICD", bucket, object_name)
 
 
 
@@ -121,20 +127,19 @@ def upload_to_s3(file_name, bucket, object_name):
         print(f"Failed to upload file to S3: {e}")  
 
 
-if os.path.exists(out_file):
-    upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
+
+upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
+# if os.path.exists(out_file):
+#     upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
 
     
-    try:
-        os.remove(out_file)
-        print(f"Cleaned up local file: {out_file}")
-    except OSError as e:
-        print(f"Error removing local file {out_file}: {e}")
-else:
-    print(f" Local file not found: {out_file}")
-
-
-
+#     try:
+#         os.remove(out_file)
+#         print(f"Cleaned up local file: {out_file}")
+#     except OSError as e:
+#         print(f"Error removing local file {out_file}: {e}")
+# else:
+#     print(f" Local file not found: {out_file}")
 
 
 

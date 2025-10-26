@@ -2,6 +2,10 @@ import zipfile
 import tempfile 
 import shutil
 import os
+
+#the templates only work if the repo has a frontend or backend folder 
+
+#whoever sees this when I make a zip file it adds it locally so someone like fix it so it deletes after use
 dummyTemplate = """version: 0.2
 
 cache:
@@ -121,11 +125,20 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
             
             shutil.move(tmp_zip_path, zip_path)
 
+
+            print("file path for yaml to send to aws",target_path)
+
+       
+
             if has_buildspec and overWrite:
                 print("Replaced existing buildspec.yml in ZIP.")
           
             else:
                 print("Injected buildspec.yml into ZIP.")
+
+                return target_path
+
+
                # print(names)
         finally:
            
