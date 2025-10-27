@@ -49,42 +49,12 @@ os: linux
 
 files:
   - source: /
-    destination: /home/ubuntu/my-next-app
-
-permissions:
-  - object: /home/ubuntu/my-next-app
-    owner: ubuntu
-    group: ubuntu
-    mode: 755
-    type:
-      - directory
-      - file
+    destination: /home/ec2-user/app
 
 hooks:
-  ApplicationStop:
-    - location: scripts/stop_app.sh
-      timeout: 60
-      runas: ubuntu
-      
-  BeforeInstall:
-    - location: scripts/cleanup.sh
-      timeout: 60
-      runas: ubuntu
-      
-  AfterInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 300
-      runas: ubuntu
-      
   ApplicationStart:
-    - location: scripts/start_app.sh
-      timeout: 60
-      runas: ubuntu
-      
-  ValidateService:
-    - location: scripts/validate.sh
-      timeout: 60
-      runas: ubuntu
+    - location: scripts/start.sh
+      runas: ec2-user
 """
 
 def addBuildSpec(zip_path,buildSpec,overWrite=True): 
