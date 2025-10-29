@@ -122,7 +122,7 @@ def addBuildSpec(zip_path,buildSpec,overWrite=True):
 
         root_prefix = rootFolder.split("/")[0] + "/"
 
-        target_path = root_prefix + "buildspec.yml"
+        target_path = "buildspec.yml"
         print("Target path for buildspec:", target_path)
 
         has_buildspec = target_path in names
@@ -183,7 +183,7 @@ def addAppSpec(zip_path,buildSpec,overWrite=True):
 
         root_prefix = rootFolder.split("/")[0] + "/"
 
-        target_path = root_prefix + "appspec.yml"
+        target_path = "appspec.yml"
         print("Target path for appspec:", target_path)
 
         has_buildspec = target_path in names
