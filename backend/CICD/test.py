@@ -5,6 +5,8 @@ from boto3.exceptions import S3UploadFailedError
 from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate,addAppSpec
 from deploymentScripts import addStartScript,start_sh_template,stop_sh_template,addStopScript,addInstallScript,install_sh_template
 import time
+import zipfile
+import io
 
 
 OWNER = "efrain-grubs"
@@ -22,19 +24,58 @@ headers = {"user":"test"}
 
 response = requests.get(zip_url, headers=headers,allow_redirects=True)  #make the request to download the zip file
 
+# hello so this function is just checking whether the user repo is a frontend (next, angular), or fastapi, or express repo
+def detect_project_type_in_zip(zip_path):
+    with zipfile.ZipFile(zip_path, 'r') as z:
+        names = [n.lower() for n in z.namelist()]
+        fastapi_markers = [
+            "main.py", "app/main.py", "app/api", "requirements.txt"
+        ]
+        if any("fastapi" in n or "uvicorn" in n for n in names) or \
+           any(m in names for m in fastapi_markers):
+            return "fastapi"
+        
+        express_markers = [
+            "package.json", "server.js", "app.js"
+        ]
+        if any("express" in n or "node_modules" in n for n in names) or \
+           any(m in names for m in express_markers):
+            return "express"
+
+        frontend_markers = [
+            "angular.json", "vite.config.js", "next.config.js",
+            "react", "src/app", "frontend/package.json"
+        ]
+        if any(m in n for n in frontend_markers):
+            return "frontend"
+
+    return "unknown"
+
+
 
 if response.status_code == 200: 
     with open(out_file, "wb") as file:
         file.write(response.content)  #write the content to a file
     print(f"Downloaded {out_file} successfully.")
    
-    path = addBuildSpec(out_file, dummyTemplate, overWrite=True) #should be adding yaml file to the zip
+    project_type = detect_project_type_in_zip(out_file)
+    print(f"Detected project type: {project_type}")
 
-    print("magical path for zip file",path)
-    addAppSpec(out_file, appspecTemplate, overWrite=True)
-    addStartScript(out_file, start_sh_template, overWrite=True)
-    addStopScript(out_file, stop_sh_template, overWrite=True)
-    addInstallScript(out_file, install_sh_template, overWrite=True)
+    if project_type == "fastapi":
+        print("Adding FastAPI templates...")
+        path = addBuildSpec(out_file, fastapi_buildspec_template, overWrite=True)
+        addAppSpec(out_file, fastapi_appspec_template, overWrite=True)
+        addStartScript(out_file, fastapi_start_script, overWrite=True)
+        addStopScript(out_file, fastapi_stop_script, overWrite=True)
+        addInstallScript(out_file, fastapi_install_script, overWrite=True)
+
+    else:
+        print("Adding default (Next.js / Express) templates...")
+        path = addBuildSpec(out_file, dummyTemplate, overWrite=True)
+        addAppSpec(out_file, appspecTemplate, overWrite=True)
+        addStartScript(out_file, start_sh_template, overWrite=True)
+        addStopScript(out_file, stop_sh_template, overWrite=True)
+        addInstallScript(out_file, install_sh_template, overWrite=True)
 
 
 
