@@ -176,8 +176,6 @@ def upload_to_s3(file_name, bucket, object_name):
 
 upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
 if os.path.exists(out_file):
-    upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
-
     
     try:
         os.remove(out_file)
