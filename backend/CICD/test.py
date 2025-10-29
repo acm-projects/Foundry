@@ -109,7 +109,7 @@ def trigger_codebuild(project_name, s3_bucket, s3_key):
         response = codebuild_client.start_build(
             projectName=project_name,
             sourceTypeOverride='S3',
-            sourceLocationOverride=f"{s3_bucket}/{s3_key}"
+            sourceLocationOverride=f"arn:aws:s3:::{s3_bucket}/{s3_key}"
       
         )
 
@@ -161,7 +161,7 @@ def upload_to_s3(file_name, bucket, object_name):
 
 #s3://foundry-codebuild-zip/artifacts/efrain-grubs/my-next-app-main.zip
         # Trigger CodeBuild after successful upload
-        #trigger_codebuild("foundryCICD", bucket, object_name)
+        trigger_codebuild("foundryCICD", bucket, object_name)
 
 
 

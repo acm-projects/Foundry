@@ -12,7 +12,7 @@ def upload_to_s3(file_name, bucket, object_name):
 
 #s3://foundry-codebuild-zip/artifacts/efrain-grubs/my-next-app-main.zip
         # Trigger CodeBuild after successful upload
-        #trigger_codebuild("foundryCICD", bucket, object_name)
+        trigger_codebuild("foundryCICD", bucket, object_name)
 
     except S3UploadFailedError as e:
         print(f"Failed to upload file to S3: {e}") 
