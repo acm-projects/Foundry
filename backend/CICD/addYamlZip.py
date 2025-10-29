@@ -4,8 +4,43 @@ import shutil
 import os
 
 #the templates only work if the repo has a frontend or backend folder 
+# second edit : also if the user has a fastapi target file (requirements.txt, etc.) - enaya
 
-#whoever sees this when I make a zip file it adds it locally so someone like fix it so it deletes after use
+fastapi_buildspec_template="""
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo "Starting FastAPI build"
+      - zip -r app.zip .
+artifacts:
+  files:
+    - '**/*'
+"""
+
+fastapi_appspec_template="""
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/app
+hooks:
+  BeforeInstall:
+    - location: scripts/install.sh
+      timeout: 300
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 300
+  ApplicationStop:
+    - location: scripts/stop.sh
+      timeout: 300
+"""
+
 dummyTemplate = """
 version: 0.2
 
