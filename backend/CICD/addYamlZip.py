@@ -43,6 +43,7 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user/app
+    overwrite: true
 
 permissions:
   - object: /home/ec2-user/app
@@ -56,10 +57,6 @@ hooks:
     - location: scripts/stop.sh
       timeout: 300
 
-      
-
-
-  
   AfterInstall: 
     - location: scripts/install.sh
       timeout: 300

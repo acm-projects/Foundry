@@ -10,8 +10,8 @@ def codeDeploy(owner,repo,bucket_name,object_key):
         #     computePlatform="Server"
         #     )             #not sure if were gonna use one application and have deployment groups or multiple applications with one deployment group
         
-#also whoever is reading this, so once something is created idk if we should delete the code deploy application 
-# and deployment group or just leave it
+#also whoever is reading this, so once something deployed ec2  idk if we should delete the code deploy application 
+# and deployment group or just leave it there
 
 #also we have to add logic to clear the buckets after deployment or something bc if we keep adding zips to the bucket it will get messy
 
@@ -26,6 +26,8 @@ def codeDeploy(owner,repo,bucket_name,object_key):
 #gotta add logic if something went wrong with upload to send to frontend
 
 #also gotta send the frontend a url too if sucessfull 
+
+
 
 
 #6 + 7 = six sevennnnn
