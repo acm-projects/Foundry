@@ -8,8 +8,8 @@ from CICD.addYamlZip import addAppSpec, addBuildSpec, dummyTemplate, appspecTemp
 from CICD.upload_s3 import upload_to_s3
 import time
 from CICD.trigger_codebuild import trigger_codebuild
-
-
+from CICD.deploymentScripts import addStartScript,start_sh_template,stop_sh_template,addStopScript,addInstallScript,install_sh_template
+from CICD.code_Deploy import codeDeploy
 
 router = APIRouter(prefix="/canvas")
 
@@ -82,6 +82,8 @@ async def cicd(Data: dict):
 
     S3_KEY = f"{owner}/{out_file}"  # the path for the file in the s3 bucket
 
+    print(S3_KEY)
+
 
     if response.status_code == 200: 
         with open(out_file, "wb") as file:
@@ -89,11 +91,11 @@ async def cicd(Data: dict):
         print(f"Downloaded {out_file} successfully.")
         path = addBuildSpec(out_file, dummyTemplate, overWrite=True)
 
-    
-
-
 
         addAppSpec(out_file, appspecTemplate, overWrite=True)
+        addStartScript(out_file, start_sh_template, overWrite=True)
+        addStopScript(out_file, stop_sh_template, overWrite=True)
+        addInstallScript(out_file, install_sh_template, overWrite=True)
     
        
 
@@ -109,7 +111,18 @@ async def cicd(Data: dict):
 
     time.sleep(10)  #wait for a few seconds to ensure the file is available in s3
 
-    trigger_codebuild("foundryCICD", S3_BUCKET_NAME, S3_KEY,path)
+    status = trigger_codebuild("foundryCICD", S3_BUCKET_NAME, S3_KEY,path,f"{owner}-{repo}")
+
+    print(status)
+
+    if(status['build_status'] == 'SUCCEEDED'):
+        codeDeploy(owner,repo,"foundry-artifacts-bucket",f"founryCICD-{owner}-{repo}")
+        print("hello world")
+
+
+
+      
+        
 
         
 

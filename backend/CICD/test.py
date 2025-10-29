@@ -3,6 +3,7 @@ import boto3
 import os 
 from boto3.exceptions import S3UploadFailedError
 from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate,addAppSpec
+from deploymentScripts import addStartScript,start_sh_template,stop_sh_template,addStopScript,addInstallScript,install_sh_template
 import time
 
 
@@ -31,6 +32,10 @@ if response.status_code == 200:
 
     print("magical path for zip file",path)
     addAppSpec(out_file, appspecTemplate, overWrite=True)
+    addStartScript(out_file, start_sh_template, overWrite=True)
+    addStopScript(out_file, stop_sh_template, overWrite=True)
+    addInstallScript(out_file, install_sh_template, overWrite=True)
+
 
 
      

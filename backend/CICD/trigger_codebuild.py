@@ -3,7 +3,7 @@ import time
 import uuid
 
 
-def trigger_codebuild(project_name, s3_bucket, s3_key,path):
+def trigger_codebuild(project_name, s3_bucket, s3_key,path,id): #in the future it will be their build id or something
 
     codebuild_client = boto3.client('codebuild',region_name='us-east-1')
     
@@ -17,7 +17,7 @@ def trigger_codebuild(project_name, s3_bucket, s3_key,path):
             artifactsOverride={ 
                 'type': 'S3',
                 'location': 'foundry-artifacts-bucket',
-                'name': f'founryCICD-{str(uuid.uuid4())}',
+                'name': f'founryCICD-{id}',
                 'packaging': 'ZIP',
                  
                
