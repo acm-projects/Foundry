@@ -2,8 +2,8 @@ import requests
 import boto3
 import os 
 from boto3.exceptions import S3UploadFailedError
-from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate,addAppSpec
-from deploymentScripts import addStartScript,start_sh_template,stop_sh_template,addStopScript,addInstallScript,install_sh_template
+from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate, fastapi_buildspec_template, fastapi_appspec_template, addAppSpec 
+from deploymentScripts import addStartScript, start_sh_template, stop_sh_template, install_sh_template, fastapi_start_sh_template, fastapi_stop_sh_template, fastapi_install_sh_template, addStopScript,addInstallScript,
 import time
 import zipfile
 import io
@@ -65,9 +65,9 @@ if response.status_code == 200:
         print("Adding FastAPI templates...")
         path = addBuildSpec(out_file, fastapi_buildspec_template, overWrite=True)
         addAppSpec(out_file, fastapi_appspec_template, overWrite=True)
-        addStartScript(out_file, fastapi_start_script, overWrite=True)
-        addStopScript(out_file, fastapi_stop_script, overWrite=True)
-        addInstallScript(out_file, fastapi_install_script, overWrite=True)
+        addStartScript(out_file, fastapi_start_sh_template, overWrite=True)
+        addStopScript(out_file, fastapi_stop_sh_template, overWrite=True)
+        addInstallScript(out_file, fastapi_install_sh_template, overWrite=True)
 
     else:
         print("Adding default (Next.js / Express) templates...")
