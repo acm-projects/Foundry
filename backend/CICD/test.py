@@ -3,14 +3,14 @@ import boto3
 import os 
 from boto3.exceptions import S3UploadFailedError
 from addYamlZip import addBuildSpec, dummyTemplate, appspecTemplate, fastapi_buildspec_template, fastapi_appspec_template, addAppSpec 
-from deploymentScripts import addStartScript, start_sh_template, stop_sh_template, install_sh_template, fastapi_start_sh_template, fastapi_stop_sh_template, fastapi_install_sh_template, addStopScript,addInstallScript,
+from deploymentScripts import addStartScript, start_sh_template, stop_sh_template, install_sh_template, fastapi_start_sh_template, fastapi_stop_sh_template, fastapi_install_sh_template, addStopScript,addInstallScript
 import time
 import zipfile
 import io
 
 
-OWNER = "efrain-grubs"
-REPO = "ai-vs-human-written-text"
+OWNER = "enayas"
+REPO = "fastapi-test-repo"
 REF = "main"
 
 
@@ -175,17 +175,17 @@ def upload_to_s3(file_name, bucket, object_name):
 
 
 upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
-# if os.path.exists(out_file):
-#     upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
+if os.path.exists(out_file):
+    upload_to_s3(out_file, S3_BUCKET_NAME, S3_KEY)
 
     
-#     try:
-#         os.remove(out_file)
-#         print(f"Cleaned up local file: {out_file}")
-#     except OSError as e:
-#         print(f"Error removing local file {out_file}: {e}")
-# else:
-#     print(f" Local file not found: {out_file}")
+    try:
+        os.remove(out_file)
+        print(f"Cleaned up local file: {out_file}")
+    except OSError as e:
+        print(f"Error removing local file {out_file}: {e}")
+else:
+    print(f" Local file not found: {out_file}")
 
 
 
