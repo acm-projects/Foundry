@@ -29,6 +29,32 @@ cd /home/ec2-user/app/frontend
 nohup npm start > /var/log/nextjs.log 2>&1 &
 """
 
+# fastapi templatese:
+
+fastapi_stop_sh_template = """#!/bin/bash
+pkill -f "uvicorn" || true
+"""
+
+fastapi_install_sh_template = """#!/bin/bash
+set -e
+cd /home/ec2-user/app/backend
+
+if ! command -v python3 &> /dev/null; then
+    sudo dnf install -y python3
+fi
+python3 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+echo "FastAPI dependencies installed successfully"
+"""
+
+fastapi_start_sh_template = """#!/bin/bash
+set -e
+cd /home/ec2-user/app/backend
+source venv/bin/activate
+nohup uvicorn main:app --host 0.0.0.0 --port 8000 > /var/log/fastapi.log 2>&1 &
+"""
 
 
 
