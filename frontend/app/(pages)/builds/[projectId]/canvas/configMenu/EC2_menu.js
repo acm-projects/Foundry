@@ -6,6 +6,8 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@
 import { Settings } from "lucide-react";
 import { useReactFlow } from "@xyflow/react";
 import { useEffect } from "react";
+import axios from 'axios'
+
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 
 const schema = z.object({name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
@@ -15,21 +17,28 @@ keyName: z.string().min(1, "Required").max(255),
 rootVolumeSizeGiB: z.coerce.number().int().min(8, "must be a greater than 8").max(16384,"less than 16384"),
 rootVolumeType: z.enum(["gp3", "gp2", "io1", "io2"], { required_error: "Select a root volume type" }),
 deleteOnTermination: z.enum(["true", "false"]),
-userData: z.string().optional(),
+repositories: z.string().min(1, "Select a repository"),
+
 });
 
-export default function EC2PanelForm({ id, onClose, onDelete,label}) {
+export default function EC2PanelForm({ id, onClose, onDelete,label,repos}) {
+
+
 const storageKey = `${id}`;
+
+console.log("reps",repos)
 
 const {setNodes,getNode} = useReactFlow();
 
 const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
-deleteOnTermination: "true", userData: ""}
+deleteOnTermination: "true", userData: "",repositories:""};
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
 const submit = (values) => {
 //where actual submit logic goes
+
+console.log("values",values)
 
 const label = id.slice(0,3)
 const betterFormatting = {
@@ -44,8 +53,30 @@ const betterFormatting = {
     deleteOnTermination: values.deleteOnTermination
   },
 }
-
 console.log("better", betterFormatting);
+
+console.log("repo selected",values.repositories)
+const sendRepo = async () => { 
+
+
+try { 
+
+  const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repositories})
+
+  
+}
+catch(err) { 
+
+  console.log("error",err)
+}
+
+
+}
+
+sendRepo()
+
+
+
 
 
 
@@ -55,6 +86,10 @@ useEffect(() => {
   const node = getNode(id);
   console.log("Node here:", node);
 }, []); //make a better dependacy to get name 
+
+
+
+
 
 
 
@@ -93,6 +128,23 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 {errors.name && (
   <p className="text-red-600 text-[10px]  -mt-1">{errors.name.message}</p>
 )}
+<span className="font-medium text-gray-800">repositories</span>
+<Controller
+control={control}
+name="repositories"
+render={({ field }) => (
+  <Select value={field.value} onValueChange={field.onChange}>
+    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+      <SelectValue placeholder="Select repository" />
+    </SelectTrigger>
+    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+      {repos?.map((repo) => (
+        <SelectItem key={repo.id} value={repo.zip_url}>{repo.name}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+/>
 
 
 <span className="font-medium text-gray-800">Instance Type</span>
@@ -198,10 +250,11 @@ render={({ field }) => (
 />
 {errors.deleteOnTermination && <p className="text-red-600 text-[10px]  -mt-1">{errors.deleteOnTermination.message}</p>}
 
-<span className="font-medium text-gray-800">userData (optional)</span>
-<textarea
-{...register("userData")}className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-/>
+
+
+
+
+
 </form>
 </div>
 

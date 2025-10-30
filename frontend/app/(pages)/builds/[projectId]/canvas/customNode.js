@@ -29,7 +29,7 @@ console.log("sources",src,dst)
 
   const nodeInfo = getNode(id)
 
-  console.log("name please",nodeInfo)
+  //console.log("name please",nodeInfo)
   switch (data.label) {
     case 'EC2':
       return (

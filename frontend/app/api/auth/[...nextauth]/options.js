@@ -2,7 +2,7 @@ import { sign } from "crypto";
 import { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { Pool } from "pg";
-
+import axios from 'axios'
 
 const clientId = process.env.GITHUB_ID;
 const clientSecret = process.env.GITHUB_SECRET;
@@ -38,7 +38,6 @@ async jwt({ token, account,profile }) {
         token.accessToken = account.access_token; 
     }
 
-
 if(profile) { 
   token.id = profile.id;
     token.login = profile.login;
@@ -59,6 +58,8 @@ session.user.email = token.email;
 session.user.image = token.image;
 
 session.accessToken = token.accessToken;
+
+
 
  return session;
 }
