@@ -3,7 +3,7 @@ import tempfile
 import shutil
 import os
 
-
+#bash scripts for next.js
 stop_sh_template = """#!/bin/bash
 pkill -f "node.*next" || true
 """
@@ -28,6 +28,9 @@ set -e
 cd /home/ec2-user/app/frontend
 nohup npm start > /var/log/nextjs.log 2>&1 &
 """
+
+
+#bash scripts for fastapi
 
 
 

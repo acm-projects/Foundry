@@ -70,6 +70,55 @@ hooks:
    
 """
 
+
+fastapi_buildspec_template="""
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing FastAPI dependencies"
+      - pwd && ls -la
+      - cd $CODEBUILD_SRC_DIR/*/
+      - pip install --upgrade pip
+      - pip install -r requirements.txt
+  build:
+    commands:
+      - echo "Starting FastAPI build"
+      - zip -r app.zip .
+artifacts:
+  files:
+    - '**/*'
+"""
+
+fastapi_appspec_template = """
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ec2-user/app
+    overwrite: true
+hooks:
+  BeforeInstall: 
+    - location: scripts/stop.sh
+      timeout: 300
+
+  AfterInstall: 
+    - location: scripts/install.sh
+      timeout: 300
+      runas: root
+    
+ 
+      
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 300
+
+"""
+
+
+
 def addBuildSpec(zip_path,buildSpec,overWrite=True): 
 
     with zipfile.ZipFile(zip_path, 'r') as zin:  #open zip file and read it 
