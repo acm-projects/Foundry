@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import { Card , CardHeader, CardTitle, CardContent, CardDescription} from '@/app/components/ui/card'
 import { Input } from '@/app/components/ui/input'
@@ -9,22 +9,35 @@ import { Select , SelectTrigger, SelectContent, SelectValue, SelectItem, SelectG
 import { Button } from '@/app/components/ui/button'
 import TeamMemberGrid from "@/app/components/TeamMemberGrid";
 
+import { useAppContext } from '@/globalStates/projectName';
+
+
 
 
 
 export default function SettingsPage({ params }) {
-  const [projectName, setProjectName] = useState("My Foundry Workflow");
+  // const [projectName, setProjectName] = useState("My Foundry Workflow");
   const [environment, setEnvironment] = useState("development");
   const [description, setDescription] = useState("This is an AWS deployment made easy by Foundry.");
   const [region, setRegion] = useState("us-east-1");
-  const [teamMembers, setTeamMembers] = useState([
-    { name: "John Smith", role: "read" },
-    { name: "Jane Doe", role: "modify" },
-  ]);
+  const { projectName, setProjectName } = useAppContext();
+  
+  const [title,setTitle] = useState("")
+  
+  const [teamMembers, setTeamMembers] = useState([]);
+
 
   const handleSave = () => {
     console.log({ projectName, environment, description, region, teamMembers });
+    
+    
+    
     alert("Settings saved! Check console for values");
+
+
+
+setProjectName(title)
+
   };
 
   return (
@@ -42,8 +55,8 @@ export default function SettingsPage({ params }) {
                     <Label htmlFor="projectName" className="mb-1">Project Name</Label>
                     <Input 
                       id="projectName"
-                      value={projectName}
-                      onChange={(e) => setProjectName(e.target.value)}
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                       placeholder="My Foundry Workflow" 
                     />
                   </div>

@@ -8,6 +8,8 @@ const clientId = process.env.GITHUB_ID;
 const clientSecret = process.env.GITHUB_SECRET;
 const databaseUrl = process.env.DATABASE_URL;
 
+const date = new Date();
+
 const pool = await new Pool({
     connectionString: databaseUrl,
     ssl: {
@@ -58,6 +60,25 @@ session.user.email = token.email;
 session.user.image = token.image;
 
 session.accessToken = token.accessToken;
+
+
+try { 
+
+  await pool.query(`INSERT INTO account (id, user_id, token ,created_at)
+      VALUES ($1, $2, $3, $4) 
+      ON CONFLICT (id) DO NOTHING`,
+
+     [token.id, token.id, token, date]);
+
+     console.log("added account")
+
+
+}catch(err) { 
+
+  console.log("error",err)
+}
+
+
 
 
 

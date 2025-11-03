@@ -8,12 +8,18 @@ import UserProfile from "./userProfile";
 import Link from "next/link";
 import Live from "../canvas/Deployment/live";
 
+import { useAppContext } from "@/globalStates/projectName";
+
 export default function WorkflowNavbar() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const projectId = pathSegments[2];
   const path = usePathname()
 const[user,setUser] = useState(false)
+
+const {projectName,setProjectName} = useAppContext()
+
+
   const tabs = [
     {
       name: "Canvas",
@@ -47,7 +53,7 @@ const[user,setUser] = useState(false)
           <Link href='/builds'>
             <Cloud className="w-5 h-5 text-white" />
           </Link>
-          <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">Build Name</h1>
+          <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">{projectName.length == 0 ? "untitled": projectName}</h1>
           <div className = "absolute left-60"> 
             <Live/>
           </div>

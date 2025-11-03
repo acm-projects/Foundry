@@ -5,8 +5,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Settings } from "lucide-react";
 import { useReactFlow } from "@xyflow/react";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import axios from 'axios'
+import { useSession } from "next-auth/react";
+
+
+
+export default function EC2PanelForm({ id, onClose, onDelete,label}) {
+
+
+const storageKey = `${id}`;
+
+const token = useSession()
+
+const [repos,setRepos] = useState([])
 
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 
@@ -17,21 +29,44 @@ keyName: z.string().min(1, "Required").max(255),
 rootVolumeSizeGiB: z.coerce.number().int().min(8, "must be a greater than 8").max(16384,"less than 16384"),
 rootVolumeType: z.enum(["gp3", "gp2", "io1", "io2"], { required_error: "Select a root volume type" }),
 deleteOnTermination: z.enum(["true", "false"]),
-repositories: z.string().min(1, "Select a repository"),
+repos: z.string().min(1, "Select a repository"),
 
 });
+ useEffect(() => { 
+  const getRepos = async () => { 
 
-export default function EC2PanelForm({ id, onClose, onDelete,label,repos}) {
+
+    console.log("token",token)
+    try { 
 
 
-const storageKey = `${id}`;
+  
+      const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${token.data?.user?.login}`}});
 
-console.log("reps",repos)
+      setRepos(response.data)
+
+
+      console.log(repos)
+
+
+  
+    }catch(err) { 
+  
+      console.error("error getting repos")
+    }
+  }
+  getRepos()
+    },[token])
+
+
+    
+
+
 
 const {setNodes,getNode} = useReactFlow();
 
 const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
-deleteOnTermination: "true", userData: "",repositories:""};
+deleteOnTermination: "true", userData: "",repos:""};
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
@@ -55,26 +90,24 @@ const betterFormatting = {
 }
 console.log("better", betterFormatting);
 
-console.log("repo selected",values.repositories)
 const sendRepo = async () => { 
 
 
-try { 
-
-  const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repositories})
-
+  try { 
   
-}
-catch(err) { 
-
-  console.log("error",err)
-}
-
-
-}
-
-sendRepo()
-
+    const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos})
+  
+    
+  }
+  catch(err) { 
+  
+    console.log("error",err)
+  }
+  
+  
+  }
+  
+  sendRepo()
 
 
 
@@ -89,7 +122,7 @@ useEffect(() => {
 
 
 
-
+console.log("repositories",repos)
 
 
 
@@ -131,7 +164,7 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 <span className="font-medium text-gray-800">repositories</span>
 <Controller
 control={control}
-name="repositories"
+name="repos"
 render={({ field }) => (
   <Select value={field.value} onValueChange={field.onChange}>
     <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
@@ -139,7 +172,7 @@ render={({ field }) => (
     </SelectTrigger>
     <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
       {repos?.map((repo) => (
-        <SelectItem key={repo.id} value={repo.zip_url}>{repo.name}</SelectItem>
+        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
       ))}
     </SelectContent>
   </Select>
