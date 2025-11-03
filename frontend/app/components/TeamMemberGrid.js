@@ -2,7 +2,7 @@ import TeamMemberCard from "./TeamMemberCard";
 import { Input } from '@/app/components/ui/input'
 import {useState,useEffect} from "react"
 import axios from 'axios'
-import { MoveRight} from "lucide-react";
+import { Search} from "lucide-react";
 
 export default function TeamMemberGrid({ members, setMembers }) {
   const handleRoleChange = (index, value) => {
@@ -82,8 +82,8 @@ findUsers()
     <div className="flex flex-col gap-2">
       <div className = "flex gap-2">
       <Input placeholder="Enter a GitHub username..." value = {input} onChange = {(e) => setInput(e.target.value)}/>
-      <div className = "flex justify-center items-center h-7 w-7 bg-black mt-1 rounded">
-      <MoveRight className = " h-6 w-6 text-white rounded" onClick = {() => addMember()}/>
+      <div className = "flex justify-center items-center h-7 w-7 mt-1 rounded">
+      <Search className = " h-7 w-7 text-black rounded" onClick = {() => addMember()}/>
       </div>
       </div>
       {members.map((member, index) => (

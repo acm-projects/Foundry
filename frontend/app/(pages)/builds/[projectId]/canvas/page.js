@@ -70,24 +70,13 @@ const onNodeClick = useCallback((event, node) => {
 
     if(nodes.length === 0 && edges.length === 0) return; 
 
-    localStorage.setItem("nodes", JSON.stringify(nodes)); 
-
-    localStorage.setItem("edges", JSON.stringify(edges));
+   //store nodes and edges in db
 
   },[nodes,edges])
 
   useEffect(() => { 
 
-    const storedNodes = JSON.parse(localStorage.getItem("nodes"));
-    const storedEdges = JSON.parse(localStorage.getItem("edges"));
-
-    if (storedNodes) { 
-      setNodes(storedNodes);
-    }
-
-    if (storedEdges) { 
-      setEdges(storedEdges);
-    }
+    //logic to get existing canvas from backend
 
   },[])
 

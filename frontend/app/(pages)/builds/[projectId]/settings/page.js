@@ -11,7 +11,7 @@ import TeamMemberGrid from "@/app/components/TeamMemberGrid";
 
 import { useAppContext } from '@/globalStates/projectName';
 
-
+import { usePathname } from "next/navigation";
 
 
 
@@ -21,7 +21,13 @@ export default function SettingsPage({ params }) {
   const [description, setDescription] = useState("This is an AWS deployment made easy by Foundry.");
   const [region, setRegion] = useState("us-east-1");
   const { projectName, setProjectName } = useAppContext();
-  
+
+
+  const pathname = usePathname();
+
+  const build_id = pathname.split("/")[2];
+
+
   const [title,setTitle] = useState("")
   
   const [teamMembers, setTeamMembers] = useState([]);
@@ -37,6 +43,9 @@ export default function SettingsPage({ params }) {
 
 
 setProjectName(title)
+
+
+
 
   };
 

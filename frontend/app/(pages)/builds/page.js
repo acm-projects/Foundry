@@ -1,14 +1,20 @@
 "use client";
-import {React,useState} from 'react'
+import {React,useEffect,useState} from 'react'
 import { GitBranch, Plus,Cloud } from "lucide-react";
 import Link from 'next/link';
 import UserProfile from './[projectId]/Navbar/userProfile';
 import WorkflowGrid from '@/app/components/WorkflowGrid';
 import { Input } from '@/app/components/ui/input'
 import { Card, CardContent, CardDescription, CardTitle} from '@/app/components/ui/card'
+import {nanoid} from 'nanoid';
+import { set } from 'zod';
+import { useAppContext } from '@/globalStates/projectName';
+export default function Builds() { 
 
-export default function Builds({id}) { 
 const[user,setUser] = useState(false)
+const id = nanoid()
+
+
 
 return (
   <div className="bg-gray-100 relative min-h-screen">
@@ -27,7 +33,8 @@ return (
     <div className="flex flex-col gap-6 sm:gap-8 items-start justify-between">
       <div className="mt-6 sm:mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        <Link href='/builds/${id}/canvas'>
+        
+        <Link href={`/builds/${id}/canvas`}>
           <Card className="group flex flex-col justify-center items-center flex-1 min-w-88 max-w-88 flex-grow min-h-60 bg-grey-100 shadow-none border-dashed border-2 rounded-2xl  hover:cursor-pointer  border-gray-300  bg-gray-100 delay-50 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-gray-300">
             <CardContent className="flex flex-col items-center justify-center gap-4">
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-500">

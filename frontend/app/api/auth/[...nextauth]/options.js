@@ -29,6 +29,22 @@ providers: [
     GithubProvider({ 
     clientId,
     clientSecret,
+    authorization: { 
+
+      params: { 
+
+
+        scope: "public_repo repo:status write:repo_hook user:email read:user"
+      
+      
+      }
+
+
+
+
+
+
+    }
  })],
  session: { 
     strategy: "jwt",
