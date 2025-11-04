@@ -6,7 +6,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { useReactFlow } from "@xyflow/react"
-
+import React from 'react'
 const schema = z.object({
   tableName: z.string().min(3, "Minimum 3 characters").max(255, "Maximum 255 characters"),
   partitionKey: z.string().min(1, "Required"),
@@ -17,6 +17,8 @@ const schema = z.object({
 
 export default function DynamoDB_menu({id,onClose,onDelete}) { 
 
+
+  
   const storageKey = `${id}`;
   const {setNodes} = useReactFlow();
 
@@ -50,12 +52,18 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
     // Update node data in React Flow
     setNodes((nodes) =>
       nodes.map((node) =>
-        node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
+        
+        node.id === id ? ({ ...node, data: { ...node.data, ...payload }  }): node
+        
       )
     );
 
+ 
     onClose();
   }
+
+
+
  
     return (
 
