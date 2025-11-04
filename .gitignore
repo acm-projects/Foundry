@@ -1,0 +1,44 @@
+# Documentation files (internal notes)
+DEBUG_EMPTY_CANVAS.md
+DEPLOY_FLOW_DIAGRAM.md
+FIELD_MAPPING.md
+INTEGRATION_SUMMARY.md
+MIGRATION_FIX.md
+QUICK_FIX_500.md
+S3_BUCKET_NAME_FIX.md
+TESTING_GUIDE.md
+TROUBLESHOOTING_500_ERROR.md
+UPDATE_BUTTON_SYSTEM.md
+
+# Created CloudFormation files
+backend/CFCreators/createdCFs/
+backend/CFCreators/allJSONs/createdCFs/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
