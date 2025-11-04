@@ -15,11 +15,79 @@ router = APIRouter(prefix="/canvas")
 
 @router.post('/deploy')
 def deploy_initiate(canvas: dict):
-    print(canvas)
-    # CFCreator.createGeneration(canvas)
+    try:
+        print("="*50)
+        print("DEPLOY REQUEST RECEIVED")
+        print("="*50)
+        print("Canvas data:", canvas)
+        print("Number of nodes:", len(canvas.get('nodes', [])))
+        print("Number of edges:", len(canvas.get('edges', [])))
+        
+        # Generate a unique build_id as integer (timestamp-based)
+        import time
+        build_id = int(time.time() * 1000)  # Millisecond timestamp as integer
+        
+        # Uncomment when ready to process
+        # CFCreator.createGeneration(canvas)
+        
+        return {
+            "status": "success",
+            "message": "Canvas received successfully",
+            "build_id": build_id,  # Return integer build_id to frontend
+            "nodes_count": len(canvas.get('nodes', [])),
+            "edges_count": len(canvas.get('edges', []))
+        }
+    except Exception as e:
+        print(f"ERROR in deploy_initiate: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Deployment failed: {str(e)}")
 
 
-    return canvas
+@router.post('/deploy/update')
+def deploy_update(canvas: dict, build_id: Optional[int] = None):
+    try:
+        print("="*50)
+        print("UPDATE REQUEST RECEIVED")
+        print("="*50)
+        
+        # Validate that build_id is provided
+        if not build_id:
+            raise HTTPException(
+                status_code=400, 
+                detail="Missing required field: build_id. The update endpoint requires build_id to identify which build to update."
+            )
+        
+        print(f"Build ID: {build_id}")
+        print("Canvas data:", canvas)
+        print("Number of nodes:", len(canvas.get('nodes', [])))
+        print("Number of edges:", len(canvas.get('edges', [])))
+        
+        # TODO: Implement update logic
+        # This should:
+        # 1. Compare with existing CloudFormation stack using build_id
+        # 2. Generate a changeset
+        # 3. Apply updates to existing resources
+        # For now, treating as a new deployment
+        
+        # Uncomment when ready to process
+        # CFCreator.createGeneration(canvas, build_id)
+        
+        return {
+            "status": "success",
+            "message": "Canvas update received successfully",
+            "build_id": build_id,
+            "nodes_count": len(canvas.get('nodes', [])),
+            "edges_count": len(canvas.get('edges', [])),
+            "action": "update"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"ERROR in deploy_update: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Update failed: {str(e)}")
 
 
 

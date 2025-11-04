@@ -86,7 +86,7 @@ export function validateDeployData(reactFlowData) {
     // Validate EC2
     if (type === "EC2") {
       if (!data.name) errors.push(`EC2 ${node.id}: Missing name`);
-      if (!data.imageID) errors.push(`EC2 ${node.id}: Missing imageID`);
+      if (!data.imageId) errors.push(`EC2 ${node.id}: Missing imageId`);
       if (!data.instanceType) errors.push(`EC2 ${node.id}: Missing instanceType`);
     }
     

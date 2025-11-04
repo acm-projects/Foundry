@@ -13,7 +13,7 @@ const nameRegex = /^[a-zA-Z0-9_-]+$/;
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
   instanceType: z.string().min(1, "Select an instance type"),
-  imageID: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
+  imageId: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
 });
 
 export default function EC2PanelForm({ id, onClose, onDelete,label,repos}) {
@@ -25,21 +25,26 @@ console.log("reps",repos)
 
 const {setNodes,getNode} = useReactFlow();
 
+// Get existing node data if available
+const existingNode = getNode(id);
+const existingData = existingNode?.data || {};
+
 const defaultValues =  {
-  name: "web-01",
-  instanceType: "t3.micro",
-  imageID: "Ubuntu"
+  name: existingData.name || "web-01",
+  instanceType: existingData.instanceType || "t3.micro",
+  imageId: existingData.imageId || "Ubuntu"
 };
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
 const submit = (values) => {
-  const label = id.slice(0,3)
+  // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
+  const label = id.split(':')[0]
   const payload = {
     label: label,
     name: values.name,
     instanceType: values.instanceType,
-    imageID: values.imageID
+    imageId: values.imageId
   }
   
   console.log("EC2 Config:", payload);
@@ -107,7 +112,7 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
   <label className="font-medium text-gray-800">Image ID <span className="text-red-500">*</span></label>
   <Controller
     control={control}
-    name="imageID"
+    name="imageId"
     render={({ field }) => (
       <Select value={field.value} onValueChange={field.onChange}>
         <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
@@ -121,7 +126,7 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
       </Select>
     )}
   />
-  {errors.imageID && <p className="text-red-600 text-[10px] mt-1">{errors.imageID.message}</p>}
+  {errors.imageId && <p className="text-red-600 text-[10px] mt-1">{errors.imageId.message}</p>}
 </div>
 
 <div>

@@ -17,13 +17,17 @@ const schema = z.object({
 export default function RDS_menu({id,onClose,onDelete}) { 
 
   const storageKey = `${id}`;
-  const {setNodes} = useReactFlow();
+  const {setNodes, getNode} = useReactFlow();
+
+  // Get existing node data if available
+  const existingNode = getNode(id);
+  const existingData = existingNode?.data || {};
 
   const defaultValues = {
-    dbName: "mydatabase",
-    engine: "postgres",
-    masterUsername: "dbadmin",
-    masterUserPassword: ""
+    dbName: existingData.dbName || "mydatabase",
+    engine: existingData.engine || "postgres",
+    masterUsername: existingData.masterUsername || "dbadmin",
+    masterUserPassword: existingData.masterUserPassword || ""
   }
 
   const {register, handleSubmit, control, formState: { errors }} = useForm({
@@ -33,7 +37,8 @@ export default function RDS_menu({id,onClose,onDelete}) {
   });
 
   const submit = (values) => {
-    const label = id.slice(0, 3)
+    // Extract the type from the node ID (e.g., "RDS:abc123" -> "RDS")
+    const label = id.split(':')[0]
     const payload = {
       label: label,
       dbName: values.dbName,

@@ -5,18 +5,28 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useReactFlow } from "@xyflow/react";
 
-const nameRegex = /^[a-z0-9-]+$/;
+const nameRegex = /^[a-z0-9][a-z0-9-]*[a-z0-9]$/;
 
 const schema = z.object({
-  bucketName: z.string().min(3, "Minimum 3 characters").max(63, "Maximum 63 characters").regex(nameRegex, "Only lowercase letters, numbers, and hyphens.")
+  bucketName: z.string()
+    .min(3, "Minimum 3 characters")
+    .max(63, "Maximum 63 characters")
+    .regex(nameRegex, "Must start and end with letter/number. Only lowercase letters, numbers, and hyphens.")
+    .refine(val => !val.includes('..'), "Cannot contain consecutive periods")
+    .refine(val => !val.startsWith('-'), "Cannot start with hyphen")
+    .refine(val => !val.endsWith('-'), "Cannot end with hyphen")
 });
 
 export default function S3_menu({id,onClose,onDelete}) { 
 
 const storageKey = `${id}`;
-const {setNodes} = useReactFlow();
+const {setNodes, getNode} = useReactFlow();
 
-const defaultValues = {bucketName: "my-app-bucket"}
+// Get existing node data if available
+const existingNode = getNode(id);
+const existingData = existingNode?.data || {};
+
+const defaultValues = {bucketName: existingData.bucketName || "my-app-bucket"}
 
 const {register, handleSubmit, formState: { errors }} = useForm({
   resolver: zodResolver(schema),
@@ -25,7 +35,8 @@ const {register, handleSubmit, formState: { errors }} = useForm({
 });
 
 const submit = (values) => {
-  const label = id.slice(0,2)
+  // Extract the type from the node ID (e.g., "S3:abc123" -> "S3")
+  const label = id.split(':')[0]
   const payload = {
     label: label,
     bucketName: values.bucketName
@@ -82,7 +93,12 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
   {errors.bucketName && (
     <p className="text-red-600 text-[10px] mt-1">{errors.bucketName.message}</p>
   )}
-  <p className="text-gray-500 text-[10px] mt-1">Must be globally unique (3-63 chars, lowercase, numbers, hyphens)</p>
+  <p className="text-gray-500 text-[10px] mt-1">
+    Just the base name - backend will add prefixes. Example: myapp, myproject-data
+  </p>
+  <p className="text-orange-600 text-[10px] mt-1">
+    ⚠️ Use only lowercase letters, numbers, and hyphens. No uppercase!
+  </p>
 </div>
 </form>
 </div>

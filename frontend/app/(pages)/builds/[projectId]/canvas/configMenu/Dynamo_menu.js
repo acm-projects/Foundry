@@ -11,21 +11,24 @@ const schema = z.object({
   tableName: z.string().min(3, "Minimum 3 characters").max(255, "Maximum 255 characters"),
   partitionKey: z.string().min(1, "Required"),
   partitionKeyType: z.enum(["S", "N"], { required_error: "Select a type" }),
-  sortKey: z.string().optional(),
-  sortKeyType: z.enum(["S", "N"], { required_error: "Select a type" }).optional()
+  sortKey: z.string().optional().or(z.literal("")),
+  sortKeyType: z.enum(["S", "N"]).optional()
 })
 
 export default function DynamoDB_menu({id,onClose,onDelete}) { 
 
-  const storageKey = `${id}`;
-  const {setNodes} = useReactFlow();
+  const {setNodes, getNode} = useReactFlow();
+
+  // Get existing node data if available
+  const existingNode = getNode(id);
+  const existingData = existingNode?.data || {};
 
   const defaultValues = {
-    tableName: "my-table",
-    partitionKey: "id",
-    partitionKeyType: "S",
-    sortKey: "",
-    sortKeyType: "S"
+    tableName: existingData.tableName || "my-table",
+    partitionKey: existingData.partitionKey || "id",
+    partitionKeyType: existingData.partitionKeyType || "S",
+    sortKey: existingData.sortKey || "",
+    sortKeyType: existingData.sortKeyType || "S"
   }
 
   const {register, handleSubmit, control, formState: { errors }} = useForm({
@@ -35,26 +38,46 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
   });
 
   const submit = (values) => {
-    const label = id.slice(0, 3)
-    const payload = {
-      label: label,
-      tableName: values.tableName,
-      partitionKey: values.partitionKey,
-      partitionKeyType: values.partitionKeyType,
-      sortKey: values.sortKey || "",
-      sortKeyType: values.sortKey ? values.sortKeyType : "S"
+    try {
+      // Extract the type from the node ID (e.g., "DynamoDB:abc123" -> "DynamoDB")
+      const label = id.split(':')[0]
+      const payload = {
+        label: label,
+        tableName: values.tableName,
+        partitionKey: values.partitionKey,
+        partitionKeyType: values.partitionKeyType,
+        sortKey: values.sortKey || "",
+        sortKeyType: values.sortKey ? values.sortKeyType : "S"
+      }
+
+      // Force React Flow to re-render by creating a completely new node object
+      setNodes((nodes) => {
+        const updatedNodes = nodes.map((node) => {
+          if (node.id === id) {
+            // Create completely new node object to force React Flow re-render
+            const updatedNode = { 
+              id: node.id,
+              type: node.type,
+              position: { ...node.position },
+              data: { ...payload },  // Fresh data object
+              // Don't copy over measured, selected, etc. - let React Flow recalculate
+            }
+            return updatedNode
+          }
+          return node
+        })
+        
+        return updatedNodes
+      });
+
+      // Use setTimeout to ensure state update completes before closing
+      setTimeout(() => {
+        onClose();
+      }, 100);
+    } catch (error) {
+      console.error("ERROR in DynamoDB submit:", error)
+      alert(`Error saving DynamoDB config: ${error.message}`)
     }
-
-    console.log("DynamoDB Config:", payload);
-
-    // Update node data in React Flow
-    setNodes((nodes) =>
-      nodes.map((node) =>
-        node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
-      )
-    );
-
-    onClose();
   }
  
     return (
@@ -170,14 +193,35 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {() => {onDelete(storageKey)
-        onClose(storageKey)
-      }} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
+      <button 
+        type="button"
+        onClick = {() => {
+          onDelete(id)
+          onClose()
+        }} 
+        className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button 
+          type="button"
+          onClick={onClose} 
+          className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+          Close
+        </button>
+        <button 
+          type="button" 
+          onClick={() => {
+            handleSubmit(
+              (data) => submit(data),
+              (errors) => {
+                alert("Please fix form errors:\n" + Object.entries(errors).map(([key, val]) => `${key}: ${val.message}`).join("\n"))
+              }
+            )()
+          }}
+          className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">
+          Save
+        </button>
       </div>
     </div>
   </aside>
