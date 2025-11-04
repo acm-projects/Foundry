@@ -125,18 +125,18 @@ const deleteNode = (id) => {
 };
 
 const deployClicked = () => {
-  let reactJSON = {
+  const reactJSON = {
     nodes: getNodes(),
     edges: getEdges(),
     viewport: getViewport(),
   }
-  reactJSON = addConfigs(reactJSON) 
-  console.log("DEPLOY WAS CLICKED!!!!!")
-  return reactJSON 
-}
-const addConfigs = (reactJSON) =>{
-  //we need to add specific configuration info here based on what the user adds to the configuration
-  //maybe updating an already existing config file and then append it to reactJSON and return it
+  
+  console.log("Deploy clicked - React Flow JSON:", reactJSON)
+  
+  // The node data is already populated from the config menus
+  // Each node should have a data property with the configuration
+  // Example: { id: "EC2:abc123", type: "EC2", data: { label: "EC2", name: "web-01", imageID: "Ubuntu", instanceType: "t3.micro" } }
+  
   return reactJSON
 }
 
@@ -185,15 +185,8 @@ const addConfigs = (reactJSON) =>{
       {console.log("object", onNodeClick.node)}
     </ReactFlow>
    
-    {console.log("share",nodes)}
-
-{ ec2  && configID? <EC2_menu onDelete = {deleteNode} id={configID} onClose = {closeEc2}/>  : null}
-{ s3  && configID? <S3_menu onDelete = {deleteNode} id={configID} onClose = {closeS3}  /> : null}
-{ rds  && configID? <RDS_menu onDelete = {deleteNode} id={configID} onClose = {closeRDS}   /> : null}
-{ dynamo  && configID? <DynamoDB_menu onDelete = {deleteNode} id={configID} onClose = {closeDynamo}   /> : null}
-
-    {console.log("share", nodes)}
-    {ec2 && configID ? <EC2_menu  onDelete={deleteNode} id={configID} onClose={closeEc2}  /> : null}
+    {console.log("nodes data:", nodes)}
+    {ec2 && configID ? <EC2_menu repos={repos} onDelete={deleteNode} id={configID} onClose={closeEc2} label={nodes.find(n => n.id === configID)?.data?.label} /> : null}
     {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
     {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}

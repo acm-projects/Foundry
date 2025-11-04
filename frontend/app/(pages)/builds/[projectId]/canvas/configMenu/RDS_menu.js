@@ -1,47 +1,58 @@
 
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
-import {useState,useEffect} from "react"
+import { useForm, Controller } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { useReactFlow } from "@xyflow/react"
+
+const schema = z.object({
+  dbName: z.string().min(1, "Required").max(63, "Maximum 63 characters"),
+  engine: z.enum(["postgres", "mysql"], { required_error: "Select an engine" }),
+  masterUsername: z.string().min(1, "Required").max(16, "Maximum 16 characters"),
+  masterUserPassword: z.string().min(8, "Minimum 8 characters").max(128, "Maximum 128 characters")
+})
 
 export default function RDS_menu({id,onClose,onDelete}) { 
 
   const storageKey = `${id}`;
-const[engine,setEngine] = useState("")
-const[instanceClass,setInstanceClass] = useState("") 
-const[storage,setStorage] = useState("")
-const[masterUsername,setMasterUsername] = useState("")
-const[masterPassword,setMasterPassword] = useState("")
-const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
-  useEffect(() => {
-      const local = localStorage.getItem(storageKey);
-   
-      const saved = JSON.parse(local) || {};
-      setEngine(saved.engine || "");
-      setInstanceClass(saved.instanceClass || "");
-      setStorage(saved.storage || "");
-      setMasterUsername(saved.masterUsername || "");
-      setMasterPassword(saved.masterPassword || "");
-      setVpcSubnetGroup(saved.vpcSubnetGroup || "");
+  const {setNodes} = useReactFlow();
+
+  const defaultValues = {
+    dbName: "mydatabase",
+    engine: "postgres",
+    masterUsername: "dbadmin",
+    masterUserPassword: ""
   }
-  , [storageKey]);
-  
- 
-  const save = () => {
-      const payload = { engine, instanceClass, storage, masterUsername,masterPassword,vpcSubnetGroup };
-  
-  
-  if(engine.length != 0 && instanceClass.length != 0 && storage.length != 0 && masterPassword.length != 0,masterUsername.length != 0, vpcSubnetGroup.length != 0) { 
-    localStorage.setItem(storageKey, JSON.stringify(payload));
-  UserInput(storageKey,payload)
-  onClose()
-  return;
-  }
-  
-  alert("fill missing input fields")
-  return;
-  
-  
+
+  const {register, handleSubmit, control, formState: { errors }} = useForm({
+    resolver: zodResolver(schema),
+    defaultValues,
+    mode: "onSubmit"
+  });
+
+  const submit = (values) => {
+    const label = id.slice(0, 3)
+    const payload = {
+      label: label,
+      dbName: values.dbName,
+      engine: values.engine,
+      masterUsername: values.masterUsername,
+      masterUserPassword: values.masterUserPassword
     }
+
+    console.log("RDS Config:", payload);
+
+    // Update node data in React Flow
+    setNodes((nodes) =>
+      nodes.map((node) =>
+        node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
+      )
+    );
+
+    onClose();
+  }
  
 
 
@@ -73,50 +84,62 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
     <div className="flex-1 overflow-y-auto space-y-3 p-3 text-xs">
       <div className="rounded-lg bg-gray-50 p-2">
         <h3 className="font-semibold text-gray-800">Service Configuration</h3>
-        <p className="mt-0.5 text-gray-500">Configure your RDS instance with the required parameters.</p>
+        <p className="mt-0.5 text-gray-500">Configure your RDS database with required parameters.</p>
       </div>
 
-      <div>
-        <h4 className="font-semibold text-gray-800">Required Fields</h4>
-        <p className="text-gray-500">Fields with * required</p>
-      </div>
+      <form className="space-y-3" onSubmit={handleSubmit(submit)} noValidate>
+        <div>
+          <label className="font-medium text-gray-800">Database Name <span className='text-red-500'>*</span></label>
+          <input 
+            {...register("dbName")} 
+            placeholder="mydatabase" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+          {errors.dbName && <p className="text-red-600 text-[10px] mt-1">{errors.dbName.message}</p>}
+        </div>
 
-      <form className="space-y-2">
-        
-          <span className="font-medium text-gray-800">Database engine </span>
-          <select value = {engine} onChange = {(e) => setEngine(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
-              <option value="" disabled>Select type</option>
-              <option>Postgre SQL</option>
-         
+        <div>
+          <label className="font-medium text-gray-800">Database Engine <span className='text-red-500'>*</span></label>
+          <Controller
+            control={control}
+            name="engine"
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectValue placeholder="Select engine" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-200 rounded-lg shadow-lg">
+                  <SelectItem value="postgres">PostgreSQL</SelectItem>
+                  <SelectItem value="mysql">MySQL</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.engine && <p className="text-red-600 text-[10px] mt-1">{errors.engine.message}</p>}
+        </div>
 
-              </select>
-          
-          
-     
-     <span className="font-medium text-gray-800">DB instance class </span>
-     <select value = {instanceClass} onChange = {(e) => setInstanceClass(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
-              <option value="" disabled>Select type</option>
-              <option>db.t3.micro</option>
-              <option>db.t3.small</option>
-              <option>db.m5.large</option>
+        <div>
+          <label className="font-medium text-gray-800">Master Username <span className='text-red-500'>*</span></label>
+          <input 
+            {...register("masterUsername")} 
+            placeholder="dbadmin" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+          {errors.masterUsername && <p className="text-red-600 text-[10px] mt-1">{errors.masterUsername.message}</p>}
+          <p className="text-gray-500 text-[10px] mt-1">Do not use "admin" (reserved word)</p>
+        </div>
 
-              </select>
-          
-
-          <span className="font-medium text-gray-800">Storage (GB)</span>
-          <input value = {storage} onChange = {(e) => setStorage(e.target.value) } placeholder="number..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-  
-<span className="font-medium text-gray-800">Master Username</span>
-<input value = {masterUsername} onChange = {(e) => setMasterUsername(e.target.value)}  placeholder="admin" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-
-<span className="font-medium text-gray-800">Master Password</span>
-<input value = {masterPassword} onChange = {(e) => setMasterPassword(e.target.value)} placeholder="password" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-
-<span className="font-medium text-gray-800">VPC subnet group</span>
-<input value = {vpcSubnetGroup} onChange = {(e) => setVpcSubnetGroup(e.target.value)}  placeholder="default-subnet-group" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-
-
-        
+        <div>
+          <label className="font-medium text-gray-800">Master Password <span className='text-red-500'>*</span></label>
+          <input 
+            {...register("masterUserPassword")} 
+            type="password"
+            placeholder="Enter secure password" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+          {errors.masterUserPassword && <p className="text-red-600 text-[10px] mt-1">{errors.masterUserPassword.message}</p>}
+          <p className="text-gray-500 text-[10px] mt-1">Must be 8-128 characters</p>
+        </div>
       </form>
     </div>
 
@@ -126,12 +149,11 @@ const[vpcSubnetGroup,setVpcSubnetGroup] = useState("")
       <button onClick = {() => {onDelete(storageKey)
         onClose(storageKey)
       }} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
-        
         Delete
       </button>
       <div className="flex items-center gap-2">
         <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
       </div>
     </div>
   </aside>
