@@ -53,8 +53,8 @@ const {projectName,setProjectName} = useAppContext()
           <Link href='/builds'>
             <Cloud className="w-5 h-5 text-white" />
           </Link>
-          <h1 className = "absolute  text-gray-700 left-25 text-2xl font-bold">{projectName.length == 0 ? "untitled": projectName}</h1>
-          <div className = "absolute left-60"> 
+          <h1 className = "absolute  text-gray-700 left-20 text-2xl font-bold">{projectName.length == 0 ? "untitled": projectName}</h1>
+          <div className = "absolute left-50"> 
             <Live/>
           </div>
             
