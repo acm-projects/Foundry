@@ -45,8 +45,6 @@ export default function SettingsPage({ params }) {
 setProjectName(title)
 
 
-
-
   };
 
   return (
@@ -66,7 +64,8 @@ setProjectName(title)
                       id="projectName"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="My Foundry Workflow" 
+                      placeholder="build 1" 
+                      maxLength = {10}
                     />
                   </div>
                 </div>
@@ -78,6 +77,8 @@ setProjectName(title)
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="This is an AWS deployment made easy by Foundry."
                     className="text-top align-top py-2"
+                    
+                  
                   />
                 </div>
                 <div className="flex flex-col w-full">

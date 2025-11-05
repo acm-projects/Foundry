@@ -1,42 +1,75 @@
 
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
-import {useState,useEffect} from "react"
-import { UserInput } from '../Deployment/UserServiceInput'
+import { useForm, Controller } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { useReactFlow } from "@xyflow/react"
+import React from 'react'
+const schema = z.object({
+  tableName: z.string().min(3, "Minimum 3 characters").max(255, "Maximum 255 characters"),
+  partitionKey: z.string().min(1, "Required"),
+  partitionKeyType: z.enum(["S", "N"], { required_error: "Select a type" }),
+  sortKey: z.string().optional().or(z.literal("")),
+  sortKeyType: z.enum(["S", "N"]).optional()
+})
+
 export default function DynamoDB_menu({id,onClose,onDelete}) { 
 
-  const[tableName,setTableName] = useState("")
-  const[partitionKey,setPartitionKey] = useState("")
-  const[sortKey,setSortKey] = useState("")
-  const[billingMode,setBillingMode] = useState("")
+  const {setNodes, getNode} = useReactFlow();
 
-  const storageKey = `${id}`;
+  // Get existing node data if available
+  const existingNode = getNode(id);
+  const existingData = existingNode?.data || {};
 
-  useEffect(() => {
-      const local = localStorage.getItem(storageKey);
-   
-      const saved = JSON.parse(local) || {};
-      setTableName(saved.tableName || "");
-      setPartitionKey(saved.partitionKey || "");
-      setSortKey(saved.sortKey || "");
-      setBillingMode(saved.billingMode || "");
+  const defaultValues = {
+    tableName: existingData.tableName || "my-table",
+    partitionKey: existingData.partitionKey || "id",
+    partitionKeyType: existingData.partitionKeyType || "S",
+    sortKey: existingData.sortKey || "",
+    sortKeyType: existingData.sortKeyType || "S"
   }
-  , [storageKey]);
-  const save = () => {
-    const payload = { tableName, partitionKey, sortKey, billingMode };
 
+  const {register, handleSubmit, control, formState: { errors }} = useForm({
+    resolver: zodResolver(schema),
+    defaultValues,
+    mode: "onSubmit"
+  });
 
-if(tableName.length != 0 && partitionKey.length != 0 && sortKey.length != 0 && billingMode.length != 0) { 
-  localStorage.setItem(storageKey, JSON.stringify(payload));
-UserInput(storageKey,payload)
-onClose()
-return;
-}
+  const submit = (values) => {
+    try {
+      // Extract the type from the node ID (e.g., "DynamoDB:abc123" -> "DynamoDB")
+      const label = id.split(':')[0]
+      const payload = {
+        label: label,
+        tableName: values.tableName,
+        partitionKey: values.partitionKey,
+        partitionKeyType: values.partitionKeyType,
+        sortKey: values.sortKey || "",
+        sortKeyType: values.sortKey ? values.sortKeyType : "S"
+      }
 
-alert("fill missing input fields")
-return;
+    console.log("DynamoDB Config:", payload);
 
+    // Update node data in React Flow
+    setNodes((nodes) =>
+      nodes.map((node) =>
+        
+        node.id === id ? ({ ...node, data: { ...node.data, ...payload }  }): node
+        
+      )
+    );
+
+ 
+    onClose();
   }
+
+    catch (error) { 
+
+      console.log("error",error)
+    }
+
  
     return (
 
@@ -74,52 +107,116 @@ return;
     <div className="flex-1 overflow-y-auto space-y-3 p-3 text-xs">
       <div className="rounded-lg bg-gray-50 p-2">
         <h3 className="font-semibold text-gray-800">Service Configuration</h3>
-        <p className="mt-0.5 text-gray-500">Configure your DynamoDB Table instance with the required parameters.</p>
+        <p className="mt-0.5 text-gray-500">Configure your DynamoDB table with keys and types.</p>
       </div>
 
-      <div>
-        <h4 className="font-semibold text-gray-800">Required Fields</h4>
-        <p className="text-gray-500">Fields with * required</p>
-      </div>
+      <form className="space-y-3" onSubmit={handleSubmit(submit)} noValidate>
+        <div>
+          <label className="font-medium text-gray-800">Table Name <span className='text-red-500'>*</span></label>
+          <input 
+            {...register("tableName")} 
+            placeholder="my-table" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+          {errors.tableName && <p className="text-red-600 text-[10px] mt-1">{errors.tableName.message}</p>}
+        </div>
 
-      <form className="space-y-2">
-        
-          <span className="font-medium text-gray-800">Table name <span className = 'text-red-500'>*</span></span>
-          <input value = {tableName} onChange = {(e) => setTableName(e.target.value) } placeholder="my-dynamoDB-table..." className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-     <span className="font-medium text-gray-800">Partition key</span>
-          <div className="relative mt-1">
-          <input value = {partitionKey} onChange = {(e) => setPartitionKey(e.target.value)} placeholder="id" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-          </div>
+        <div>
+          <label className="font-medium text-gray-800">Partition Key <span className='text-red-500'>*</span></label>
+          <input 
+            {...register("partitionKey")} 
+            placeholder="id" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+          {errors.partitionKey && <p className="text-red-600 text-[10px] mt-1">{errors.partitionKey.message}</p>}
+        </div>
 
-          <span className="font-medium text-gray-800">Sort key (optional)</span>
-          <input value = {sortKey} onChange = {(e) => setSortKey(e.target.value)} placeholder="timestamp" className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" />
-  
-<span className="font-medium text-gray-800">Billing Mode</span>
-<select value = {billingMode} onChange = {(e) => setBillingMode(e.target.value)} className="w-full appearance-none rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 pr-6 text-xs text-gray-800 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" defaultValue="">
-              <option value="" disabled>Select type</option>
-              <option>Pay per request</option>
-              <option >Provisioned</option>
+        <div>
+          <label className="font-medium text-gray-800">Partition Key Type <span className='text-red-500'>*</span></label>
+          <Controller
+            control={control}
+            name="partitionKeyType"
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-200 rounded-lg shadow-lg">
+                  <SelectItem value="S">String (S)</SelectItem>
+                  <SelectItem value="N">Number (N)</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.partitionKeyType && <p className="text-red-600 text-[10px] mt-1">{errors.partitionKeyType.message}</p>}
+        </div>
 
-              </select>
+        <div>
+          <label className="font-medium text-gray-800">Sort Key (optional)</label>
+          <input 
+            {...register("sortKey")} 
+            placeholder="timestamp" 
+            className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20" 
+          />
+        </div>
+
+        <div>
+          <label className="font-medium text-gray-800">Sort Key Type</label>
+          <Controller
+            control={control}
+            name="sortKeyType"
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+                  <SelectValue placeholder="Select type" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-200 rounded-lg shadow-lg">
+                  <SelectItem value="S">String (S)</SelectItem>
+                  <SelectItem value="N">Number (N)</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
       </form>
     </div>
 
     <div className="h-px w-full " />
 
     <div className="sticky rounded-lg flex items-center justify-between gap-2 p-2 bg-white border-t border-gray-200">
-      <button onClick = {() => {onDelete(storageKey)
-        onClose(storageKey)
-      }} className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
-        
+      <button 
+        type="button"
+        onClick = {() => {
+          onDelete(id)
+          onClose()
+        }} 
+        className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-red-700">
         Delete
       </button>
       <div className="flex items-center gap-2">
-        <button onClick = {onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-        <button onClick = {save} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+        <button 
+          type="button"
+          onClick={onClose} 
+          className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">
+          Close
+        </button>
+        <button 
+          type="button" 
+          onClick={() => {
+            handleSubmit(
+              (data) => submit(data),
+              (errors) => {
+                alert("Please fix form errors:\n" + Object.entries(errors).map(([key, val]) => `${key}: ${val.message}`).join("\n"))
+              }
+            )()
+          }}
+          className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">
+          Save
+        </button>
       </div>
     </div>
   </aside>
 </Panel>
 
     )
-}
+}}

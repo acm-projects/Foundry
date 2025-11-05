@@ -9,6 +9,9 @@ import { useEffect,useState } from "react";
 import axios from 'axios'
 import { useSession } from "next-auth/react";
 
+import CircleLoader from "./Bars/load_bar";
+
+
 
 
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
@@ -22,14 +25,11 @@ const [repos,setRepos] = useState([])
 
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 
-const schema = z.object({name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
-instanceType: z.string().min(1, "Select an instance type"),
-imageID: z.enum(["Amazon Linux", "Ubuntu", "Windows", "macOS"]),
-keyName: z.string().min(1, "Required").max(255),
-rootVolumeSizeGiB: z.coerce.number().int().min(8, "must be a greater than 8").max(16384,"less than 16384"),
-rootVolumeType: z.enum(["gp3", "gp2", "io1", "io2"], { required_error: "Select a root volume type" }),
-deleteOnTermination: z.enum(["true", "false"]),
-repos: z.string().min(1, "Select a repository"),
+const schema = z.object({
+  name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
+  instanceType: z.string().min(1, "Select an instance type"),
+  imageId: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
+  repos: z.string().min(1, "Select a repository")
 
 });
  useEffect(() => { 
@@ -65,60 +65,63 @@ repos: z.string().min(1, "Select a repository"),
 
 const {setNodes,getNode} = useReactFlow();
 
-const defaultValues =  {name: "web-01",instanceType: "t3.micro",imageID: "Ubuntu", keyName: "my-keypair", rootVolumeSizeGiB:20,rootVolumeType: "gp3",
-deleteOnTermination: "true", userData: "",repos:""};
+// Get existing node data if available
+const existingNode = getNode(id);
+const existingData = existingNode?.data || {};
+
+const defaultValues =  {
+  name: existingData.name || "web-01",
+  instanceType: existingData.instanceType || "t3.micro",
+  imageId: existingData.imageId || "Ubuntu",
+  repos: ""
+
+};
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
 //handleSubmit is the validation function, the real submit function is the one below 
 const submit = (values) => {
-//where actual submit logic goes
-
-console.log("values",values)
-
-const label = id.slice(0,3)
-const betterFormatting = {
-  label: label,
-  name: values.name,
-  instanceType: values.instanceType,
-  imageID: values.imageID,
-  keyName: values.keyName,
-  storage: {
-    rootVolumeSizeGiB: values.rootVolumeSizeGiB,
-    rootVolumeType: values.rootVolumeType,
-    deleteOnTermination: values.deleteOnTermination
-  },
-}
-console.log("better", betterFormatting);
-
-const sendRepo = async () => { 
-
-
-  try { 
+  // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
+  const label = id.split(':')[0]
+  const payload = {
+    label: label,
+    name: values.name,
+    instanceType: values.instanceType,
+    imageId: values.imageId
+  }
   
-    const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos})
-  
+  console.log("EC2 Config:", payload);
+
+  // Update node data in React Flow
+  setNodes((nodes) =>
+    nodes.map((node) =>
+      node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
+    )
+  );
+
+  const sendRepo = async () => { 
+
+
+    try { 
     
-  }
-  catch(err) { 
+      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos, tag: values.name})
+
+      console.log("response",response)
+    
+      
+    }
+    catch(err) { 
+    
+      console.log("error",err)
+    }
+    
+    
+    }
+    
+    sendRepo()
   
-    console.log("error",err)
-  }
-  
-  
-  }
-  
-  sendRepo()
 
-
-
-
-
+  onClose();
 };
-
-useEffect(() => {
-  const node = getNode(id);
-  console.log("Node here:", node);
-}, []); //make a better dependacy to get name 
 
 
 
@@ -148,19 +151,22 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 <div className="flex-1 overflow-y-auto space-y-3 p-3 text-xs">
 <div className="rounded-lg bg-gray-50 p-2">
 <h3 className="font-semibold text-gray-800">Service Configuration</h3>
-<p className="mt-0.5 text-gray-500">Configure your EC2 with required parameters.</p>
+<p className="mt-0.5 text-gray-500">Configure your EC2 instance with required parameters.</p>
 </div>
 
-<form className="space-y-2" onSubmit={handleSubmit(submit)} noValidate>
-<span className="font-medium text-gray-800">name</span>
-<input
-  {...register("name")}
-  placeholder="web-01..."
-  className="w-full rounded-lg border mt-1 border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-/>
-{errors.name && (
-  <p className="text-red-600 text-[10px]  -mt-1">{errors.name.message}</p>
-)}
+<form className="space-y-3" onSubmit={handleSubmit(submit)} noValidate>
+<div>
+  <label className="font-medium text-gray-800">Name <span className="text-red-500">*</span></label>
+  <input
+    {...register("name")}
+    placeholder="web-01"
+    className="w-full rounded-lg border mt-1 border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
+  />
+  {errors.name && (
+    <p className="text-red-600 text-[10px] mt-1">{errors.name.message}</p>
+  )}
+</div>
+
 <span className="font-medium text-gray-800">repositories</span>
 <Controller
 control={control}
@@ -180,110 +186,52 @@ render={({ field }) => (
 />
 
 
-<span className="font-medium text-gray-800">Instance Type</span>
-<div className="relative mt-1">
-<Controller
-  control={control}
-  name="instanceType"
-  render={({ field }) => (
-    <Select value={field.value} onValueChange={field.onChange}>
-      <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-        <SelectValue placeholder="Select type" />
-      </SelectTrigger>
-      <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-        <SelectItem value="t3.micro">t3.micro</SelectItem>
-        <SelectItem value="t3.small">t3.small</SelectItem>
-        <SelectItem value="t3.medium">t3.medium</SelectItem>
-        <SelectItem value="t3.large">t3.large</SelectItem>
-        <SelectItem value="t4g.micro">t4g.micro</SelectItem>
-        <SelectItem value="t4g.small">t4g.small</SelectItem>
-        <SelectItem value="t4g.medium">t4g.medium</SelectItem>
-        <SelectItem value="c7i-flex.large">c7i-flex.large</SelectItem>
-        <SelectItem value="m7i-flex.large">m7i-flex.large</SelectItem>
-        <SelectItem value="r6g.large">r6g.large</SelectItem>
-      </SelectContent>
-    </Select>
-  )}
-/>
+
+
+
+
+<div>
+  <label className="font-medium text-gray-800">Image ID <span className="text-red-500">*</span></label>
+  <Controller
+    control={control}
+    name="imageId"
+    render={({ field }) => (
+      <Select value={field.value} onValueChange={field.onChange}>
+        <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+          <SelectValue placeholder="Select OS" />
+        </SelectTrigger>
+        <SelectContent className="bg-gray-200 rounded-lg shadow-lg">
+          <SelectItem value="Ubuntu">Ubuntu</SelectItem>
+          <SelectItem value="Amazon Linux">Amazon Linux</SelectItem>
+          <SelectItem value="Windows">Windows</SelectItem>
+        </SelectContent>
+      </Select>
+    )}
+  />
+  {errors.imageId && <p className="text-red-600 text-[10px] mt-1">{errors.imageId.message}</p>}
 </div>
-{errors.instanceType && <p className="text-red-600 text-[10px]  -mt-1">{errors.instanceType.message}</p>}
 
-<span className="font-medium text-gray-800">ImageID </span>
-<Controller
-control={control}
-name="imageID"
-render={({ field }) => (
-  <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-      <SelectValue placeholder="Select type" />
-    </SelectTrigger>
-    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      <SelectItem value="Amazon Linux">Amazon Linux</SelectItem>
-      <SelectItem value="Ubuntu">Ubuntu</SelectItem>
-      <SelectItem value="Windows">Windows</SelectItem>
-      <SelectItem value="macOS">macOS</SelectItem>
-    </SelectContent>
-  </Select>
-)}
-/>
-{errors.imageID && <p className="text-red-600 text-[10px]  -mt-1">{errors.imageID.message}</p>}
-
-<span className="font-medium text-gray-800">KeyName</span>
-<input
-{...register("keyName")}
-placeholder="my-keypair"
-className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-/>
-{errors.keyName && <p className="text-red-600 text-[10px]  -mt-1">{errors.keyName.message}</p>}
-
-<span className="font-medium text-gray-800">rootVolumeSizeGiB</span>
-<input
-type="number"
-{...register("rootVolumeSizeGiB")}
-placeholder="20"
-className="mt-1 w-full rounded-lg border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-800 placeholder:text-gray-400 outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20"
-/>
-{errors.rootVolumeSizeGiB && <p className="text-red-600 text-[10px]  -mt-1">{errors.rootVolumeSizeGiB.message}</p>}
-
-<span className="font-medium text-gray-800">rootVolumeType</span>
-<Controller
-control={control}
-name="rootVolumeType"
-render={({ field }) => (
-  <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-      <SelectValue placeholder="Select type" />
-    </SelectTrigger>
-    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      <SelectItem value="gp3">gp3</SelectItem>
-      <SelectItem value="gp2">gp2</SelectItem>
-      <SelectItem value="io1">io1</SelectItem>
-      <SelectItem value="io2">io2</SelectItem>
-    </SelectContent>
-  </Select>
-)}
-/>
-{errors.rootVolumeType && <p className="text-red-600 text-[10px]  -mt-1">{errors.rootVolumeType.message}</p>}
-
-<span className="font-medium text-gray-800">deleteOnTermination</span>
-<Controller
-control={control}
-name="deleteOnTermination"
-render={({ field }) => (
-  <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-      <SelectValue placeholder="Select type" />
-    </SelectTrigger>
-    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      <SelectItem value="true">true</SelectItem>
-      <SelectItem value="false">false</SelectItem>
-    </SelectContent>
-  </Select>
-)}
-/>
-{errors.deleteOnTermination && <p className="text-red-600 text-[10px]  -mt-1">{errors.deleteOnTermination.message}</p>}
-
-
+<div>
+  <label className="font-medium text-gray-800">Instance Type <span className="text-red-500">*</span></label>
+  <Controller
+    control={control}
+    name="instanceType"
+    render={({ field }) => (
+      <Select value={field.value} onValueChange={field.onChange}>
+        <SelectTrigger className="w-full mt-1 rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+          <SelectValue placeholder="Select type" />
+        </SelectTrigger>
+        <SelectContent className="max-h-48 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+          <SelectItem value="t3.micro">t3.micro</SelectItem>
+          <SelectItem value="t3.small">t3.small</SelectItem>
+          <SelectItem value="c7i-flex.large">c7i-flex.large</SelectItem>
+          <SelectItem value="m7i-flex.large">m7i-flex.large</SelectItem>
+        </SelectContent>
+      </Select>
+    )}
+  />
+  {errors.instanceType && <p className="text-red-600 text-[10px] mt-1">{errors.instanceType.message}</p>}
+</div>
 
 
 
@@ -301,6 +249,7 @@ className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 te
 >
 Delete
 </button>
+
 <div className="flex items-center gap-2">
 <button onClick={onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
 <button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>

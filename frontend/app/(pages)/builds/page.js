@@ -9,10 +9,61 @@ import { Card, CardContent, CardDescription, CardTitle} from '@/app/components/u
 import {nanoid} from 'nanoid';
 import { set } from 'zod';
 import { useAppContext } from '@/globalStates/projectName';
+import axios from 'axios'
+import { useSession } from 'next-auth/react';
 export default function Builds() { 
 
 const[user,setUser] = useState(false)
-const id = nanoid()
+const data = useSession()
+
+
+useEffect(() => {
+  
+const get_builds = async () => { 
+  try { 
+    const response = await axios.get(`http://localhost:8000/builds`,{params: {id: data.data?.user?.id}});
+
+
+    console.log("backend response",response)
+  }catch(err) { 
+  
+  
+    console.log("error",err)
+  }
+  
+}
+
+
+get_builds()
+
+
+
+},[data])
+
+const newBuild = async () => { 
+
+
+  try { 
+  
+    const response = await axios.get(`http://localhost:8000/builds/new`,{params: {id: data.data?.user?.id}});
+  
+    console.log("response",response.data?.message)
+
+    if(response.status == 200){ 
+  
+  
+      window.location.href = `/builds/${response.data?.message}/canvas`
+    } 
+
+
+  }catch(err) { 
+  
+  
+    console.log("error",err)
+  }
+  
+  
+    }
 
 
 
@@ -34,7 +85,8 @@ return (
       <div className="mt-6 sm:mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
         
-        <Link href={`/builds/${id}/canvas`}>
+        
+        <button onClick={() => newBuild()}>
           <Card className="group flex flex-col justify-center items-center flex-1 min-w-88 max-w-88 flex-grow min-h-60 bg-grey-100 shadow-none border-dashed border-2 rounded-2xl  hover:cursor-pointer  border-gray-300  bg-gray-100 delay-50 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-gray-300">
             <CardContent className="flex flex-col items-center justify-center gap-4">
               <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-orange-500">
@@ -44,7 +96,8 @@ return (
               <CardDescription className="text-center">Start building your AWS infrastructure with drag-and-drop services</CardDescription>
             </CardContent>
           </Card>
-        </Link>
+          </button>
+  
           <WorkflowGrid/>
         </div>
       </div>

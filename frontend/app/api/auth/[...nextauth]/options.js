@@ -39,11 +39,6 @@ providers: [
       
       }
 
-
-
-
-
-
     }
  })],
  session: { 
@@ -62,7 +57,10 @@ if(profile) {
     token.name = profile.name;
     token.email = profile.email;
     token.image = profile.avatar_url;
+    token.repos_url = profile.repos_url;
 }
+
+console.log("profile in jwt",profile)
 
  return token;
 
