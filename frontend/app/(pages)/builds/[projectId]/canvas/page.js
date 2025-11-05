@@ -359,7 +359,7 @@ const deployClicked = () => {
     >
     </ReactFlow>
    
-    {ec2 && configID ? <EC2_menu repos={repos} onDelete={deleteNode} id={configID} onClose={closeEc2} label={nodes.find(n => n.id === configID)?.data?.label} /> : null}
+    {ec2 && configID ? <EC2_menu  onDelete={deleteNode} id={configID} onClose={closeEc2} label={nodes.find(n => n.id === configID)?.data?.label} /> : null}
     {s3 && configID ? <S3_menu onDelete={deleteNode} id={configID} onClose={closeS3} /> : null}
     {rds && configID ? <RDS_menu onDelete={deleteNode} id={configID} onClose={closeRDS} /> : null}
     {dynamo && configID ? <DynamoDB_menu onDelete={deleteNode} id={configID} onClose={closeDynamo} /> : null}
@@ -371,7 +371,7 @@ const deployClicked = () => {
 
    
 </div>
-<div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-50 flex flex-col gap-2">
+<div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-50 flex gap-2">
   <Deploy 
     deployClicked={deployClicked} 
     deploymentState={deploymentState}

@@ -9,6 +9,9 @@ import { useEffect,useState } from "react";
 import axios from 'axios'
 import { useSession } from "next-auth/react";
 
+import CircleLoader from "./Bars/load_bar";
+
+
 
 
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
@@ -25,7 +28,7 @@ const nameRegex = /^[a-zA-Z0-9_-]+$/;
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
   instanceType: z.string().min(1, "Select an instance type"),
-  imageID: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
+  imageId: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
   repos: z.string().min(1, "Select a repository")
 
 });
@@ -69,7 +72,9 @@ const existingData = existingNode?.data || {};
 const defaultValues =  {
   name: existingData.name || "web-01",
   instanceType: existingData.instanceType || "t3.micro",
-  imageId: existingData.imageId || "Ubuntu"
+  imageId: existingData.imageId || "Ubuntu",
+  repos: ""
+
 };
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
@@ -98,7 +103,9 @@ const submit = (values) => {
 
     try { 
     
-      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos})
+      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos, tag: values.name})
+
+      console.log("response",response)
     
       
     }
@@ -161,23 +168,8 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 </div>
 
 
-<span className="font-medium text-gray-800">repositories</span>
-<Controller
-control={control}
-name="repos"
-render={({ field }) => (
-  <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-      <SelectValue placeholder="Select repository" />
-    </SelectTrigger>
-    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      {repos?.map((repo) => (
-        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)}
-/>
+
+
 
 
 <div>
@@ -222,6 +214,26 @@ render={({ field }) => (
   />
   {errors.instanceType && <p className="text-red-600 text-[10px] mt-1">{errors.instanceType.message}</p>}
 </div>
+<span className="font-medium text-gray-800">repositories</span>
+<Controller
+control={control}
+name="repos"
+render={({ field }) => (
+  <Select value={field.value} onValueChange={field.onChange}>
+    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+      <SelectValue placeholder="Select repository" />
+    </SelectTrigger>
+    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+      {repos?.map((repo) => (
+        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+/>
+
+{/* <CircleLoader/> */}
+
 </form>
 </div>
 
@@ -235,6 +247,7 @@ className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-1.5 te
 >
 Delete
 </button>
+
 <div className="flex items-center gap-2">
 <button onClick={onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
 <button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>

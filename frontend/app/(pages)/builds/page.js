@@ -13,34 +13,31 @@ import axios from 'axios'
 export default function Builds() { 
 
 const[user,setUser] = useState(false)
-const id = nanoid()
+
+useEffect(() => { 
 
 
-const newBuild = async () => { 
-
-  try { 
-
-  const response = await axios.post("http://localhost:8000/builds/",{id:id})
-
-  console.log("response",response)
+  const newBuild = async () => { 
 
 
-  if(response.status == 200) { 
-window.location.href = `/builds/${id}/canvas`
+try { 
+
+  const response = await axios.post(`http://localhost:8000/canvas/create`, {
+
+  });
+
+
+}catch(err) { 
+
+
+  console.log("error",err)
 }
 
 
-  }catch(err) { 
 
-    console.log("error",err)
+
   }
-
-}
-
-
-
-{/* <Link href={`/builds/${id}/canvas`}></Link> */}
-
+})
 
 return (
   <div className="bg-gray-100 relative min-h-screen">

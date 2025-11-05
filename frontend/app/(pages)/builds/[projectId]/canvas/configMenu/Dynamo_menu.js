@@ -65,7 +65,10 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
     onClose();
   }
 
+    catch (error) { 
 
+      console.log("error",error)
+    }
 
  
     return (
@@ -216,4 +219,4 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
 </Panel>
 
     )
-}
+}}
