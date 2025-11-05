@@ -10,34 +10,62 @@ import {nanoid} from 'nanoid';
 import { set } from 'zod';
 import { useAppContext } from '@/globalStates/projectName';
 import axios from 'axios'
+import { useSession } from 'next-auth/react';
 export default function Builds() { 
 
 const[user,setUser] = useState(false)
-
-useEffect(() => { 
-
-
-  const newBuild = async () => { 
+const data = useSession()
 
 
-try { 
-
-  const response = await axios.post(`http://localhost:8000/canvas/create`, {
-
-  });
-
-
-}catch(err) { 
+useEffect(() => {
+  
+const get_builds = async () => { 
+  try { 
+    const response = await axios.get(`http://localhost:8000/builds`,{params: {id: data.data?.user?.id}});
 
 
-  console.log("error",err)
+    console.log("backend response",response)
+  }catch(err) { 
+  
+  
+    console.log("error",err)
+  }
+  
 }
 
 
+get_builds()
 
 
+
+},[data])
+
+const newBuild = async () => { 
+
+
+  try { 
+  
+    const response = await axios.get(`http://localhost:8000/builds/new`,{params: {id: data.data?.user?.id}});
+  
+    console.log("response",response.data?.message)
+
+    if(response.status == 200){ 
+  
+  
+      window.location.href = `/builds/${response.data?.message}/canvas`
+    } 
+
+
+  }catch(err) { 
+  
+  
+    console.log("error",err)
   }
-})
+  
+  
+    }
+
+
 
 return (
   <div className="bg-gray-100 relative min-h-screen">

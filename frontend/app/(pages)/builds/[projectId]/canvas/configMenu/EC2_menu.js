@@ -167,6 +167,24 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
   )}
 </div>
 
+<span className="font-medium text-gray-800">repositories</span>
+<Controller
+control={control}
+name="repos"
+render={({ field }) => (
+  <Select value={field.value} onValueChange={field.onChange}>
+    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+      <SelectValue placeholder="Select repository" />
+    </SelectTrigger>
+    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+      {repos?.map((repo) => (
+        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+/>
+
 
 
 
@@ -214,25 +232,9 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
   />
   {errors.instanceType && <p className="text-red-600 text-[10px] mt-1">{errors.instanceType.message}</p>}
 </div>
-<span className="font-medium text-gray-800">repositories</span>
-<Controller
-control={control}
-name="repos"
-render={({ field }) => (
-  <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-      <SelectValue placeholder="Select repository" />
-    </SelectTrigger>
-    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      {repos?.map((repo) => (
-        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-)}
-/>
 
-{/* <CircleLoader/> */}
+
+
 
 </form>
 </div>
