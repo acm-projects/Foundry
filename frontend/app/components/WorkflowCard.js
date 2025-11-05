@@ -1,12 +1,11 @@
-
 import { Card , CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card'
 import DeploymentStatus from "@/app/components/DeploymentStatus";
+import Link from 'next/link'; // Import Link
 
-export default function WorkflowCard({title, description, status, lastModified}){
+export default function WorkflowCard({title, description, status, lastModified, href = '#'}){ // Added href prop
 
-  return (
-    <div>
-      <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 
+  const CardContentComponent = (
+    <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 
   bg-gray-100 backdrop-blur-md shadow-lg rounded-2xl
   transition duration-200 hover:scale-[1.02] hover:cursor-pointer">
         <CardHeader className="gap-4">
@@ -28,6 +27,13 @@ export default function WorkflowCard({title, description, status, lastModified})
           </div>
         </CardContent>
       </Card>
+  );
+
+  return (
+    <div>
+        <Link href={href}>
+            {CardContentComponent}
+        </Link>
     </div>
   )
 }
