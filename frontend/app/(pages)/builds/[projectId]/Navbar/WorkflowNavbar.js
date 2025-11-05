@@ -88,7 +88,7 @@ export default function WorkflowNavbar() {
         <div className="flex items-center gap-4"> 
           
           {/* Logo/Icon */}
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm mr-3">
               <Link href='/builds'>
                 <Cloud className="w-5 h-5 text-white" />
               </Link>
