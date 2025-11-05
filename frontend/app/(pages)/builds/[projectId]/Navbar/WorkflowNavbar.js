@@ -3,6 +3,8 @@ import { User,Cloud } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Monitor, DollarSign, FileText, Settings } from "lucide-react";
 import {useState, useEffect, useCallback} from 'react' // Import necessary hooks
+import DeploymentStatus from "@/app/components/DeploymentStatus";
+
 
 import UserProfile from "./userProfile";
 import Link from "next/link";
@@ -61,7 +63,7 @@ export default function WorkflowNavbar() {
     // Render Input field when editing
     <input
       type="text"
-      className="text-2xl font-bold p-1 border-b-2 border-orange-500 bg-transparent outline-none text-gray-700 w-full min-w-[120px]"
+      className="text-2xl font-bold p-1 border-b-2 border-orange-500 bg-transparent outline-none text-gray-700 w-full min-w-[100px] max-w-[240px]"
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
       onBlur={handleSave} // Save when focus is lost
@@ -72,7 +74,7 @@ export default function WorkflowNavbar() {
   ) : (
     // Render static H1 when not editing
     <h1 
-      className="text-2xl font-bold text-gray-700 cursor-pointer p-1 rounded hover:bg-gray-100 transition-colors w-full truncate"
+      className="text-2xl font-bold text-gray-700 cursor-pointer p-1 rounded hover:bg-gray-100 transition-colors w-full truncate mr-2"
       onClick={() => setIsEditing(true)}
       title="Click to rename"
     >
@@ -88,7 +90,7 @@ export default function WorkflowNavbar() {
         <div className="flex items-center gap-4"> 
           
           {/* Logo/Icon */}
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm mr-3">
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm mr-2">
               <Link href='/builds'>
                 <Cloud className="w-5 h-5 text-white" />
               </Link>
@@ -101,7 +103,7 @@ export default function WorkflowNavbar() {
 
           {/* Live Status */}
           <div className="pt-1">
-            <Live/>
+            <DeploymentStatus status="inactive"/>
           </div>
             
         </div>
