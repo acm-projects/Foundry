@@ -69,8 +69,6 @@ const {projectName,setProjectName} = useAppContext()
       const isActive = pathname.startsWith(tab.href);
 
       return (
-        <div>
-
         <Link
           key={tab.name}
           href={tab.href}
@@ -88,7 +86,6 @@ const {projectName,setProjectName} = useAppContext()
           <span>{tab.name}</span>
           
         </Link>
-        </div>
       );
     })}
   
