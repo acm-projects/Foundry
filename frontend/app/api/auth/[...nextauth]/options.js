@@ -80,18 +80,19 @@ session.accessToken = token.accessToken;
 
 try { 
 
-  await pool.query(`INSERT INTO account (id, user_id, token ,created_at)
-      VALUES ($1, $2, $3, $4) 
-      ON CONFLICT (id) DO NOTHING`,
+  await pool.query(`INSERT INTO account (id, user_id, token, github_login, github_access_token, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6) 
+      ON CONFLICT (id) DO UPDATE
+      SET token = $3, github_login=$4, github_access_token = $5`,
 
-     [token.id, token.id, token, date]);
+     [token.id, token.id, token, token.login, token.accessToken, date]);
 
-     console.log("added account")
+     console.log("account updated with separate access token")
 
 
 }catch(err) { 
 
-  console.log("error",err)
+  console.log("error inserting/updating account",err)
 }
 
 
