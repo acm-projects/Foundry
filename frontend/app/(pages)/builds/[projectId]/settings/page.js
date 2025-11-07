@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState,useEffect, use } from "react";
 
 import { Card , CardHeader, CardTitle, CardContent, CardDescription} from '@/app/components/ui/card'
 import { Input } from '@/app/components/ui/input'
@@ -8,8 +8,8 @@ import { Label } from '@/app/components/ui/label'
 import { Select , SelectTrigger, SelectContent, SelectValue, SelectItem, SelectGroup} from '@/app/components/ui/select'
 import { Button } from '@/app/components/ui/button'
 import TeamMemberGrid from "@/app/components/TeamMemberGrid";
+import axios from 'axios'
 
-import { useAppContext } from '@/globalStates/projectName';
 
 import { usePathname } from "next/navigation";
 
@@ -20,7 +20,7 @@ export default function SettingsPage({ params }) {
   const [environment, setEnvironment] = useState("development");
   const [description, setDescription] = useState("This is an AWS deployment made easy by Foundry.");
   const [region, setRegion] = useState("us-east-1");
-  const { projectName, setProjectName } = useAppContext();
+  const [ projectName, setProjectName ] = useState("");
 
 
   const pathname = usePathname();
@@ -33,17 +33,24 @@ export default function SettingsPage({ params }) {
   const [teamMembers, setTeamMembers] = useState([]);
 
 
-  const handleSave = () => {
-    console.log({ projectName, environment, description, region, teamMembers });
+  const handleSave = async () => {
     
-    
-    
-    alert("Settings saved! Check console for values");
+
+try { 
+  setProjectName(title)
+
+const response = await axios.post("http://localhost:8000/canvas/settings",{projectName: title, description: description,build_id: build_id })
+
+console.log("responsee",response)
 
 
 
-setProjectName(title)
+  alert("Settings saved! Check console for values");
 
+} catch(err) { 
+
+  console.log("unable to save",err)
+}
 
   };
 

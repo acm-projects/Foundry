@@ -8,37 +8,13 @@ import { Input } from '@/app/components/ui/input'
 import { Card, CardContent, CardDescription, CardTitle} from '@/app/components/ui/card'
 import {nanoid} from 'nanoid';
 import { set } from 'zod';
-import { useAppContext } from '@/globalStates/projectName';
+
 import axios from 'axios'
 import { useSession } from 'next-auth/react';
 export default function Builds() { 
 
 const[user,setUser] = useState(false)
-const data = useSession()
 
-
-useEffect(() => {
-  
-const get_builds = async () => { 
-  try { 
-    const response = await axios.get(`http://localhost:8000/builds`,{params: {id: data.data?.user?.id}});
-
-
-    console.log("backend response",response)
-  }catch(err) { 
-  
-  
-    console.log("error",err)
-  }
-  
-}
-
-
-get_builds()
-
-
-
-},[data])
 
 const newBuild = async () => { 
 
@@ -69,7 +45,7 @@ const newBuild = async () => {
 
 return (
   <div className="bg-gray-100 relative min-h-screen">
-  <div className="flex items-center justify-between pt-5 px-4 sm:px-6 lg:px-8">
+  <div className="flex items-center justify-between  pt-5 px-4 sm:px-6 lg:px-8">
     <div className="pl-0">
       <Link href='/builds'>
         <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-orange-500 shadow-sm">
@@ -80,7 +56,7 @@ return (
     <Input placeholder="Search" className = "min-w-xl flex ml-10 flex-col sm:flex-row bg-gray-50 p-2 shadow-l rounded-2xl border border-gray-200 sm:space-x-2 w-fit"/>
     <UserProfile />
   </div>
-  <main className="flex items-center justify-center mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 pt-5 pb-16">
+  <main className="flex items-center justify-center mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 pt-8 pb-8">
     <div className="flex flex-col gap-6 sm:gap-8 items-start justify-between">
       <div className="mt-6 sm:mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">

@@ -8,7 +8,7 @@ import UserProfile from "./userProfile";
 import Link from "next/link";
 import Live from "../canvas/Deployment/live";
 
-import { useAppContext } from "@/globalStates/projectName";
+
 
 export default function WorkflowNavbar() {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export default function WorkflowNavbar() {
   const path = usePathname()
 const[user,setUser] = useState(false)
 
-const {projectName,setProjectName} = useAppContext()
+const projectName = ""
 
 
   const tabs = [

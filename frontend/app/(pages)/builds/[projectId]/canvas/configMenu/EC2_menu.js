@@ -87,6 +87,7 @@ const submit = (values) => {
     name: values.name,
     instanceType: values.instanceType,
     imageId: values.imageId
+    
   }
   
   console.log("EC2 Config:", payload);
