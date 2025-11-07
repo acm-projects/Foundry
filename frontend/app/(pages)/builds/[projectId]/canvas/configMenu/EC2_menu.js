@@ -9,17 +9,12 @@ import { useEffect,useState } from "react";
 import axios from 'axios'
 import { useSession } from "next-auth/react";
 
-import CircleLoader from "./Bars/load_bar";
-
-
-
 
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
 
+const { data: session, status } = useSession(); 
 
 const storageKey = `${id}`;
-
-const token = useSession()
 
 const [repos,setRepos] = useState([])
 
@@ -32,54 +27,76 @@ const schema = z.object({
   repos: z.string().min(1, "Select a repository")
 
 });
+
  useEffect(() => { 
   const getRepos = async () => { 
 
+    if (status === "loading" || !session || !session.user?.login) {
+      console.log("[EC2_CONFIG] Repo fetch skipped: Session not ready.");
+      setRepos([]);
+      return;
+    }
+    
+    const githubLogin = session.user.login;
+    console.log(`[EC2_CONFIG] Fetching repos for user: ${githubLogin}`);
 
-    console.log("token",token)
+
     try { 
-
-
-  
-      const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${token.data?.user?.login}`}});
+      const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${githubLogin}`}});
 
       setRepos(response.data)
 
-
-      console.log(repos)
-
-
-  
     }catch(err) { 
-  
-      console.error("error getting repos")
+      console.error("[EC2_CONFIG] Error getting repos", err.message);
+      setRepos([]);
     }
   }
   getRepos()
-    },[token])
+    },[session, status]) 
 
 
     
 
-
-
 const {setNodes,getNode} = useReactFlow();
 
-// Get existing node data if available
+
 const existingNode = getNode(id);
-const existingData = existingNode?.data || {};
+
+const existingData = existingNode?.data?.config || {}; 
 
 const defaultValues =  {
   name: existingData.name || "web-01",
   instanceType: existingData.instanceType || "t3.micro",
   imageId: existingData.imageId || "Ubuntu",
-  repos: ""
-
+  repos: existingData.repos || "" 
 };
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
-//handleSubmit is the validation function, the real submit function is the one below 
+
 const submit = (values) => {
+  const githubLogin = session?.user?.login; 
+  
+  if (!githubLogin) {
+    console.error("User not logged in or GitHub login not available. Cannot proceed with webhook setup.");
+    return; 
+  }
+  
+
+  const repoIdentifier = values.repos; 
+  const parts = repoIdentifier.split('/');
+  const repoName = parts[0]; 
+  const owner = parts[1]; 
+
+
+  const sendWebhookRequest = async () => { 
+    try { 
+      console.log(`[EC2_CONFIG] Setting up webhook for ${owner}/${repoName}...`);
+      
+      const response = await axios.post('https://overslack-stonily-allegra.ngrok-free.dev/github/add_webhook', {
+        owner: owner,
+        repo: repoName 
+      });
+      console.log("[EC2_CONFIG] Webhook Creation Response:", response.data);
   // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
   const label = id.split(':')[0]
   const payload = {
@@ -111,22 +128,63 @@ const submit = (values) => {
       
     }
     catch(err) { 
-    
-      console.log("error",err)
+      console.error("[EC2_CONFIG] Error creating webhook or connecting to API:", err.message);
     }
-    
-    
-    }
-    
-    sendRepo()
+  };
   
+  const sendBuildsRequest = async () => {
+      try { 
+          console.log(`[EC2_CONFIG] Triggering build for ${repoIdentifier}...`);
+          const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{
+              repo: repoIdentifier, 
+              tag: values.name
+          });
+          console.log("[EC2_CONFIG] Builds API response:", response.data);
+      }
+      catch(err) { 
+          console.error("[EC2_CONFIG] Error triggering build:", err.message);
+      }
+  };
 
-  onClose();
+
+  const handleSubmission = async () => {
+      // webhook setup first (if a repo is selected)
+      if (repoIdentifier) {
+          await sendWebhookRequest(); 
+      }
+      
+      // existing builds api call
+      await sendBuildsRequest();
+      
+
+      const newConfig = {
+          name: values.name,
+          instanceType: values.instanceType,
+          imageId: values.imageId,
+          repos: repoIdentifier // 
+      }
+      
+
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === id 
+            ? { 
+                ...node, 
+                data: { 
+                    ...node.data, 
+                    config: newConfig, 
+                    label: values.name 
+                } 
+              } 
+            : node
+        )
+      );
+      
+      onClose();
+  };
+  
+  handleSubmission();
 };
-
-
-
-console.log("repositories",repos)
 
 
 
@@ -179,12 +237,14 @@ render={({ field }) => (
     </SelectTrigger>
     <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
       {repos?.map((repo) => (
+        // Value format: repoName/ownerName
         <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
       ))}
     </SelectContent>
   </Select>
 )}
 />
+{errors.repos && <p className="text-red-600 text-[10px] mt-1">{errors.repos.message}</p>}
 
 
 
@@ -260,4 +320,3 @@ Delete
 </Panel>
 );
 }
-
