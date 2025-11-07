@@ -9,22 +9,16 @@ import { useEffect,useState } from "react";
 import axios from 'axios'
 import { useSession } from "next-auth/react";
 
-import CircleLoader from "./Bars/load_bar";
-
-
-
 
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
 
+const { data: session, status } = useSession(); 
 
 const storageKey = `${id}`;
-
-const token = useSession()
 
 const [repos,setRepos] = useState([])
 
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
-const { data: session, status } = useSession(); 
 
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
@@ -33,7 +27,8 @@ const schema = z.object({
   repos: z.string().min(1, "Select a repository")
 
 });
-useEffect(() => { 
+
+ useEffect(() => { 
   const getRepos = async () => { 
 
     if (status === "loading" || !session || !session.user?.login) {
@@ -62,44 +57,23 @@ useEffect(() => {
 
     
 
-
-
 const {setNodes,getNode} = useReactFlow();
 
-// Get existing node data if available
+
 const existingNode = getNode(id);
-const existingData = existingNode?.data || {};
+
+const existingData = existingNode?.data?.config || {}; 
 
 const defaultValues =  {
   name: existingData.name || "web-01",
   instanceType: existingData.instanceType || "t3.micro",
   imageId: existingData.imageId || "Ubuntu",
-  repos: ""
-
+  repos: existingData.repos || "" 
 };
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
-//handleSubmit is the validation function, the real submit function is the one below 
+
 const submit = (values) => {
-  // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
-  const label = id.split(':')[0]
-  const payload = {
-    label: label,
-    name: values.name,
-    instanceType: values.instanceType,
-    imageId: values.imageId
-    
-  }
-  
-  console.log("EC2 Config:", payload);
-
-  // Update node data in React Flow
-  setNodes((nodes) =>
-    nodes.map((node) =>
-      node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
-    )
-  );
-
   const githubLogin = session?.user?.login; 
   
   if (!githubLogin) {
@@ -123,6 +97,34 @@ const submit = (values) => {
         repo: repoName 
       });
       console.log("[EC2_CONFIG] Webhook Creation Response:", response.data);
+  // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
+  const label = id.split(':')[0]
+  const payload = {
+    label: label,
+    name: values.name,
+    instanceType: values.instanceType,
+    imageId: values.imageId
+    
+  }
+  
+  console.log("EC2 Config:", payload);
+
+  // Update node data in React Flow
+  setNodes((nodes) =>
+    nodes.map((node) =>
+      node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
+    )
+  );
+
+  const sendRepo = async () => { 
+
+
+    try { 
+    
+      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: values.repos, tag: values.name})
+
+      console.log("response",response)
+    
       
     }
     catch(err) { 
@@ -152,19 +154,37 @@ const submit = (values) => {
       }
       
       // existing builds api call
-      await sendBuildsRequest(); 
-    }
+      await sendBuildsRequest();
+      
 
- 
-    handleSubmission();
+      const newConfig = {
+          name: values.name,
+          instanceType: values.instanceType,
+          imageId: values.imageId,
+          repos: repoIdentifier // 
+      }
+      
 
-  onClose();
-
+      setNodes((nodes) =>
+        nodes.map((node) =>
+          node.id === id 
+            ? { 
+                ...node, 
+                data: { 
+                    ...node.data, 
+                    config: newConfig, 
+                    label: values.name 
+                } 
+              } 
+            : node
+        )
+      );
+      
+      onClose();
+  };
+  
+  handleSubmission();
 };
-
-
-
-console.log("repositories",repos)
 
 
 
@@ -217,12 +237,14 @@ render={({ field }) => (
     </SelectTrigger>
     <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
       {repos?.map((repo) => (
+        // Value format: repoName/ownerName
         <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
       ))}
     </SelectContent>
   </Select>
 )}
 />
+{errors.repos && <p className="text-red-600 text-[10px] mt-1">{errors.repos.message}</p>}
 
 
 
