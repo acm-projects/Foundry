@@ -15,7 +15,7 @@ export default function Builds() {
 
 const[user,setUser] = useState(false)
 
-
+const data = useSession()
 const newBuild = async () => { 
 
 
