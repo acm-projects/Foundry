@@ -3,9 +3,16 @@ import { Input } from '@/app/components/ui/input'
 import {useState,useEffect} from "react"
 import axios from 'axios'
 import { Search} from "lucide-react";
+import {useSession} from 'next-auth/react'
+import { send } from "process";
 
 
-export default function TeamMemberGrid({ members, setMembers }) {
+export default function TeamMemberGrid({ members, setMembers,invite_id }) {
+  const data = useSession()
+
+
+  
+  
   const handleRoleChange = (index, value) => {
     const updated = [...members];
     updated[index].role = value;
@@ -14,6 +21,7 @@ export default function TeamMemberGrid({ members, setMembers }) {
 
   const[input,setInput] = useState("")
   const[users,setUsers] = useState([])
+  
 
 
 useEffect(() => {
@@ -27,11 +35,26 @@ useEffect(() => {
 
       console.log("response",response)
 
-      setUsers(response.data)
+      const send_id = (data) => {
+        
+        const allIds = data.data.map(item => item.id);
+      
+        console.log("all IDs:", allIds); 
+        console.log("all emails:", ); 
+      
+      
+        invite_id(allIds);
+      };
+
+      const emails = response.data.map(item => item.email)
+      
+
+      send_id(response)
+
+      setUsers(emails)
       
     
-    
-    
+  
     }catch(err) { 
     
     
@@ -94,6 +117,7 @@ findUsers()
           onRoleChange={(value) => handleRoleChange(index, value)}
         />
       ))}
+
     </div>
   );
 }
