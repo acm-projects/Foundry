@@ -71,6 +71,8 @@ const onNodeClick = useCallback((event, node) => {
         setS3(false);
         setRDS(false);
         setDynamo(true);
+        console.log("dynamo true",node.type)
+
         break;}
  }, 
   []);

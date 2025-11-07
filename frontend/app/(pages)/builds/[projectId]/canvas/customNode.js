@@ -116,7 +116,6 @@ return (
       className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
     />
   </div>
-  <span>{/*something may go here for naming node in the futrue*/}</span>
 </div>
 );
 default:

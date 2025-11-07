@@ -2,8 +2,8 @@
 import { Card , CardHeader, CardTitle, CardDescription, CardContent} from '@/app/components/ui/card'
 import DeploymentStatus from "@/app/components/DeploymentStatus";
 
-export default function WorkflowCard({title, description, status, lastModified}){
-
+export default function WorkflowCard({title, description, status, created_at}){
+console.log("workflow card props",created_at)
   return (
     <div>
       <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 
@@ -23,8 +23,8 @@ export default function WorkflowCard({title, description, status, lastModified})
         </CardHeader>
         <CardContent>
           <div className="flex justify-between max-w-7xl mx-auto">
-            <p className="text-neutral-500 text-left">Last Modified:</p>
-            <p className=" text-neutral-500 text-right">{lastModified}</p>
+         
+            <p className=" text-neutral-500 text-right">{created_at}</p>
           </div>
         </CardContent>
       </Card>

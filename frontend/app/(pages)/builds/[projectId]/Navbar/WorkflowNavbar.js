@@ -8,45 +8,18 @@ import UserProfile from "./userProfile";
 import Link from "next/link";
 import Live from "../canvas/Deployment/live";
 
-import { useAppContext } from "@/globalStates/projectName";
+
 
 export default function WorkflowNavbar() {
   const pathname = usePathname();
   const pathSegments = pathname.split("/");
   const projectId = pathSegments[2];
-  
-  const [isEditing, setIsEditing] = useState(false); // State to control edit mode
-  const { projectName, setProjectName } = useAppContext();
-  const [inputValue, setInputValue] = useState(projectName.length === 0 ? "untitled" : projectName);
-  
-  // Update internal input value when global context changes
-  useEffect(() => {
-      setInputValue(projectName.length === 0 ? "untitled" : projectName);
-  }, [projectName]);
+  const path = usePathname()
+const[user,setUser] = useState(false)
 
-
-  // Handler to save the title and exit edit mode
-  const handleSave = useCallback(() => {
-    const trimmedValue = inputValue.trim() || "untitled";
-    
-    if (trimmedValue !== projectName) {
-      // 1. Update global context
-      setProjectName(trimmedValue);
-      // 2. TODO: Implement API call here to persist the name change
-      console.log(`Title saved: ${trimmedValue}`);
-    } 
-    setInputValue(trimmedValue);
-    setIsEditing(false);
-  }, [inputValue, projectName, setProjectName]);
-
-  // Handler for keyboard events (Enter key to save)
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      event.target.blur(); // Triggers onBlur, which calls handleSave
-    }
-  };
-
+const projectName = ""
+const [inputValue, setInputValue] = useState(projectName.length === 0 ? "untitled" : projectName);  
+const [isEditing, setIsEditing] = useState(false)
 
   const tabs = [
     // ... (tabs array remains the same)
