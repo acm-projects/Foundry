@@ -54,7 +54,7 @@ try {
   setProjectName(title)
 
 
-  const response = await axios.post(`http://localhost:8000/builds/invite`,{invite_id: invite_id, build_id: build_id, project_name: title, description: description,
+  const response = await axios.post(`http://localhost:8000/canvas/invite`,{invite_id: invite_id, build_id: build_id, project_name: title, description: description,
    
     owner_id: id
   },);
