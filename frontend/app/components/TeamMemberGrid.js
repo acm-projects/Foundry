@@ -27,10 +27,10 @@ export default function TeamMemberGrid({ members, setMembers,invite_id }) {
 useEffect(() => {
 
   const findUsers = async () => { 
-  
+
     try { 
 
-      const response = await axios.get(`http://localhost:8000/canvas/users`);
+      const response = await axios.get(`http://localhost:8000/canvas/users`)
 
 
       console.log("response",response)
@@ -40,13 +40,13 @@ useEffect(() => {
         const allIds = data.data.map(item => item.id);
       
         console.log("all IDs:", allIds); 
-        console.log("all emails:", data.data.map(item => item.email)); 
-
+        console.log("all emails:", ); 
       
-
+      
+        invite_id(allIds);
       };
 
-      const emails = response.data;
+      const emails = response.data.map(item => item.email)
       
 
       send_id(response)
@@ -74,37 +74,31 @@ findUsers()
  }, [])
 
 
-//  console.log("users in database",users)
+ console.log("users in database",users)
 
-const addMember = () => {
-  const user = users?.find(u => u.email === input);
-
-  if (members.find(m => m.id === user?.id)) {
-    setInput("");
-    return;
-  }
-
-  if (user) {
-    const updatedMembers = [
-      ...members,
-      { id: user.id, name: user.name, email: user.email, role: 'read' },
-    ];
-
-    setMembers(updatedMembers);
-    setInput("");
-
-    // send only the IDs of selected members
-    const memberIds = updatedMembers.map(m => m.id);
-    invite_id(memberIds);
-  } else {
-    alert("user not found");
-  }
-
-  
-};
+ const addMember = () => {  //this changes things visually gotta add scripts to change in db
+    const user = users?.find(u => u === input);
 
 
- 
+    if(members.find(m => m.name === user)){setInput("") 
+      return;}
+
+    
+    if (user) {
+      setMembers([...members, { name: user, role: 'read',}]);
+      setInput("");
+    } else {
+      alert("user not found");
+    }
+
+
+
+
+
+
+ }
+
+ console.log("members:",members)  
 
 
 
@@ -116,7 +110,6 @@ const addMember = () => {
       <Search className = " h-7 w-7 text-black rounded" onClick = {() => addMember()}/>
       </div>
       </div>
-
       {members.map((member, index) => (
         <TeamMemberCard
           key={index}

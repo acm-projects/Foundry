@@ -11,7 +11,7 @@ export default function TeamMemberCard({ member, onRoleChange }){
       <ItemContent>
         <div className="flex gap-5 items-center">
           <User />
-          <ItemTitle>{member.email}</ItemTitle>
+          <ItemTitle>{member.name}</ItemTitle>
         </div>
       </ItemContent>
       <ItemActions>
