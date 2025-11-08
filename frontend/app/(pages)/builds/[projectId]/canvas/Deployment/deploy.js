@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import api from "@/app/api";
 import Live from "./live";
 import { validateDeployData } from "./formatDeployData";
+import { useSession } from "next-auth/react";
 
 function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeploymentSuccess }) {
   const [status, setStatus] = useState(false)
   const [live, setLive] = useState(true)
+  const session = useSession()
 
   // deploymentState can be: 'never' | 'deployed' | 'needs-update'
   const isDeployed = deploymentState === 'deployed'
@@ -25,20 +27,27 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       alert(`Please configure all resources:\n${errors.join('\n')}`)
       return
     }
+
+    // Validate buildId exists
+    if (!buildId) {
+      alert('Error: No build ID found. Please refresh the page or create a new build.')
+      return
+    }
+
+    // Get owner_id from session
+    const owner_id = session.data?.user?.id
+    if (!owner_id) {
+      alert('Error: No user ID found. Please sign in again.')
+      return
+    }
     
     try {
       setStatus(true)
       
-      // Choose endpoint based on deployment state
+      // For new deployments, use POST /canvas/deploy with buildId, canvas, owner_id, and region
+      // For updates, still use the update endpoint
       const endpoint = needsUpdate ? '/canvas/deploy/update' : '/canvas/deploy'
       const actionText = needsUpdate ? 'update' : 'deploy'
-      
-      // Validate build_id exists for updates
-      if (needsUpdate && !buildId) {
-        alert('Cannot update: No build ID found. Please deploy first or clear canvas and redeploy.')
-        setStatus(false)
-        return
-      }
       
       // Validate stack_name exists for updates
       if (needsUpdate && !stackName) {
@@ -50,14 +59,24 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       console.log(`Sending POST to ${endpoint}...`)
       console.log("needsUpdate:", needsUpdate)
       console.log("buildId:", buildId, typeof buildId)
+      console.log("owner_id:", owner_id, typeof owner_id)
       console.log("stackName:", stackName, typeof stackName)
       
-      // Backend expects data wrapped in "canvas" field
-      // For updates, also include build_id and stack_name
-      // auto_execute: true tells backend to automatically execute the deployment
+      // NEW PAYLOAD FORMAT per backend spec:
+      // {
+      //   "buildId": <integer>,
+      //   "canvas": { nodes, edges, viewport },
+      //   "owner_id": <integer>,
+      //   "region": "us-east-1"
+      // }
       const requestBody = needsUpdate 
         ? { canvas: reactJson, build_id: buildId, stack_name: stackName, auto_execute: true }
-        : { canvas: reactJson, auto_execute: true }
+        : { 
+            buildId: buildId,  // Integer from URL params
+            canvas: reactJson,  // Canvas object with nodes, edges, viewport
+            owner_id: parseInt(owner_id, 10),  // Integer user ID
+            region: "us-east-1"  // Default region - could be made configurable
+          }
       
       console.log("Request body:", JSON.stringify(requestBody, null, 2))
       
@@ -65,28 +84,25 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       console.log(`${actionText} response:`, response.data)
       console.log("Full response object:", response)
       console.log("Response data keys:", Object.keys(response.data))
-      console.log("build_id in response?", 'build_id' in response.data)
-      console.log("response.data.build_id:", response.data.build_id)
-      console.log("stack_name in response?", 'stack_name' in response.data)
-      console.log("response.data.stack_name:", response.data.stack_name)
       
       setLive(true)
       alert(`${needsUpdate ? 'Update' : 'Deployment'} successful!`)
       
-      // Notify parent that deployment succeeded, pass build_id and stack_name from response
-      const responseBuildId = response.data.build_id
-      const responseStackName = response.data.stack_name
+      // Backend response format:
+      // { success: true, stackName: "foundry-stack-26", stackId: "...", status: "...", buildId: 26 }
+      const responseBuildId = response.data.buildId
+      const responseStackName = response.data.stackName
       console.log("Extracted responseBuildId:", responseBuildId, typeof responseBuildId)
       console.log("Extracted responseStackName:", responseStackName, typeof responseStackName)
       
       if (!responseBuildId && !needsUpdate) {
-        console.warn("⚠️ WARNING: Backend did not return build_id! This will prevent updates from working.")
-        alert("Warning: Deployment succeeded but no build_id was returned. Updates may not work.")
+        console.warn("⚠️ WARNING: Backend did not return buildId! This will prevent updates from working.")
+        alert("Warning: Deployment succeeded but no buildId was returned. Updates may not work.")
       }
       
       if (!responseStackName && !needsUpdate) {
-        console.warn("⚠️ WARNING: Backend did not return stack_name! This will prevent updates from working.")
-        alert("Warning: Deployment succeeded but no stack_name was returned. Updates may not work.")
+        console.warn("⚠️ WARNING: Backend did not return stackName! This will prevent updates from working.")
+        alert("Warning: Deployment succeeded but no stackName was returned. Updates may not work.")
       }
       
       onDeploymentSuccess(reactJson, responseBuildId, responseStackName)

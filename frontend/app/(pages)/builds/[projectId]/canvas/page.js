@@ -12,6 +12,7 @@ import Sidebar from "./sideBar";
 import { DnDProvider, useDnD } from "./DnDContext";
 import { useSession } from "next-auth/react";
 import Deploy from './Deployment/deploy'
+import { useParams } from "next/navigation";
 
 import {useState} from "react"
 import axios from "axios";
@@ -24,6 +25,8 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition, getNodes, getEdges, getViewport } = useReactFlow();
   const [type] = useDnD();
+  const params = useParams();
+  const session = useSession();
 
   const[ec2,setEc2] = useState(false);
   const[s3,setS3] = useState(false);
@@ -39,7 +42,8 @@ const[configs,setConfigs] = useState({}) //this is for updating config menu fiel
   // 'needs-update' = deployed but changes detected
   const [deploymentState, setDeploymentState] = useState('never')
   const [lastDeployedSnapshot, setLastDeployedSnapshot] = useState(null)
-  const [buildId, setBuildId] = useState(null) // Track the build_id from deployment
+  // Get buildId from URL params - this is the single source of truth
+  const buildId = params.projectId ? parseInt(params.projectId, 10) : null
   const [stackName, setStackName] = useState(null) // Track the stack_name from deployment
 
 const onNodeClick = useCallback((event, node) => {
@@ -97,33 +101,36 @@ const onNodeClick = useCallback((event, node) => {
 
     //logic to get existing canvas from backend
 
-    // Load deployment state
-    const storedDeploymentState = localStorage.getItem('deploymentState')
-    const storedSnapshot = localStorage.getItem('lastDeployedSnapshot')
-    const storedBuildId = localStorage.getItem('buildId')
-    const storedStackName = localStorage.getItem('stackName')
+    if (!buildId) {
+      console.warn("No buildId available, skipping localStorage load");
+      return;
+    }
+
+    console.log("Loading deployment state for build:", buildId);
+
+    // Load deployment state - USE BUILD-SPECIFIC KEYS
+    const storedDeploymentState = localStorage.getItem(`deploymentState_${buildId}`)
+    const storedSnapshot = localStorage.getItem(`lastDeployedSnapshot_${buildId}`)
+    const storedStackName = localStorage.getItem(`stackName_${buildId}`)
     
     if (storedDeploymentState) {
+      console.log("Loaded deployment state:", storedDeploymentState);
       setDeploymentState(storedDeploymentState)
+    } else {
+      console.log("No stored deployment state, defaulting to 'never'");
     }
     
     if (storedSnapshot) {
       setLastDeployedSnapshot(storedSnapshot)
     }
 
-    if (storedBuildId) {
-      // Parse as integer since backend expects integer
-      const buildIdNum = parseInt(storedBuildId, 10)
-      if (!isNaN(buildIdNum)) {
-        setBuildId(buildIdNum)
-      }
-    }
+    // buildId is now from URL params, not localStorage
     
     if (storedStackName) {
       setStackName(storedStackName)
     }
 
-  },[])
+  },[buildId])
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }, []);
@@ -201,6 +208,7 @@ const detectCanvasChanges = () => {
 const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackName) => {
   console.log("=== handleDeploymentSuccess CALLED ===")
   console.log("Deployment successful - saving snapshot")
+  console.log("Build ID from URL:", buildId)
   console.log("Build ID from response:", responseBuildId, typeof responseBuildId)
   console.log("Stack Name from response:", responseStackName, typeof responseStackName)
   console.log("deployedData keys:", Object.keys(deployedData))
@@ -209,30 +217,29 @@ const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackNam
   setLastDeployedSnapshot(snapshot)
   setDeploymentState('deployed')
   
-  // Store build_id if provided (ensure it's a number)
-  if (responseBuildId !== null && responseBuildId !== undefined) {
-    const buildIdNum = typeof responseBuildId === 'string' ? parseInt(responseBuildId, 10) : responseBuildId
-    console.log("Setting build_id state to:", buildIdNum)
-    setBuildId(buildIdNum)
-    localStorage.setItem('buildId', String(buildIdNum))
-    console.log("build_id saved to state and localStorage:", localStorage.getItem('buildId'))
-  } else {
-    console.warn("⚠️ responseBuildId is null or undefined - cannot store build_id")
+  // buildId is now from URL params, not response
+  // Just verify they match
+  if (responseBuildId && responseBuildId !== buildId) {
+    console.warn(`⚠️ Build ID mismatch! URL: ${buildId}, Response: ${responseBuildId}`)
   }
   
   // Store stack_name if provided
   if (responseStackName) {
     console.log("Setting stack_name state to:", responseStackName)
     setStackName(responseStackName)
-    localStorage.setItem('stackName', responseStackName)
-    console.log("stack_name saved to state and localStorage:", localStorage.getItem('stackName'))
+    // Use build-specific localStorage key
+    localStorage.setItem(`stackName_${buildId}`, responseStackName)
+    console.log("stack_name saved to state and localStorage:", localStorage.getItem(`stackName_${buildId}`))
   } else {
     console.warn("⚠️ responseStackName is null or undefined - cannot store stack_name")
   }
   
   // Also save to localStorage for persistence across page reloads
-  localStorage.setItem('lastDeployedSnapshot', snapshot)
-  localStorage.setItem('deploymentState', 'deployed')
+  // USE BUILD-SPECIFIC KEYS
+  localStorage.setItem(`lastDeployedSnapshot_${buildId}`, snapshot)
+  localStorage.setItem(`deploymentState_${buildId}`, 'deployed')
+  
+  console.log(`✅ Deployment state saved for build ${buildId}`)
 }
 
 // Clear entire canvas and reset state
@@ -249,18 +256,18 @@ const handleClearCanvas = () => {
     // Clear deployment state
     setDeploymentState('never')
     setLastDeployedSnapshot(null)
-    setBuildId(null)
+    // buildId comes from URL, don't clear it
     setStackName(null)
     
-    // Clear localStorage
-    localStorage.removeItem('nodes')
-    localStorage.removeItem('edges')
-    localStorage.removeItem('deploymentState')
-    localStorage.removeItem('lastDeployedSnapshot')
-    localStorage.removeItem('buildId')
-    localStorage.removeItem('stackName')
+    // Clear localStorage - USE BUILD-SPECIFIC KEYS
+    localStorage.removeItem(`nodes_${buildId}`)
+    localStorage.removeItem(`edges_${buildId}`)
+    localStorage.removeItem(`deploymentState_${buildId}`)
+    localStorage.removeItem(`lastDeployedSnapshot_${buildId}`)
+    // Don't remove buildId - it's from URL
+    localStorage.removeItem(`stackName_${buildId}`)
     
-    console.log("Canvas cleared successfully")
+    console.log(`Canvas cleared successfully for build ${buildId}`)
   }
 }
 

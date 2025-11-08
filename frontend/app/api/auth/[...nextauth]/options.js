@@ -8,14 +8,23 @@ const clientId = process.env.GITHUB_ID;
 const clientSecret = process.env.GITHUB_SECRET;
 const databaseUrl = process.env.DATABASE_URL;
 
-const date = new Date();
-
-const pool = await new Pool({
+const pool = new Pool({
     connectionString: databaseUrl,
     ssl: {
         rejectUnauthorized: false
     }
 });
+
+// Test database connection on startup
+pool.connect()
+    .then(client => {
+        console.log("✅ Database connection successful");
+        client.release();
+    })
+    .catch(err => {
+        console.error("❌ Database connection failed:", err.message);
+        console.error("Connection string format: postgresql://user:password@host:port/database");
+    });
 
 if(!clientId || !clientSecret) {    
 
@@ -29,17 +38,6 @@ providers: [
     GithubProvider({ 
     clientId,
     clientSecret,
-    authorization: { 
-
-      params: { 
-
-
-        scope: "public_repo repo:status write:repo_hook user:email read:user"
-      
-      
-      }
-
-    }
  })],
  session: { 
     strategy: "jwt",
@@ -57,10 +55,7 @@ if(profile) {
     token.name = profile.name;
     token.email = profile.email;
     token.image = profile.avatar_url;
-    token.repos_url = profile.repos_url;
 }
-
-console.log("profile in jwt",profile)
 
  return token;
 
@@ -76,56 +71,53 @@ session.user.image = token.image;
 session.accessToken = token.accessToken;
 
 
-try { 
-
-  await pool.query(`INSERT INTO account (id, user_id, token, github_login, github_access_token, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6) 
-      ON CONFLICT (id) DO UPDATE
-      SET token = $3, github_login=$4, github_access_token = $5`,
-
-     [token.id, token.id, token, token.login, token.accessToken, date]);
-
-     console.log("account updated with separate access token")
-
-
-}catch(err) { 
-
-  console.log("error inserting/updating account",err)
-}
-
-
-
-
 
  return session;
 }
  },events: {
 
 
-async signIn({ user,account,profile }) { 
+async signIn({ user, account, profile }) { 
+    console.log("=== SIGN IN EVENT ===");
     console.log("User signed in", user);
     console.log("Account", account);
     console.log("Profile", profile);
 
-    console.log("profile login",profile?.login)
-
-    const username = profile?.login || user.name
+    // Note: In signIn event, profile is minimal. Get username from user object instead
+    // The username will be stored in the JWT from the profile in the jwt callback
+    const username = user.name || user.email?.split('@')[0];
+    
+    // Convert user.id to integer (GitHub IDs are strings but database expects integer)
+    const userId = parseInt(user.id, 10);
+    
+    console.log("Using username:", username);
+    console.log("Attempting to insert user into database...");
+    console.log("User ID:", userId, "Type:", typeof userId);
 
   try { 
-
-    await pool.query(`INSERT INTO users (id, name, username ,email)
+    const result = await pool.query(`INSERT INTO users (id, name, username, email)
         VALUES ($1, $2, $3, $4) 
-        ON CONFLICT (id) DO NOTHING`,
+        ON CONFLICT (id) DO NOTHING
+        RETURNING *`,
+       [userId, user.name, username, user.email]);
 
-       [user.id, user.name, username, user.email]);
-
+    if (result.rowCount > 0) {
+      console.log("✅ User successfully inserted into database:", result.rows[0]);
+    } else {
+      console.log("ℹ️ User already exists in database (ON CONFLICT triggered)");
+    }
 
   }catch(err) { 
 
-    console.error("something went wrong",err)
+    console.error("❌ Database error during signIn:");
+    console.error("Error message:", err.message);
+    console.error("Error code:", err.code);
+    console.error("Error detail:", err.detail);
+    console.error("Full error:", err);
+    // Don't block sign-in even if database fails
   }
-
-
+  
+  return true; // Allow sign-in to proceed
 }
 
 

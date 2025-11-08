@@ -20,12 +20,18 @@ const get_builds = async () => {
 
     console.log("backend response",response)
 
-
-    setProjects(response.data)  
+    // Backend now returns { builds: [...] } instead of array directly
+    if (response.data && Array.isArray(response.data.builds)) {
+      setProjects(response.data.builds)
+    } else {
+      console.warn("Unexpected response format:", response.data)
+      setProjects([])
+    }
   }catch(err) { 
   
   
     console.log("error",err)
+    setProjects([])
   }
   
 }
@@ -40,16 +46,15 @@ get_builds()
 
   return (
     <>
-      {projects.map((proj) => {
+      {Array.isArray(projects) && projects.map((proj) => {
   const formattedDate = new Date(proj.created_at).toLocaleString("en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   });
 
   return (
-    <Link  href={`/builds/${proj.build_id}/canvas`}>
+    <Link  href={`/builds/${proj.id}/canvas`} key={proj.id}>
     <WorkflowCard
-      key={proj.id}
       title={proj.project_name || "Untitled"}
       description={proj.description}
       status={proj.status || "inactive"}
