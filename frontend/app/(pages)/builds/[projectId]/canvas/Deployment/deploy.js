@@ -9,11 +9,14 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
   const [status, setStatus] = useState(false)
   const [live, setLive] = useState(true)
 
+  buildId = "123abc"
+
   // deploymentState can be: 'never' | 'deployed' | 'needs-update'
   const isDeployed = deploymentState === 'deployed'
   const needsUpdate = deploymentState === 'needs-update'
 
   const handleDeploy = async () => {
+
     // Get the React Flow JSON with node data from parent
     const reactJson = deployClicked()
     
