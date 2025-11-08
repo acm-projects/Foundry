@@ -1,4 +1,3 @@
-
 import {Panel} from '@xyflow/react'
 import { Settings } from 'lucide-react'
 import { useForm, Controller } from "react-hook-form"
@@ -6,7 +5,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { useReactFlow } from "@xyflow/react"
-import React from 'react'
+
 const schema = z.object({
   tableName: z.string().min(3, "Minimum 3 characters").max(255, "Maximum 255 characters"),
   partitionKey: z.string().min(1, "Required"),
@@ -50,26 +49,35 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
         sortKeyType: values.sortKey ? values.sortKeyType : "S"
       }
 
-    console.log("DynamoDB Config:", payload);
-
-    // Update node data in React Flow
-    setNodes((nodes) =>
-      nodes.map((node) =>
+      // Force React Flow to re-render by creating a completely new node object
+      setNodes((nodes) => {
+        const updatedNodes = nodes.map((node) => {
+          if (node.id === id) {
+            // Create completely new node object to force React Flow re-render
+            const updatedNode = { 
+              id: node.id,
+              type: node.type,
+              position: { ...node.position },
+              data: { ...payload },  // Fresh data object
+              // Don't copy over measured, selected, etc. - let React Flow recalculate
+            }
+            return updatedNode
+          }
+          return node
+        })
         
-        node.id === id ? ({ ...node, data: { ...node.data, ...payload }  }): node
-        
-      )
-    );
+        return updatedNodes
+      });
 
- 
-    onClose();
-  }
-
-    catch (error) { 
-
-      console.log("error",error)
+      // Use setTimeout to ensure state update completes before closing
+      setTimeout(() => {
+        onClose();
+      }, 100);
+    } catch (error) {
+      console.error("ERROR in DynamoDB submit:", error)
+      alert(`Error saving DynamoDB config: ${error.message}`)
     }
-
+  }
  
     return (
 
@@ -219,4 +227,4 @@ export default function DynamoDB_menu({id,onClose,onDelete}) {
 </Panel>
 
     )
-}}
+}
