@@ -34,17 +34,14 @@ const DnDFlow = () => {
   const[dynamo,setDynamo] = useState(false)
 const[configID,setConfigID] = useState(null);
 
-const[configs,setConfigs] = useState({}) //this is for updating config menu fields btw
+const[configs,setConfigs] = useState({}) 
 
-  // Deployment state tracking
-  // 'never' = never deployed
-  // 'deployed' = successfully deployed and no changes since
-  // 'needs-update' = deployed but changes detected
+
   const [deploymentState, setDeploymentState] = useState('never')
   const [lastDeployedSnapshot, setLastDeployedSnapshot] = useState(null)
-  // Get buildId from URL params - this is the single source of truth
+
   const buildId = params.projectId ? parseInt(params.projectId, 10) : null
-  const [stackName, setStackName] = useState(null) // Track the stack_name from deployment
+  const [stackName, setStackName] = useState(null)
 
 const onNodeClick = useCallback((event, node) => {
   
@@ -81,56 +78,50 @@ const onNodeClick = useCallback((event, node) => {
  }, 
   []);
 
-  useEffect(() => { 
 
-    if(nodes.length === 0 && edges.length === 0) return; 
+useEffect(() => {
+  if (!buildId) return;
 
-   //store nodes and edges in db
+  const savedNodes = localStorage.getItem(`nodes_${buildId}`);
+  const savedEdges = localStorage.getItem(`edges_${buildId}`);
+  const storedDeploymentState = localStorage.getItem(`deploymentState_${buildId}`);
+  const storedSnapshot = localStorage.getItem(`lastDeployedSnapshot_${buildId}`);
+  const storedStackName = localStorage.getItem(`stackName_${buildId}`);
 
-    // Check if canvas has changed since last deployment
-    if (deploymentState === 'deployed' && lastDeployedSnapshot) {
-      const hasChanges = detectCanvasChanges()
-      if (hasChanges) {
-        setDeploymentState('needs-update')
-      }
+  if (savedNodes) {
+    setNodes(JSON.parse(savedNodes));
+  }
+
+  if (savedEdges) {
+    setEdges(JSON.parse(savedEdges));
+  }
+
+  if (storedDeploymentState) {
+    setDeploymentState(storedDeploymentState);
+  }
+
+  if (storedSnapshot) {
+    setLastDeployedSnapshot(storedSnapshot);
+  }
+
+  if (storedStackName) {
+    setStackName(storedStackName);
+  }
+}, [buildId]);
+
+useEffect(() => {
+  if (nodes.length === 0 && edges.length === 0) return;
+
+  localStorage.setItem(`nodes_${buildId}`, JSON.stringify(nodes));
+  localStorage.setItem(`edges_${buildId}`, JSON.stringify(edges));
+
+  if (deploymentState === 'deployed' && lastDeployedSnapshot) {
+    const hasChanges = detectCanvasChanges();
+    if (hasChanges) {
+      setDeploymentState('needs-update');
     }
-
-  },[nodes, edges, deploymentState, lastDeployedSnapshot])
-
-  useEffect(() => { 
-
-    //logic to get existing canvas from backend
-
-    if (!buildId) {
-      console.warn("No buildId available, skipping localStorage load");
-      return;
-    }
-
-    console.log("Loading deployment state for build:", buildId);
-
-    // Load deployment state - USE BUILD-SPECIFIC KEYS
-    const storedDeploymentState = localStorage.getItem(`deploymentState_${buildId}`)
-    const storedSnapshot = localStorage.getItem(`lastDeployedSnapshot_${buildId}`)
-    const storedStackName = localStorage.getItem(`stackName_${buildId}`)
-    
-    if (storedDeploymentState) {
-      console.log("Loaded deployment state:", storedDeploymentState);
-      setDeploymentState(storedDeploymentState)
-    } else {
-      console.log("No stored deployment state, defaulting to 'never'");
-    }
-    
-    if (storedSnapshot) {
-      setLastDeployedSnapshot(storedSnapshot)
-    }
-
-    // buildId is now from URL params, not localStorage
-    
-    if (storedStackName) {
-      setStackName(storedStackName)
-    }
-
-  },[buildId])
+  }
+}, [nodes, edges, deploymentState, lastDeployedSnapshot, buildId]);
 
   const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; }, []);
@@ -175,7 +166,6 @@ const deleteNode = (id) => {
   setNodes((nds) => nds.filter((n) => n.id !== id));
 };
 
-// Function to create a snapshot of current canvas state for comparison
 const createCanvasSnapshot = (reactJson) => {
   return JSON.stringify({
     nodes: reactJson.nodes.map(n => ({
@@ -192,7 +182,6 @@ const createCanvasSnapshot = (reactJson) => {
   })
 }
 
-// Function to detect if canvas has changed since last deployment
 const detectCanvasChanges = () => {
   if (!lastDeployedSnapshot) return false
   
@@ -204,7 +193,6 @@ const detectCanvasChanges = () => {
   return currentSnapshot !== lastDeployedSnapshot
 }
 
-// Called when deployment succeeds
 const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackName) => {
  
   console.log("Deployment successful - saving snapshot")
@@ -217,73 +205,49 @@ const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackNam
   setLastDeployedSnapshot(snapshot)
   setDeploymentState('deployed')
   
-  // buildId is now from URL params, not response
-  // Just verify they match
   if (responseBuildId && responseBuildId !== buildId) {
     console.warn(`Build ID mismatch! URL: ${buildId}, Response: ${responseBuildId}`)
   }
   
-  // Store stack_name if provided
   if (responseStackName) {
     console.log("Setting stack_name state to:", responseStackName)
     setStackName(responseStackName)
-    // Use build-specific localStorage key
     localStorage.setItem(`stackName_${buildId}`, responseStackName)
     console.log("stack_name saved to state and localStorage:", localStorage.getItem(`stackName_${buildId}`))
   } else {
     console.warn("⚠️ responseStackName is null or undefined - cannot store stack_name")
   }
   
-  // Also save to localStorage for persistence across page reloads
-  // USE BUILD-SPECIFIC KEYS
   localStorage.setItem(`lastDeployedSnapshot_${buildId}`, snapshot)
   localStorage.setItem(`deploymentState_${buildId}`, 'deployed')
 
-  //going to save deployment state to db
-  
   console.log(`Deployment state saved for build ${buildId}`)
 }
 
-// Clear entire canvas and reset state
 const handleClearCanvas = () => {
-  const confirmClear = window.confirm(
-    " Clear Canvas?\n\nThis will:\n• Remove all nodes and edges\n• Reset deployment state\n• Clear localStorage\n\nThis action cannot be undone."
-  )
-  
+  const confirmClear = typeof window === "undefined" ? true : window.confirm("Clear canvas?")
   if (confirmClear) {
-    // Clear React Flow state
     setNodes([])
     setEdges([])
-    
-    // Clear deployment state
     setDeploymentState('never')
     setLastDeployedSnapshot(null)
-    // buildId comes from URL, don't clear it
     setStackName(null)
-    
-    // Clear localStorage - USE BUILD-SPECIFIC KEYS
     localStorage.removeItem(`nodes_${buildId}`)
     localStorage.removeItem(`edges_${buildId}`)
     localStorage.removeItem(`deploymentState_${buildId}`)
     localStorage.removeItem(`lastDeployedSnapshot_${buildId}`)
-    // Don't remove buildId - it's from URL
     localStorage.removeItem(`stackName_${buildId}`)
-    
     console.log(`Canvas cleared successfully for build ${buildId}`)
   }
 }
 
 const deployClicked = () => {
-  console.log("=== DEPLOY CLICKED - DEBUG INFO ===")
+
   
   const rawNodes = getNodes()
   const rawEdges = getEdges()
   const rawViewport = getViewport()
   
-  console.log("Raw nodes from React Flow:", rawNodes)
-  console.log("Raw edges from React Flow:", rawEdges)
-  console.log("Number of nodes:", rawNodes.length)
-  console.log("Number of edges:", rawEdges.length)
   
   const reactJSON = {
     nodes: rawNodes,
@@ -291,19 +255,16 @@ const deployClicked = () => {
     viewport: rawViewport,
   }
   
-  // Clean up nodes - remove React Flow internal fields and old imageID
   reactJSON.nodes = reactJSON.nodes.map(node => {
     console.log(`Processing node: ${node.id}, type: ${node.type}`, node.data)
     
     const cleanData = { ...node.data }
     
-    // Remove old imageID field if exists (keep only imageId)
     if (cleanData.imageID) {
       console.log(`  Removing old imageID from node ${node.id}`)
       delete cleanData.imageID
     }
     
-    // Remove React Flow internal fields
     const { measured, selected, dragging, ...cleanNode } = node
     
     return {
@@ -312,7 +273,6 @@ const deployClicked = () => {
     }
   })
   
-  // Clean up edges - remove React Flow styling/animation
   reactJSON.edges = reactJSON.edges.map(edge => {
     const { animated, style, ...cleanEdge } = edge
     return cleanEdge
@@ -325,13 +285,6 @@ const deployClicked = () => {
   
   return reactJSON
 }
-
-
-
- //logic to get existing canvas from backend
-
-
-
 
   return (
 
@@ -429,5 +382,6 @@ export default function CanvasPage() {
     </ReactFlowProvider>
   );
 }
+
 
 

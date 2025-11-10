@@ -11,66 +11,42 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import CircleLoader from "./Bars/load_bar";
 
-
-
-
 export default function EC2PanelForm({ id, onClose, onDelete,label}) {
 
-
 const storageKey = `${id}`;
-
 const token = useSession()
-
 const [repos,setRepos] = useState([])
-
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 const { data: session, status } = useSession(); 
-
 const buildId = usePathname().split("/")[2];
-
-console.log("buildingId,",buildId)
+const savedKey = `ec2_saved_${id}`
+const [saved,setSaved] = useState(() => typeof window !== "undefined" && localStorage.getItem(savedKey) === "1")
 
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
   instanceType: z.string().min(1, "Select an instance type"),
   imageId: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
-  repos: z.string().min(1, "Select a repository")
-
+  repos: z.string().optional().default("")
 });
+
 useEffect(() => { 
   const getRepos = async () => { 
-
     if (status === "loading" || !session || !session.user?.login) {
-      console.log("[EC2_CONFIG] Repo fetch skipped: Session not ready.");
       setRepos([]);
       return;
     }
-    
     const githubLogin = session.user.login;
-    console.log(`[EC2_CONFIG] Fetching repos for user: ${githubLogin}`);
-
-
     try { 
       const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${githubLogin}`}});
-
       setRepos(response.data)
-
     }catch(err) { 
-      console.error("[EC2_CONFIG] Error getting repos", err.message);
       setRepos([]);
     }
   }
   getRepos()
     },[session, status]) 
 
-
-    
-
-
-
 const {setNodes,getNode} = useReactFlow();
-
-// Get existing node data if available
 const existingNode = getNode(id);
 const existingData = existingNode?.data || {};
 
@@ -79,98 +55,66 @@ const defaultValues =  {
   instanceType: existingData.instanceType || "t3.micro",
   imageId: existingData.imageId || "Ubuntu",
   repos: ""
-
 };
 
 const {register, handleSubmit,control,formState: { errors },} = useForm({resolver: zodResolver(schema),defaultValues, mode: "onSubmit",});
-//handleSubmit is the validation function, the real submit function is the one below 
 const submit = (values) => {
-  // Extract the type from the node ID (e.g., "EC2:abc123" -> "EC2")
   const label = id.split(':')[0]
   const payload = {
     label: label,
     name: values.name,
     instanceType: values.instanceType,
     imageId: values.imageId
-    
   }
-  
-  console.log("EC2 Config:", payload);
-
-  // Update node data in React Flow
   setNodes((nodes) =>
     nodes.map((node) =>
       node.id === id ? { ...node, data: { ...node.data, ...payload } } : node
     )
   );
-
   const githubLogin = session?.user?.login; 
-  
   if (!githubLogin) {
-    console.error("User not logged in or GitHub login not available. Cannot proceed with webhook setup.");
     return; 
   }
-  
-
   const repoIdentifier = values.repos; 
-  const parts = repoIdentifier.split('/');
+  const parts = (repoIdentifier || "").split('/');
   const repoName = parts[0]; 
   const owner = parts[1]; 
 
-
   const sendWebhookRequest = async () => { 
     try { 
-      console.log(`[EC2_CONFIG] Setting up webhook for ${owner}/${repoName}...`);
-      
-      const response = await axios.post('https://overslack-stonily-allegra.ngrok-free.dev/github/add_webhook', {
+      await axios.post('https://overslack-stonily-allegra.ngrok-free.dev/github/add_webhook', {
         owner: owner,
         repo: repoName 
       });
-      console.log("[EC2_CONFIG] Webhook Creation Response:", response.data);
-      
     }
     catch(err) { 
-      console.error("[EC2_CONFIG] Error creating webhook or connecting to API:", err.message);
     }
   };
   
   const sendBuildsRequest = async () => {
       try { 
-         
-          const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{
+          await axios.post('http://127.0.0.1:8000/canvas/builds',{
               repo: repoIdentifier, 
               tag: buildId
           });
-          console.log("Builds API response:", response.data);
       }
       catch(err) { 
-          console.error("err", err.message);
       }
   };
 
-
   const handleSubmission = async () => {
-      // webhook setup first (if a repo is selected)
       if (repoIdentifier) {
           await sendWebhookRequest(); 
       }
-      
- 
       await sendBuildsRequest(); 
     }
-
- 
     handleSubmission();
-
+  if (!saved) {
+    setSaved(true)
+    if (typeof window !== "undefined") localStorage.setItem(savedKey,"1")
+  }
   onClose();
-
 };
-
-
-
-console.log("repositories",repos)
-
-
 
 return (
 <Panel
@@ -216,7 +160,8 @@ control={control}
 name="repos"
 render={({ field }) => (
   <Select value={field.value} onValueChange={field.onChange}>
-    <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+   <SelectTrigger disabled={!saved} className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+
       <SelectValue placeholder="Select repository" />
     </SelectTrigger>
     <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
@@ -227,11 +172,6 @@ render={({ field }) => (
   </Select>
 )}
 />
-
-
-
-
-
 
 <div>
   <label className="font-medium text-gray-800">Image ID <span className="text-red-500">*</span></label>
@@ -276,9 +216,6 @@ render={({ field }) => (
   {errors.instanceType && <p className="text-red-600 text-[10px] mt-1">{errors.instanceType.message}</p>}
 </div>
 
-
-
-
 </form>
 </div>
 
@@ -295,7 +232,7 @@ Delete
 
 <div className="flex items-center gap-2">
 <button onClick={onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
-<button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+<button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">{saved ? "Upload repositories" : "Save"}</button>
 </div>
 </div>
 </aside>
