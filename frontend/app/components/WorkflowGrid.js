@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function WorkflowGrid() {
 
   const data = useSession()
-  const[projects,setProjects] = useState([])
+  const[projects,setProjects] = useState([]);
 
 
 useEffect(() => {
@@ -16,18 +16,18 @@ useEffect(() => {
 const get_builds = async () => { 
   try { 
     const response = await axios.get(`http://localhost:8000/builds`,{params: {id: data.data?.user?.id}});
+    const data = await response.json();
 
-
-    console.log("backend response",response)
-
-
-    setProjects(response.data)  
-  }catch(err) { 
-  
-  
-    console.log("error",err)
+    if (Array.isArray(projects)) {
+      setProjects(data);
+    } else {
+      console.error("Expected an array but got:", data);
+        setProjects([]); 
+    }
+  } catch(error) { 
+    console.log("error",error)
+    setProjects([]);
   }
-  
 }
 
 

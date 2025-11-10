@@ -31,12 +31,26 @@ const [isEditing, setIsEditing] = useState(false)
     { name: "Settings", icon: Settings, href: `/builds/${projectId}/settings`, },
   ];
 
+  const handleSave = () => {
+    console.log("Saving input value:", inputValue);
+    setIsEditing(false); 
+    // Add logic to save the input value (e.g., API call)
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSave(); // Save when Enter is pressed
+    } else if (e.key === "Escape") {
+      setIsEditing(false); // Exit editing mode without saving
+    }
+  };
+  
   // --- Title Rendering Logic ---
   const TitleComponent = isEditing ? (
     // Render Input field when editing
     <input
       type="text"
-      className="text-2xl font-bold p-1 border-b-2 border-orange-500 bg-transparent outline-none text-gray-700 w-full min-w-[100px] max-w-[240px]"
+      className="text-2xl font-bold p-1 border-b-2 border-orange-500 bg-transparent outline-none text-gray-700 w-full min-w-[120px] max-w-[200px]"
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
       onBlur={handleSave} // Save when focus is lost
@@ -51,7 +65,7 @@ const [isEditing, setIsEditing] = useState(false)
       onClick={() => setIsEditing(true)}
       title="Click to rename"
     >
-      {projectName.length === 0 ? "untitled" : projectName}
+      {inputValue} {/* Use inputValue as the title */}
     </h1>
   );
   // -----------------------------

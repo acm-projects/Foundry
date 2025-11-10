@@ -23,14 +23,14 @@ setInvitations((prev) => prev.filter((invite) => invite.id !== id));
 
 return (
 <div className="relative" ref={boxRef}>
-<button
+<div
 onClick={() => setOpen((v) => !v)}
 className="flex items-center gap-2 px-3 py-1 rounded-xl cursor-pointer"
 aria-haspopup="true"
 aria-expanded={open}
 >
 <Inbox className="h-7 w-7" />
-</button>
+</div>
 
 {open && (
 <div className="absolute -right-10 top-full mt-2 z-50 w-80 max-w-[90vw] rounded-xl border border-gray-200 bg-gray-100 shadow-lg">

@@ -2,11 +2,12 @@
 import AppNavbar from "./Navbar/WorkflowNavbar";
 import React from 'react';
 import { usePathname } from "next/navigation";
+import { use } from "react";
 import {useState} from 'react'
 import Live from "./canvas/Deployment/live";
 
 export default function BuildsLayout({ children, params }){
-  const { projectId } = params;
+  const { projectId } = use(params);
 
   const path = usePathname();
 
