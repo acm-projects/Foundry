@@ -8,7 +8,7 @@ import { useReactFlow } from "@xyflow/react";
 import { useEffect,useState } from "react";
 import axios from 'axios'
 import { useSession } from "next-auth/react";
-
+import { usePathname } from "next/navigation";
 import CircleLoader from "./Bars/load_bar";
 
 
@@ -25,6 +25,10 @@ const [repos,setRepos] = useState([])
 
 const nameRegex = /^[a-zA-Z0-9_-]+$/;
 const { data: session, status } = useSession(); 
+
+const buildId = usePathname().split("/")[2];
+
+console.log("buildingId,",buildId)
 
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
@@ -132,15 +136,15 @@ const submit = (values) => {
   
   const sendBuildsRequest = async () => {
       try { 
-          console.log(`[EC2_CONFIG] Triggering build for ${repoIdentifier}...`);
+         
           const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{
               repo: repoIdentifier, 
-              tag: values.name
+              tag: buildId
           });
-          console.log("[EC2_CONFIG] Builds API response:", response.data);
+          console.log("Builds API response:", response.data);
       }
       catch(err) { 
-          console.error("[EC2_CONFIG] Error triggering build:", err.message);
+          console.error("err", err.message);
       }
   };
 
@@ -151,7 +155,7 @@ const submit = (values) => {
           await sendWebhookRequest(); 
       }
       
-      // existing builds api call
+ 
       await sendBuildsRequest(); 
     }
 

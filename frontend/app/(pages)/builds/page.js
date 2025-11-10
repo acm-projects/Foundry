@@ -20,46 +20,27 @@ const newBuild = async () => {
 
 
   try { 
-    console.log("=== CREATING NEW BUILD ===");
-    console.log("User ID:", data.data?.user?.id);
-    console.log("Request URL: http://localhost:8000/builds/new");
     
     const response = await axios.get(`http://localhost:8000/builds/new`,{params: {id: data.data?.user?.id}});
   
-    console.log("New build response status:", response.status);
-    console.log("New build response data:", response.data);
+    
+ 
 
-    // Backend returns { build_id: <integer> }
     const buildId = response.data?.build_id
 
     if(response.status == 200 && buildId){ 
-      console.log("✅ Build created successfully! ID:", buildId)
+ 
       window.location.href = `/builds/${buildId}/canvas`
     } else {
-      console.error("❌ No build_id in response:", response.data)
+      
       alert("Failed to create new build: No build ID returned")
     }
 
 
   }catch(err) { 
-    console.error("❌ Error creating build:");
-    console.error("Error message:", err.message);
-    console.error("Error response:", err.response);
-    console.error("Response status:", err.response?.status);
-    console.error("Response data:", err.response?.data);
+ 
     console.error("Full error:", err);
     
-    let errorMessage = "Failed to create new build: ";
-    
-    if (err.response?.status === 404) {
-      errorMessage += "Backend endpoint not found. Is the backend server running on port 8000?";
-    } else if (err.response?.data?.detail) {
-      errorMessage += err.response.data.detail;
-    } else {
-      errorMessage += err.message;
-    }
-    
-    alert(errorMessage);
   }
   
   

@@ -13,7 +13,7 @@ export default function UserProfile() {
 
 console.log(data)
 
-  console.log("username",data.data?.user?.login)
+
   return (
     <div>
       <div

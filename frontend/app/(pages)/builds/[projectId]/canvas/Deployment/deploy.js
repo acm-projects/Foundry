@@ -62,13 +62,7 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       console.log("owner_id:", owner_id, typeof owner_id)
       console.log("stackName:", stackName, typeof stackName)
       
-      // NEW PAYLOAD FORMAT per backend spec:
-      // {
-      //   "buildId": <integer>,
-      //   "canvas": { nodes, edges, viewport },
-      //   "owner_id": <integer>,
-      //   "region": "us-east-1"
-      // }
+      
       const requestBody = needsUpdate 
         ? { canvas: reactJson, build_id: buildId, stack_name: stackName, auto_execute: true }
         : { 
@@ -88,8 +82,6 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       setLive(true)
       alert(`${needsUpdate ? 'Update' : 'Deployment'} successful!`)
       
-      // Backend response format:
-      // { success: true, stackName: "foundry-stack-26", stackId: "...", status: "...", buildId: 26 }
       const responseBuildId = response.data.buildId
       const responseStackName = response.data.stackName
       console.log("Extracted responseBuildId:", responseBuildId, typeof responseBuildId)
@@ -101,7 +93,7 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       }
       
       if (!responseStackName && !needsUpdate) {
-        console.warn("⚠️ WARNING: Backend did not return stackName! This will prevent updates from working.")
+        console.warn(" WARNING: Backend did not return stackName! This will prevent updates from working.")
         alert("Warning: Deployment succeeded but no stackName was returned. Updates may not work.")
       }
       

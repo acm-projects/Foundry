@@ -12,36 +12,38 @@ export default function WorkflowGrid() {
 
 
 useEffect(() => {
-  
-const get_builds = async () => { 
-  try { 
-    const response = await axios.get(`http://localhost:8000/builds`,{params: {id: data.data?.user?.id}});
+const get_builds = async () => {
+  try {
 
+    const response = await axios.get(`http://localhost:8000/builds`, {
+      params: { id: data.data?.user?.id }
+    })
 
-    console.log("backend response",response)
+    const invites = await axios.get(`http://localhost:8000/builds/invitations/`, {
+      params: { id: data.data?.user?.id }
+    })
 
-    // Backend now returns { builds: [...] } instead of array directly
-    if (response.data && Array.isArray(response.data.builds)) {
-      setProjects(response.data.builds)
-    } else {
-      console.warn("Unexpected response format:", response.data)
-      setProjects([])
-    }
-  }catch(err) { 
-  
-  
-    console.log("error",err)
-    setProjects([])
+    const own = response?.data?.builds
+    const invitedRaw = invites?.data
+    const acceptedOnly = invitedRaw.filter(b => b?.invite_status === true)
+
+    const normalizedAccepted = acceptedOnly.map(b => ({
+      id: b?.id,
+      project_name: b?.project_name,
+      description: b?.description,
+      created_at: b?.created_at,
+    }))
+
+    
+    setProjects([...own, ...normalizedAccepted])
+  } catch (err) {
+    console.log("error", err)
   }
-  
 }
 
-
 get_builds()
+}, [data?.data?.user?.id])
 
-
-
-},[data])
 
 
   return (
@@ -69,3 +71,4 @@ get_builds()
 
   );
 }
+

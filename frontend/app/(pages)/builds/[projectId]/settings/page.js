@@ -37,27 +37,28 @@ export default function SettingsPage({ params }) {
 
   const id = data.data?.user?.id
 
-  const invites = (id) => { 
+  const invites = async (id) => { 
    
     setInviteId(id)
+
+
   }
-
-
-
-
- 
 
   const handleSave = async () => {
     
 
 try { 
-  setProjectName(title)
+  
+
+console.log("team members,",teamMembers)
 
 
   const response = await axios.post(`http://localhost:8000/canvas/invite`,{invite_id: invite_id, build_id: build_id, project_name: title, description: description,
    
     owner_id: id
   },);
+
+  console.log("invitation,",invite_id)
 
 
   alert("Settings saved! Check console for values");

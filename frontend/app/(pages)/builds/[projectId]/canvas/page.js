@@ -206,7 +206,7 @@ const detectCanvasChanges = () => {
 
 // Called when deployment succeeds
 const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackName) => {
-  console.log("=== handleDeploymentSuccess CALLED ===")
+ 
   console.log("Deployment successful - saving snapshot")
   console.log("Build ID from URL:", buildId)
   console.log("Build ID from response:", responseBuildId, typeof responseBuildId)
@@ -220,7 +220,7 @@ const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackNam
   // buildId is now from URL params, not response
   // Just verify they match
   if (responseBuildId && responseBuildId !== buildId) {
-    console.warn(`⚠️ Build ID mismatch! URL: ${buildId}, Response: ${responseBuildId}`)
+    console.warn(`Build ID mismatch! URL: ${buildId}, Response: ${responseBuildId}`)
   }
   
   // Store stack_name if provided
@@ -238,14 +238,16 @@ const handleDeploymentSuccess = (deployedData, responseBuildId, responseStackNam
   // USE BUILD-SPECIFIC KEYS
   localStorage.setItem(`lastDeployedSnapshot_${buildId}`, snapshot)
   localStorage.setItem(`deploymentState_${buildId}`, 'deployed')
+
+  //going to save deployment state to db
   
-  console.log(`✅ Deployment state saved for build ${buildId}`)
+  console.log(`Deployment state saved for build ${buildId}`)
 }
 
 // Clear entire canvas and reset state
 const handleClearCanvas = () => {
   const confirmClear = window.confirm(
-    "⚠️ Clear Canvas?\n\nThis will:\n• Remove all nodes and edges\n• Reset deployment state\n• Clear localStorage\n\nThis action cannot be undone."
+    " Clear Canvas?\n\nThis will:\n• Remove all nodes and edges\n• Reset deployment state\n• Clear localStorage\n\nThis action cannot be undone."
   )
   
   if (confirmClear) {

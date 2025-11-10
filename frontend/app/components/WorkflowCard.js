@@ -3,7 +3,7 @@ import { Card , CardHeader, CardTitle, CardDescription, CardContent} from '@/app
 import DeploymentStatus from "@/app/components/DeploymentStatus";
 
 export default function WorkflowCard({title, description, status, created_at}){
-console.log("workflow card props",created_at)
+
   return (
     <div>
       <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 

@@ -18,11 +18,11 @@ const pool = new Pool({
 // Test database connection on startup
 pool.connect()
     .then(client => {
-        console.log("✅ Database connection successful");
+       
         client.release();
     })
     .catch(err => {
-        console.error("❌ Database connection failed:", err.message);
+        console.error(" Database connection failed:", err.message);
         console.error("Connection string format: postgresql://user:password@host:port/database");
     });
 
@@ -78,16 +78,14 @@ session.accessToken = token.accessToken;
 
 
 async signIn({ user, account, profile }) { 
-    console.log("=== SIGN IN EVENT ===");
+
     console.log("User signed in", user);
     console.log("Account", account);
     console.log("Profile", profile);
 
-    // Note: In signIn event, profile is minimal. Get username from user object instead
-    // The username will be stored in the JWT from the profile in the jwt callback
     const username = user.name || user.email?.split('@')[0];
     
-    // Convert user.id to integer (GitHub IDs are strings but database expects integer)
+   
     const userId = parseInt(user.id, 10);
     
     console.log("Using username:", username);
@@ -102,22 +100,18 @@ async signIn({ user, account, profile }) {
        [userId, user.name, username, user.email]);
 
     if (result.rowCount > 0) {
-      console.log("✅ User successfully inserted into database:", result.rows[0]);
+      console.log("User successfully inserted into database:", result.rows[0]);
     } else {
       console.log("ℹ️ User already exists in database (ON CONFLICT triggered)");
     }
 
   }catch(err) { 
 
-    console.error("❌ Database error during signIn:");
-    console.error("Error message:", err.message);
-    console.error("Error code:", err.code);
-    console.error("Error detail:", err.detail);
-    console.error("Full error:", err);
-    // Don't block sign-in even if database fails
+   console.error("error",err)
+   
   }
   
-  return true; // Allow sign-in to proceed
+  return true; 
 }
 
 
