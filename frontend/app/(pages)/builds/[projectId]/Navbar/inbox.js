@@ -94,7 +94,7 @@ return (<div className="relative" ref={boxRef}>
     )}
     </button>
     {open && (
-    <div className="absolute -right-10 top-full mt-2 z-50  w-65 rounded-xl border border-gray-200 bg-gray-100 shadow-lg">
+    <div className="absolute -right-10 top-full mt-2 z-50  w-70 rounded-xl border border-gray-200 bg-gray-100 shadow-lg">
     <ul className="max-h-60 overflow-auto divide-y divide-gray-100">
     {invitations?.filter(invite => invite.invite_status === false).length === 0 && (
       <li className="p-3 text-sm text-gray-500">No invitations</li>
@@ -104,7 +104,7 @@ return (<div className="relative" ref={boxRef}>
       .map((invite) => (
         <li key={invite.id} className="flex items-center justify-between gap-3 p-3">
           <p className="text-sm text-gray-900">
-            <span className="font-medium">{invite.project_name}</span> invited you
+            <span className="font-medium">{invite.project_name || "unknown user"}</span> invited you
           </p>
           <div className="flex items-center gap-2">
             <button className="p-1 rounded hover:bg-gray-200" aria-label="Decline" onClick={() => handleAction(invite.id)}>
