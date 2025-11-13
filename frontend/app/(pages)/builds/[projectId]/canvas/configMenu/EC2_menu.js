@@ -37,14 +37,18 @@ useEffect(() => {
     }
     const githubLogin = session.user.login;
     try { 
-      const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${githubLogin}`}});
-      setRepos(response.data)
-    }catch(err) { 
+      const response = await axios.get("http://127.0.0.1:8000/canvas", {
+        headers: { Authorization: `Bearer ${githubLogin}` },
+      });
+      setRepos(response.data || []); // Ensure repos is an array
+    } catch (err) { 
+      console.error("Error fetching repos:", err);
       setRepos([]);
     }
-  }
-  getRepos()
-    },[session, status]) 
+  };
+  getRepos();
+}, [session, status]);
+
 
 const {setNodes,getNode} = useReactFlow();
 const existingNode = getNode(id);
@@ -167,8 +171,13 @@ render={({ field }) => (
       <SelectValue placeholder="Select repository" />
     </SelectTrigger>
     <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-      {repos?.map((repo) => (
-        <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>{repo.name}</SelectItem>
+      {repos?.map((repo, index) => (
+        <SelectItem
+          key={repo.id || `${repo.name}-${repo.owner}-${index}`} // Ensure a unique key
+          value={`${repo.name}/${repo.owner}`}
+        >
+          {repo.name}
+        </SelectItem>
       ))}
     </SelectContent>
   </Select>
