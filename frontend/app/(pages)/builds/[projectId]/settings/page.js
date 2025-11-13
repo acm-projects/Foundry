@@ -17,13 +17,13 @@ import { usePathname } from "next/navigation";
 
 
 export default function SettingsPage({ params }) {
-  // const [projectName, setProjectName] = useState("My Foundry Workflow");
   const [environment, setEnvironment] = useState("development");
   const [description, setDescription] = useState("This is an AWS deployment made easy by Foundry.");
   const [region, setRegion] = useState("us-east-1");
   const [projectName, setProjectName ] = useState("");
-  const [invite_id,setInviteId] = useState("")
+  const [invite_id,setInviteId] = useState([])
 
+  const[email,setEmail] = useState("")
 
   const pathname = usePathname();
 
@@ -37,37 +37,35 @@ export default function SettingsPage({ params }) {
 
   const id = data.data?.user?.id
 
-  const invites = async (id) => { 
-   
+  const invites = (id) => { 
     setInviteId(id)
-
-
   }
 
-  const handleSave = async () => {
-    
+const invite_email = (email) => { 
 
-try { 
+  setEmail(email)
   
+}
 
-console.log("team members,",teamMembers)
+
+  const handleSave = async () => {
+try { 
+
+
 
 
   const response = await axios.post(`http://localhost:8000/canvas/invite`,{invite_id: invite_id, build_id: build_id, project_name: title, description: description,
-   
-    owner_id: id
+    owner_id: id, invite_email: email
   },);
 
   console.log("invitation,",invite_id)
-
+  console.log("emasil",email)
 
   alert("Settings saved! Check console for values");
 
 } catch(err) { 
-
   console.log("unable to save",err)
 }
-
   };
 
   return (
@@ -103,7 +101,7 @@ console.log("team members,",teamMembers)
 <CardDescription>Invite your team members to collaborate.</CardDescription>
 </CardHeader>
 <CardContent>
-<TeamMemberGrid members={teamMembers} setMembers={setTeamMembers} invite_id = {invites}/>
+<TeamMemberGrid members={teamMembers} setMembers={setTeamMembers} invite_id = {invites} invite_email={invite_email}/>
 </CardContent>
 </Card>
 </div>

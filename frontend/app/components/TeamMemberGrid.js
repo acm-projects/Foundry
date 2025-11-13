@@ -5,10 +5,13 @@ import axios from 'axios'
 import { Search} from "lucide-react";
 import {useSession} from 'next-auth/react'
 import { send } from "process";
+import { usePathname } from "next/navigation";
 
 
-export default function TeamMemberGrid({ members, setMembers,invite_id }) {
+export default function TeamMemberGrid({ members, setMembers,invite_id,invite_email }) {
   const data = useSession()
+  const pathname = usePathname()
+  const build_id = pathname.split("/")[2]
 
   const handleRoleChange = (index, value) => {
     const updated = [...members];
@@ -19,7 +22,31 @@ export default function TeamMemberGrid({ members, setMembers,invite_id }) {
   const[input,setInput] = useState("")
   const[users,setUsers] = useState([])
   
-
+useEffect(() => { 
+const already_sent_invite =  async () => { 
+try { 
+  const get_invitations = await axios.get(`http://localhost:8000/builds/sent_invitations/`,{params: {id: data.data?.user?.id}});
+  const existingInvitesRaw = get_invitations.data || []
+  const existingInvites = existingInvitesRaw
+    .filter(invite => String(invite.build_id) === String(build_id))
+    .map(invite => ({
+      id: invite.invite__id,
+      name: invite.name || "Unknown",
+      email: invite.invite_email,
+      role: "read",
+    }));
+  setMembers(prev => {
+    const seen = new Set(prev.map(m => `${m.id}`));
+    const add = existingInvites.filter(i => !seen.has(`${i.id}`));
+    return [...prev, ...add];
+  });
+}
+catch(err) { 
+  console.log("error:",err)
+}
+}
+already_sent_invite()
+},[data.data?.user?.id, build_id])
 
 useEffect(() => {
 
@@ -28,7 +55,6 @@ useEffect(() => {
     try { 
 
       const response = await axios.get(`http://localhost:8000/canvas/users`);
-
 
       console.log("response",response)
 
@@ -88,9 +114,12 @@ const addMember = () => {
     setMembers(updatedMembers);
     setInput("");
 
-    // send only the IDs of selected members
     const memberIds = updatedMembers.map(m => m.id);
     console.log("member IDs to invite:", memberIds);
+
+    const memberEmails = updatedMembers.map(m => m.email);
+console.log("member Emails to invite:", memberEmails);
+    invite_email(memberEmails);
     invite_id(memberIds);
   } else {
     alert("user not found");
@@ -120,3 +149,4 @@ const addMember = () => {
     </div>
   );
 }
+
