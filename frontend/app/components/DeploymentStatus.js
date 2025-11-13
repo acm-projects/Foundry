@@ -6,7 +6,7 @@ export default function DeploymentStatus({status}){
   let dotColor="";
 
   switch (status) {
-    case "live":
+    case true:
       styles="bg-green-100 text-green-700 border border-green-300";
       dotColor = "bg-green-500";
       label = "Live";

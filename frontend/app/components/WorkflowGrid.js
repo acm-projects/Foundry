@@ -19,6 +19,8 @@ const get_builds = async () => {
       params: { id: data.data?.user?.id }
     })
 
+    console.log("repssss",response)
+
     const invites = await axios.get(`http://localhost:8000/builds/invitations/`, {
       params: { id: data.data?.user?.id }
     })
@@ -45,9 +47,11 @@ get_builds()
 }, [data?.data?.user?.id])
 
 
-
+console.log("projects",projects)
   return (
     <>
+
+    
       {Array.isArray(projects) && projects.map((proj) => {
   const formattedDate = new Date(proj.created_at).toLocaleString("en-US", {
     dateStyle: "medium",

@@ -98,20 +98,13 @@ const submit = (values) => {
       
     // const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildId}`);
 
+      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: repoIdentifier, tag: buildId});
 
-        
-        
-        
-  
-      await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: repoIdentifier, tag: buildId});
+
+      console.log("ip response",response)
     
     
-    // ws.onmessage = (event) => { 
-    //   console.log("WebSocket message received:", event.data);
-    // }   
-        
 
-//left off here
 
 
     

@@ -4,6 +4,7 @@ import DeploymentStatus from "@/app/components/DeploymentStatus";
 
 export default function WorkflowCard({title, description, status, created_at}){
 
+  console.log("status in workflow card",status) 
   return (
     <div>
       <Card className="group flex flex-col justify-between flex-1 min-w-88 max-w-88 flex-grow min-h-60 

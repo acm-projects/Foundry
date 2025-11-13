@@ -13,6 +13,7 @@ import {useSession} from 'next-auth/react'
 
 
 import { usePathname } from "next/navigation";
+import { get } from "http";
 
 
 
@@ -36,6 +37,39 @@ export default function SettingsPage({ params }) {
   const data = useSession()
 
   const id = data.data?.user?.id
+
+useEffect(() => { 
+
+  const getSettings = async () => {  
+
+    try { 
+
+
+
+      const response = await axios.get("http://localhost:8000/canvas/settings",{params: {build_id: build_id}});
+
+      // console.log("settings response",response.data)
+      console.log("settings respon",response.data[0])
+      console.log("settings response",response.data.description)
+      setTitle(response.data[0]?.project_name || "")
+      setDescription(response.data[0]?.description || "")
+
+
+
+   
+
+    }
+    catch(err){
+      console.log("error",err)
+    }
+  }
+
+
+  getSettings()
+
+},[])
+
+
 
   const invites = (id) => { 
     setInviteId(id)

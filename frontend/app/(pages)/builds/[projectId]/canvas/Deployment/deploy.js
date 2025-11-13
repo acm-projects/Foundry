@@ -5,17 +5,35 @@ import api from "@/app/api";
 import Live from "./live";
 import { validateDeployData } from "./formatDeployData";
 import { useSession } from "next-auth/react";
-
+import { usePathname } from "next/navigation";
+import axios from 'axios'
 function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeploymentSuccess }) {
   const [status, setStatus] = useState(false)
   const [live, setLive] = useState(true)
   const session = useSession()
+
+
 
   // deploymentState can be: 'never' | 'deployed' | 'needs-update'
   const isDeployed = deploymentState === 'deployed'
   const needsUpdate = deploymentState === 'needs-update'
 
   const handleDeploy = async () => {
+
+
+  try { 
+
+const response = await axios.post("http://localhost:8000/canvas/deployments",{build_id:buildId}) //this is assuming deployment was sucessful
+
+console.log("response",response)
+  }
+  catch(err){
+    console.log("error",err)
+  }
+
+
+
+
     // Get the React Flow JSON with node data from parent
     const reactJson = deployClicked()
     
