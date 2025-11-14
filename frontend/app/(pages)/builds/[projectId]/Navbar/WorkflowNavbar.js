@@ -21,6 +21,23 @@ const projectName = ""
 const [inputValue, setInputValue] = useState(projectName.length === 0 ? "untitled" : projectName);  
 const [isEditing, setIsEditing] = useState(false)
 
+  // Handle saving the title
+  const handleSave = () => {
+    setIsEditing(false);
+    // TODO: Add logic to save projectName to backend/database
+    console.log("Saved project name:", inputValue);
+  };
+
+  // Handle keyboard events
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSave();
+    } else if (e.key === 'Escape') {
+      setInputValue(projectName.length === 0 ? "untitled" : projectName);
+      setIsEditing(false);
+    }
+  };
+
   const tabs = [
     // ... (tabs array remains the same)
     { name: "Canvas", icon: Monitor, href: `/builds/${projectId}/canvas`, },
