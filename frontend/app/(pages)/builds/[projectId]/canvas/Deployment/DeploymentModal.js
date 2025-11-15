@@ -363,22 +363,29 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
 
                     // Find SSH key for this EC2 instance
                     const isEC2 = resource.type.includes('EC2::Instance');
+                    const isS3 = resource.type.includes('S3::Bucket');
                     
                     const keyPairForResource = keyPairs && isEC2 
                       ? Object.values(keyPairs).find(kp => {
-                          // Match using instanceNodeId from backend
-                          // CloudFormation logicalId is like "EC2EC2UtilePiNQgXxOP8o522Bm"
-                          // Backend instanceNodeId is like "EC2:UtilePiNQgXxOP8o522Bm"
-                          const nodeIdWithoutPrefix = kp.instanceNodeId.replace('EC2:', '');
-                          const matches = resource.logicalId.includes(nodeIdWithoutPrefix);
-                          console.log('🔍 Key matching:', {
-                            resourceId: resource.logicalId,
-                            nodeId: kp.instanceNodeId,
-                            nodeIdStripped: nodeIdWithoutPrefix,
-                            matches,
-                            isComplete: isResourceComplete,
-                            keyPairsExist: !!keyPairs
-                          });
+                          // Try multiple matching strategies since IDs might be encoded differently
+                          // Strategy 1: Direct include (for similar IDs)
+                          const directMatch = resource.logicalId.includes(kp.instanceNodeId.replace('EC2:', ''));
+                          
+                          // Strategy 2: Check if they share significant parts (ignoring underscores and extra chars)
+                          const resourceIdClean = resource.logicalId.replace(/_/g, '').toLowerCase();
+                          const nodeIdClean = kp.instanceNodeId.replace(/[EC2:_]/g, '').toLowerCase();
+                          const partialMatch = resourceIdClean.includes(nodeIdClean) || nodeIdClean.includes(resourceIdClean);
+                          
+                          const matches = directMatch || partialMatch;
+                          
+                          if (matches) {
+                            console.log('✅ KEY MATCH FOUND:', {
+                              resourceId: resource.logicalId,
+                              nodeId: kp.instanceNodeId,
+                              strategy: directMatch ? 'direct' : 'partial'
+                            });
+                          }
+                          
                           return matches;
                         })
                       : null;
@@ -423,20 +430,37 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                         {/* Resource Details */}
                         {isResourceComplete && resource.physicalId && (
                           <div className="mt-2 space-y-1.5 text-xs">
-                            {/* For EC2, only show Resource ID */}
-                            {isEC2 ? (
-                              <div className="flex items-center gap-2">
-                                <span className="text-gray-600 font-medium w-24 flex-shrink-0">Resource ID:</span>
-                                <code className="flex-1 text-gray-900 font-mono bg-gray-100 px-2 py-1 rounded truncate">
-                                  {resource.physicalId}
-                                </code>
-                                <button
-                                  onClick={() => copyToClipboard(resource.physicalId)}
-                                  className="p-1 text-gray-500 hover:text-gray-900 transition-colors"
-                                  title="Copy ID"
-                                >
-                                  <Copy className="w-3.5 h-3.5" />
-                                </button>
+                            {/* For EC2 and S3, only show Resource ID and domain name */}
+                            {isEC2 || isS3 ? (
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-gray-600 font-medium w-24 flex-shrink-0">Resource ID:</span>
+                                  <code className="flex-1 text-gray-900 font-mono bg-gray-100 px-2 py-1 rounded truncate">
+                                    {resource.physicalId}
+                                  </code>
+                                  <button
+                                    onClick={() => copyToClipboard(resource.physicalId)}
+                                    className="p-1 text-gray-500 hover:text-gray-900 transition-colors"
+                                    title="Copy ID"
+                                  >
+                                    <Copy className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                                {isS3 && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-gray-600 font-medium w-24 flex-shrink-0">S3 Link:</span>
+                                    <code className="flex-1 text-gray-900 font-mono bg-gray-100 px-2 py-1 rounded truncate">
+                                      {`${resource.physicalId}.s3.amazonaws.com`}
+                                    </code>
+                                    <button
+                                      onClick={() => copyToClipboard(`${resource.physicalId}.s3.amazonaws.com`)}
+                                      className="p-1 text-gray-500 hover:text-gray-900 transition-colors"
+                                      title="Copy Link"
+                                    >
+                                      <Copy className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             ) : (
                               <>
