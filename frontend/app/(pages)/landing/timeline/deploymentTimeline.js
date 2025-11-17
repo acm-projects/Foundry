@@ -11,6 +11,7 @@ const steps = [
 
 function Connector() {
   return (
+    <div className = "mb-10">
     <svg width="92" height="20" viewBox="0 0 92 20" className="mx-2  text-#b1b1b7 ">
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
@@ -20,6 +21,7 @@ function Connector() {
       </defs>
       <line className="edge" x1="2" y1="10" x2="86" y2="10" markerEnd="url(#arrow)" />
     </svg>
+    </div>
   );
 }
 

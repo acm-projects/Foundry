@@ -48,8 +48,10 @@ return (
 <div className="w-full md:w-1/2 p-6 md:p-8 flex justify-center items-center">
 <div className="flex flex-col items-start space-y-6 sm:space-y-8">
 <div className="fkex flex-col text-orange-600 font-bold pl-6 sm:pl-10 text-4xl sm:text-5xl md:text-6xl">
-  <h1>The visual AWS</h1>
-  <h1>infrastructure builder</h1>
+  <h1>The visual</h1>
+  <h1>AWS</h1>
+  <h1>infrastructure</h1>
+  <h1>builder</h1>
 </div>
 <div className = "pl-6 sm:pl-10">
   <div className = "w-full text-2xl sm:text-4xl md:text-5xl">

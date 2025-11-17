@@ -1,6 +1,6 @@
 import { Panel } from "@xyflow/react";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { set, z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Settings } from "lucide-react";
@@ -22,12 +22,46 @@ const buildId = usePathname().split("/")[2];
 const savedKey = `ec2_saved_${id}`
 const [saved,setSaved] = useState(() => typeof window !== "undefined" && localStorage.getItem(savedKey) === "1")
 
+const [endpoint,setEndpoint] = useState(null)
+
 const schema = z.object({
   name: z.string().min(1, "Required").max(255).regex(nameRegex, "Only letters, numbers, hyphens, and underscores."),
   instanceType: z.string().min(1, "Select an instance type"),
   imageId: z.enum(["Ubuntu", "Amazon Linux", "Windows"], { required_error: "Select an image" }),
   repos: z.string().optional().default("")
 });
+
+
+useEffect(() => { 
+  const foundry = async () => {   
+///hehehhehehehhehehhehehehhehehhehehhehehehhehehhehehehhehehehhehe 
+    try { 
+  
+  
+      const endpoint = await axios.get(`http://127.0.0.1:8000/canvas/endpoint/`,{params: {build_id: buildId}});
+
+
+       
+      
+      console.log("endpoint response",endpoint.data[0].endpoint)
+
+
+      setEndpoint(endpoint.data[0].endpoint)  
+
+
+      
+      
+      }catch(err) { 
+      
+        console.log("salutations friend",err)
+      }
+  }
+  
+  foundry();
+
+
+},[session])
+
 
 useEffect(() => { 
   const getRepos = async () => { 
@@ -39,11 +73,14 @@ useEffect(() => {
     try { 
       const response = await axios.get("http://127.0.0.1:8000/canvas",{headers: {Authorization: `Bearer ${githubLogin}`}});
       setRepos(response.data)
+
     }catch(err) { 
       setRepos([]);
     }
   }
   getRepos()
+
+
     },[session, status]) 
 
 const {setNodes,getNode} = useReactFlow();
@@ -98,13 +135,7 @@ const submit = (values) => {
       
     // const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildId}`);
 
-      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: repoIdentifier, tag: buildId});
-
-
-      console.log("ip response",response)
-    
-    
-
+      const response = await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: repoIdentifier, tag: buildId,endpoint: values.name});
 
 
     
@@ -155,6 +186,12 @@ style={{ top: "50%", right: "10px", transform: "translateY(-50%)" }}
 </div>
 
 <form className="space-y-3" onSubmit={handleSubmit(submit)} noValidate>
+
+<div>
+ {endpoint && <label className="font-medium text-gray-800">endpoint: <a className = "text-blue-700" href = {endpoint} target = "__blank" >{endpoint}</a></label> }
+
+</div>
+
 <div>
   <label className="font-medium text-gray-800">Name <span className="text-red-500">*</span></label>
   <input
