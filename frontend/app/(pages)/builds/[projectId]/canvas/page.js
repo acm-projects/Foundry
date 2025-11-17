@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useCallback,useEffect, use } from "react";
+import React, { useRef, useCallback, useEffect, use } from "react";
 import EC2_menu from "./configMenu/EC2_menu";
 import DynamoDB_menu from "./configMenu/Dynamo_menu";
 import S3_menu from "./configMenu/S3_menu";
@@ -25,7 +25,9 @@ const DnDFlow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition, getNodes, getEdges, getViewport } = useReactFlow();
   const [type] = useDnD();
-  const params = useParams();
+  const paramsResult = useParams();
+  // Next.js 15 returns params as object but warns about future Promise; conditionally unwrap
+  const params = paramsResult instanceof Promise ? use(paramsResult) : paramsResult;
   const session = useSession();
 
   const[ec2,setEc2] = useState(false);

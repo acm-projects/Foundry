@@ -107,6 +107,7 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
   const [isDragging, setIsDragging] = useState(false);
   const [downloadedKeys, setDownloadedKeys] = useState(new Set());
   const [lastValidProgress, setLastValidProgress] = useState({ completed: 0, total: 0, percentage: 0 });
+  const [lastValidKeyPairs, setLastValidKeyPairs] = useState(null);
 
   const wsRef = useRef(null);
   const logsRef = useRef(null);
@@ -116,6 +117,13 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
   // Debug keyPairs prop
   useEffect(() => {
     console.log("🔑 KeyPairs prop received:", keyPairs);
+  }, [keyPairs]);
+
+  // Cache last valid keyPairs so intermittent prop updates don't remove keys from the UI
+  useEffect(() => {
+    if (keyPairs && Object.keys(keyPairs).length > 0) {
+      setLastValidKeyPairs(keyPairs);
+    }
   }, [keyPairs]);
 
   // Timer for elapsed time
@@ -512,9 +520,14 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                     const isEC2 = resource.type.includes("EC2::Instance");
                     const isS3 = resource.type.includes("S3::Bucket");
 
+                    const effectiveKeyPairs =
+                      keyPairs && Object.keys(keyPairs).length > 0
+                        ? keyPairs
+                        : lastValidKeyPairs || null;
+
                     const keyPairForResource =
-                      keyPairs && isEC2
-                        ? Object.values(keyPairs).find((kp) => {
+                      effectiveKeyPairs && isEC2
+                        ? Object.values(effectiveKeyPairs).find((kp) => {
                             // Try multiple matching strategies since IDs might be encoded differently
                             // Strategy 1: Direct include (for similar IDs)
                             const directMatch = resource.logicalId.includes(
