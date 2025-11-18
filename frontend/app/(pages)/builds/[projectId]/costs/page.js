@@ -1,16 +1,24 @@
+"use client";
 import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectValue, SelectLabel } from '@/app/components/ui/select';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/app/components/ui/card';
 import { ChartBarDefault } from '@/app/components/costCharts/ChartBarDefault';
 import { ChartPieLegend } from '@/app/components/costCharts/ChartPieLegend';
-
+import { useState,useEffect } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
 import EC2InstancesTable from '@/app/components/costCharts/EC2InstancesTable';
-
+import axios from 'axios';  
 export default function CostsPage({ params }) {
+
+
   return (
     <div className="pt-8 pb-8">
       <div>
+
+
+
+
+
        
       
       </div>
@@ -24,7 +32,7 @@ export default function CostsPage({ params }) {
               </CardHeader>
               <CardContent>
                 <h1 className="text-3xl font-bold">
-                  $255
+           
                 </h1>
                 <CardDescription className="flex mt-2"><TrendingUp className="h-5 w-4 mr-1" /> +8.6% from last month </CardDescription>
               </CardContent>
