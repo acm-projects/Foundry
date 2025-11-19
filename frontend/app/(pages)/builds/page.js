@@ -11,42 +11,36 @@ import { set } from 'zod';
 import Invite_Inbox from './[projectId]/Navbar/inbox';
 import axios from 'axios'
 import { useSession } from 'next-auth/react';
+
 export default function Builds() { 
 
 const[user,setUser] = useState(false)
+const [searchTerm,setSearchTerm] = useState("")
 
 const data = useSession()
 const newBuild = async () => { 
-
 
   try { 
     
     const response = await axios.get(`http://localhost:8000/builds/new`,{params: {id: data.data?.user?.id}});
   
-    
- 
-
     const buildId = response.data?.build_id
 
     if(response.status == 200 && buildId){ 
- 
+  
       window.location.href = `/builds/${buildId}/canvas`
     } else {
       
       alert("Failed to create new build: No build ID returned")
     }
 
-
   }catch(err) { 
- 
+  
     console.error("Full error:", err);
     
   }
   
-  
     }
-
-
 
 return (
   <div className="bg-gray-100 relative min-h-screen">
@@ -58,10 +52,15 @@ return (
         </div>
       </Link>
     </div>
-    <Input placeholder="Search" className = "min-w-xl flex ml-10 flex-col sm:flex-row bg-gray-50 p-2 shadow-l rounded-2xl border border-gray-200 sm:space-x-2 w-fit"/>
+    <Input
+      placeholder="Search"
+      className="min-w-xl flex ml-10 flex-col sm:flex-row bg-gray-50 p-2 shadow-l rounded-2xl border border-gray-200 sm:space-x-2 w-fit"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
    <div className = "ml-150">
     <button>
-<Invite_Inbox/>
+      <Invite_Inbox/>
    </button>
    </div>
     <UserProfile />
@@ -70,7 +69,6 @@ return (
     <div className="flex flex-col gap-6 sm:gap-8 items-start justify-between">
       <div className="mt-6 sm:mt-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        
         
         <button onClick={() => newBuild()}>
           <Card className="group flex flex-col justify-center items-center flex-1 min-w-88 max-w-88 flex-grow min-h-60 bg-grey-100 shadow-none border-dashed border-2 rounded-2xl  hover:cursor-pointer  border-gray-300  bg-gray-100 delay-50 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-gray-300">
@@ -84,7 +82,7 @@ return (
           </Card>
           </button>
   
-          <WorkflowGrid/>
+          <WorkflowGrid searchTerm={searchTerm}/>
         </div>
       </div>
     </div>
@@ -95,3 +93,4 @@ return (
 
 )
 }
+

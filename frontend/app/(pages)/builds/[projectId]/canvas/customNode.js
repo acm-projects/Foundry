@@ -4,6 +4,7 @@ import { Handle, Position,useReactFlow } from "@xyflow/react";
 import { Archive,Server,Database } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useEffect } from "react";
 
 function SingleHandleNode({ data, id, count }) {
   const { getNode } = useReactFlow();
@@ -31,29 +32,38 @@ function SingleHandleNode({ data, id, count }) {
   const buildID = usePathname().split("/")[2];
   const nodeInfo = getNode(id);
 
-  const webhook = async () => { 
-    try { 
-      if (wsRef.current && (wsRef.current.readyState === 0 || wsRef.current.readyState === 1)) return;
-      const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildID}`);
-      ws.onmessage = (event) => { 
-        let next = event.data;
-        try {
-          const j = JSON.parse(event.data);
-          if (j && j.status) next = j.status;
-        } catch {}
-        setStatus(String(next));
-        console.log("WebSocket message received:", event.data);
-      };
-      wsRef.current = ws;
-    } catch(err) { 
-      console.log("error",err);
-    }
-  };
+  useEffect(() => { 
+
+    const webhook = async () => { 
+      try { 
+        if (wsRef.current && (wsRef.current.readyState === 0 || wsRef.current.readyState === 1)) return;
+        const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildID}`);
+        ws.onmessage = (event) => { 
+          let next = event.data;
+          try {
+            const j = JSON.parse(event.data);
+            if (j && j.status) next = j.status;
+          } catch {}
+          setStatus(String(next));
+          console.log("WebSocket message received:", event.data);
+        };
+        wsRef.current = ws;
+      } catch(err) { 
+        console.log("error",err);
+      }
+    };
+
+
+    webhook();
+
+  },[buildID]);
+
+  
 
 switch (data.label) {
 case 'EC2':
 return (
-<button onClick={() => webhook()} className="group" disabled={busy}>
+<button  className="group" disabled={busy}>
   <div className={`w-10 h-10 rounded-2xl border-orange-500 shadow-sm flex items-center justify-center bg-orange-200 text-white relative transition-all duration-500 ease-in-out hover:shadow-2xl ${busy ? 'opacity-50 grayscale pointer-events-none' : 'opacity-100 grayscale-0'}`}>
     <div className="flex justify-center items-center font-semibold transition-all duration-500 ease-in-out">
       <Server className="w-4 h-4 text-orange-500" />

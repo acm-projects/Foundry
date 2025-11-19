@@ -3,24 +3,10 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell} from '@/
 const expenses = [
   {
     id: 1,
-    instance: "web-server",
-    type: "t3.medium",
-    dailyCost: "$4.20",
-    monthlyCost: "$126",
-  },
-  {
-    id: 2,
-    instance: "api-server",
-    type: "t3.large",
-    dailyCost: "$6.30",
-    monthlyCost: "$189",
-  },
-  {
-    id:3,
-    instance: "web-server",
-    type: "t3.small",
-    dailyCost: "$2.10",
-    monthlyCost: "$63",
+    instance: "web-01",
+    type: "t3.micro",
+    dailyCost: "less than one cent",
+    monthlyCost: "less than one cent",
   },
 ]
 

@@ -3,12 +3,42 @@ import { Select, SelectTrigger, SelectContent, SelectGroup, SelectItem, SelectVa
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/app/components/ui/card';
 import { ChartBarDefault } from '@/app/components/costCharts/ChartBarDefault';
 import { ChartPieLegend } from '@/app/components/costCharts/ChartPieLegend';
-import { useState,useEffect } from 'react';
+import { useState,useEffect, use } from 'react';
 import { TrendingUp } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger,} from '@/app/components/ui/tabs.jsx'
 import EC2InstancesTable from '@/app/components/costCharts/EC2InstancesTable';
-import axios from 'axios';  
-export default function CostsPage({ params }) {
+import axios from 'axios'; 
+
+import { usePathname } from 'next/navigation';
+export default function CostsPage() {
+
+const build_id = usePathname().split("/")[2];
+
+const[s3Cost,setS3Cost] = useState(0)
+const[ec2Cost,setEc2Cost] = useState([])
+
+useEffect(() =>{ 
+
+const getCosts = async () => { 
+
+  try { 
+
+const response = await axios.get("http://localhost:8000/canvas/costs",{params: {build_id:build_id }});
+
+console.log("ec2",response.data)
+
+
+setS3Cost(response.data?.s3 || 0)
+
+  }catch(err) { 
+    console.error("Error fetching costs data:", err);
+  }
+}
+
+getCosts()
+},[])
+
+
 
 
   return (
