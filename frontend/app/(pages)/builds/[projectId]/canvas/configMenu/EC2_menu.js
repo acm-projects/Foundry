@@ -49,6 +49,8 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
       }
     };
 
+    console.log("endpoint",endpoint)
+
     foundry();
   }, [session, buildId]);
 
