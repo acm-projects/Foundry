@@ -105,7 +105,7 @@ setTotal(price)
               </CardHeader>
               <CardContent>
                 <h1 className="text-3xl font-bold">
-               <input/>
+               100$
                 </h1>
               </CardContent>
             </Card>
