@@ -74,6 +74,30 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
   const { setNodes, getNode } = useReactFlow();
   const existingNode = getNode(id);
   const existingData = existingNode?.data || {};
+useEffect(() => { 
+  const getRepos = async () => { 
+    if (status === "loading" || !session || !session.user?.login) {
+      setRepos([]);
+      return;
+    }
+    const githubLogin = session.user.login;
+    try { 
+      const response = await axios.get("http://127.0.0.1:8000/canvas", {
+        headers: { Authorization: `Bearer ${githubLogin}` },
+      });
+      setRepos(response.data || []); // Ensure repos is an array
+    } catch (err) { 
+      console.error("Error fetching repos:", err);
+      setRepos([]);
+    }
+  };
+  getRepos();
+}, [session, status]);
+
+
+const {setNodes,getNode} = useReactFlow();
+const existingNode = getNode(id);
+const existingData = existingNode?.data || {};
 
   const defaultValues = {
     name: existingData.name || "web-01",
@@ -113,45 +137,63 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
     const repoName = parts[0];
     const owner = parts[1];
 
-    const sendWebhookRequest = async () => {
-      try {
-        await axios.post(
-          "https://overslack-stonily-allegra.ngrok-free.dev/github/add_webhook",
-          {
-            owner: owner,
-            repo: repoName,
-          }
-        );
-      } catch (err) {}
-    };
-
-    // const sendBuildsRequest = async () => {
-    //   try {
-    //     await axios.post("http://127.0.0.1:8000/canvas/builds", {
-    //       repo: repoIdentifier,
-    //       tag: buildId,
-    //       endpoint: values.name,
-    //     });
-    //   } catch (err) {
-    //     console.log("error", err);
-    //   }
-    // };
-
-    const handleSubmission = async () => {
-      if (repoIdentifier) {
-        await sendWebhookRequest();
-      }
-      // await sendBuildsRequest();
-    };
-    handleSubmission();
-
-    if (!saved) {
-      setSaved(true);
-      if (typeof window !== "undefined") localStorage.setItem(savedKey, "1");
+  const sendWebhookRequest = async () => { 
+    try { 
+      await axios.post('https://overslack-stonily-allegra.ngrok-free.dev/github/add_webhook', {
+        owner: owner,
+        repo: repoName,
+        build_id: buildId,
+      });
     }
-
-    onClose();
+    catch(err) { 
+      console.log("[EC2_CONFIG] Error creating webhook or connecting to API:", err.message)
+    }
   };
+  
+  const sendBuildsRequest = async () => {
+
+    
+      try { 
+      
+    // const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildId}`);
+
+
+        
+        
+        
+  
+      await axios.post('http://127.0.0.1:8000/canvas/builds',{repo: repoIdentifier, tag: buildId});
+    
+    
+    // ws.onmessage = (event) => { 
+    //   console.log("WebSocket message received:", event.data);
+    // }   
+        
+
+//left off here
+
+
+    
+      }
+      catch(err) { 
+
+        console.log("error",err)
+      }
+  };
+
+  const handleSubmission = async () => {
+    if (repoIdentifier) {
+      await sendWebhookRequest(); 
+    }
+    // await sendBuildsRequest(); 
+  }
+    handleSubmission();
+  // if (!saved) {
+  //   setSaved(true)
+  //   if (typeof window !== "undefined") localStorage.setItem(savedKey,"1")
+  // }
+  onClose();
+};
 
   return (
     <Panel
@@ -206,25 +248,29 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
               )}
             </div>
 
-            <span className="font-medium text-gray-800">repositories</span>
-            <Controller
-              control={control}
-              name="repos"
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
-                    <SelectValue placeholder="Select repository" />
-                  </SelectTrigger>
-                  <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
-                    {repos?.map((repo) => (
-                      <SelectItem key={repo.id} value={`${repo.name}/${repo.owner}`}>
-                        {repo.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
+<span className="font-medium text-gray-800">repositories</span>
+<Controller
+control={control}
+name="repos"
+render={({ field }) => (
+  <Select value={field.value} onValueChange={field.onChange}>
+   <SelectTrigger disabled={false} className="w-full rounded-lg border bg-gray-200 px-2 py-1.5 text-xs text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20">
+
+      <SelectValue placeholder="Select repository" />
+    </SelectTrigger>
+    <SelectContent className="max-h-28 overflow-y-auto bg-gray-200 rounded-lg shadow-lg">
+      {repos?.map((repo, index) => (
+        <SelectItem
+          key={repo.id || `${repo.name}-${repo.owner}-${index}`} // Ensure a unique key
+          value={`${repo.name}/${repo.owner}`}
+        >
+          {repo.name}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+)}
+/>
 
             <div>
               <label className="font-medium text-gray-800">
@@ -296,24 +342,14 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
             Delete
           </button>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onClose}
-              className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
-            >
-              Close
-            </button>
-            <button
-              onClick={() => handleSubmit(submit)()}
-              className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700"
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </aside>
-    </Panel>
-  );
+<div className="flex items-center gap-2">
+<button onClick={onClose} className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50">Close</button>
+<button onClick={() => handleSubmit(submit)()} className="rounded-lg bg-orange-600 px-3 py-1.5 text-xs font-semibold text-white shadow hover:bg-orange-700">Save</button>
+</div>
+</div>
+</aside>
+</Panel>
+);
 }
 
 
