@@ -95,10 +95,6 @@ useEffect(() => {
 }, [session, status]);
 
 
-const {setNodes,getNode} = useReactFlow();
-const existingNode = getNode(id);
-const existingData = existingNode?.data || {};
-
   const defaultValues = {
     name: existingData.name || "web-01",
     instanceType: existingData.instanceType || "t3.micro",
