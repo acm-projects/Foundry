@@ -82,12 +82,7 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
     repos: "",
   };
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm({
+  const {register,handleSubmit,control,formState: { errors },} = useForm({
     resolver: zodResolver(schema),
     defaultValues,
     mode: "onSubmit",
@@ -130,23 +125,23 @@ export default function EC2PanelForm({ id, onClose, onDelete, label }) {
       } catch (err) {}
     };
 
-    const sendBuildsRequest = async () => {
-      try {
-        await axios.post("http://127.0.0.1:8000/canvas/builds", {
-          repo: repoIdentifier,
-          tag: buildId,
-          endpoint: values.name,
-        });
-      } catch (err) {
-        console.log("error", err);
-      }
-    };
+    // const sendBuildsRequest = async () => {
+    //   try {
+    //     await axios.post("http://127.0.0.1:8000/canvas/builds", {
+    //       repo: repoIdentifier,
+    //       tag: buildId,
+    //       endpoint: values.name,
+    //     });
+    //   } catch (err) {
+    //     console.log("error", err);
+    //   }
+    // };
 
     const handleSubmission = async () => {
       if (repoIdentifier) {
         await sendWebhookRequest();
       }
-      await sendBuildsRequest();
+      // await sendBuildsRequest();
     };
     handleSubmission();
 
