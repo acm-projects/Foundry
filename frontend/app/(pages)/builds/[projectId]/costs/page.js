@@ -16,7 +16,7 @@ const build_id = usePathname().split("/")[2];
 
 const[s3Cost,setS3Cost] = useState(0)
 const[ec2Cost,setEc2Cost] = useState([])
-
+const[total,setTotal] = useState(0)
 useEffect(() =>{ 
 
 const getCosts = async () => { 
@@ -25,10 +25,21 @@ const getCosts = async () => {
 
 const response = await axios.get("http://localhost:8000/canvas/costs",{params: {build_id:build_id }});
 
-console.log("ec2",response.data)
+console.log("ec2",response.data?.ec2)
+console.log("s3",response.data?.s3)
 
 
-setS3Cost(response.data?.s3 || 0)
+
+
+
+setS3Cost(response.data?.s3)
+
+
+
+setEc2Cost(response.data?.ec2)  
+
+
+
 
   }catch(err) { 
     console.error("Error fetching costs data:", err);
@@ -39,18 +50,36 @@ getCosts()
 },[])
 
 
+useEffect(() => {
+  let price = 0
+  ec2Cost?.map((type) => { 
+    price  += type.cost
+
+
+  
+  })
+
+price += s3Cost
+
+console.log("cost",price)
+
+
+setTotal(price)
+
+
+
+
+
+},[ec2Cost])
+
+
 
 
   return (
     <div className="pt-8 pb-8">
       <div>
 
-
-
-
-
-       
-      
+    
       </div>
       <div>
         <div className="flex justify-between gap-5 w-full mt-5">
@@ -59,12 +88,13 @@ getCosts()
   transition-transform duration-200 hover:scale-[1.02]">
               <CardHeader>
                 <CardTitle>Current Month</CardTitle>
+                {total}
               </CardHeader>
               <CardContent>
                 <h1 className="text-3xl font-bold">
            
                 </h1>
-                <CardDescription className="flex mt-2"><TrendingUp className="h-5 w-4 mr-1" /> +8.6% from last month </CardDescription>
+             
               </CardContent>
             </Card>
             <Card className=" flex-1 flex-grow min-h-50 
@@ -75,7 +105,7 @@ getCosts()
               </CardHeader>
               <CardContent>
                 <h1 className="text-3xl font-bold">
-                $400
+               <input/>
                 </h1>
               </CardContent>
             </Card>
@@ -87,7 +117,7 @@ getCosts()
               </CardHeader>
               <CardContent>
                 <h1 className="text-3xl font-bold">
-                  $8.50
+                  {total}
                 </h1>
                 <CardDescription className="flex mt-2"> Based on the last 30 days </CardDescription>
               </CardContent>
@@ -121,7 +151,7 @@ getCosts()
             </CardHeader>
             <CardContent>
               <div className="flex-grow min-h-100">
-                <ChartBarDefault/>
+                <ChartBarDefault total = {total}/>
               </div>
             </CardContent>
           </Card>
@@ -156,7 +186,7 @@ getCosts()
             </CardHeader>
             <CardContent>
               <div className="flex-grow mt-8 min-h-100">
-                <ChartPieLegend/>
+                <ChartPieLegend ec2 = {ec2Cost} s3Cost = {s3Cost}/>
               </div>
             </CardContent>
           </Card>
@@ -185,7 +215,7 @@ getCosts()
 
               <CardContent>
                 <TabsContent value="ec2instances">
-                  <EC2InstancesTable />
+                  <EC2InstancesTable ec2 = {ec2Cost} />
                 </TabsContent>
                 <TabsContent value="storage">
                   

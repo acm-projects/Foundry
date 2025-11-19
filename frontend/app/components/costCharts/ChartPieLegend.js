@@ -5,13 +5,9 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from "@/app/components/ui/chart"
+import { useState,useEffect } from "react"
 export const description = "A pie chart with a legend"
-const chartData = [
-  { browser: "ec2", cost: 275, fill: "var(--color-ec2)" },
-  { browser: "s3", cost: 200, fill: "var(--color-s3)" },
-  { browser: "rds", cost: 187, fill: "var(--color-rds)" },
-  { browser: "dynamo", cost: 173, fill: "var(--color-dynamo)" },
-]
+
 const chartConfig = {
   cost: {
     label: "Cost",
@@ -33,7 +29,29 @@ const chartConfig = {
     color: "var(--chart-4)",
   },
 }
-export function ChartPieLegend() {
+export function ChartPieLegend(ec2) {
+const[ec2Total,setEc2Total] = useState()
+
+useEffect(() => { 
+
+  let total = 0
+   ec2.ec2.map((type) => { 
+    total += type.cost
+  })
+
+  setEc2Total(total)
+
+},[ec2])
+
+
+  const chartData = [
+    { browser: "ec2", cost: ec2Total, fill: "var(--color-ec2)" },
+    { browser: "s3", cost: ec2.s3Cost, fill: "var(--color-s3)" },
+    { browser: "rds", cost: 0, fill: "var(--color-rds)" },
+    { browser: "dynamo", cost: 0, fill: "var(--color-dynamo)" },
+  ]
+ 
+  console.log('lets look at ec2',ec2)
   return (
     <ChartContainer config={chartConfig} className="mx-auto w-full max-w-xl">
       <div className="flex flex-col items-center justify-center py-6">
