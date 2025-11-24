@@ -37,7 +37,7 @@ function SingleHandleNode({ data, id, count }) {
     const webhook = async () => { 
       try { 
         if (wsRef.current && (wsRef.current.readyState === 0 || wsRef.current.readyState === 1)) return;
-        const ws = new WebSocket(`ws://127.0.0.1:8000/canvas/ws/${buildID}`);
+        const ws = new WebSocket(`ws://127.0.0.1:8000/github/ws/${buildID}`);
         ws.onmessage = (event) => { 
           let next = event.data;
           try {

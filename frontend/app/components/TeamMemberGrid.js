@@ -129,13 +129,47 @@ console.log("member Emails to invite:", memberEmails);
   
 };
 
+const suggestions = input
+  ? users
+      ?.filter(u => {
+        const q = input.toLowerCase();
+        return (
+          u.email?.toLowerCase().includes(q) ||
+          u.name?.toLowerCase().includes(q)
+        );
+      })
+      .slice(0, 5)
+  : [];
+
   return (
     <div className="flex flex-col gap-2">
-      <div className = "flex gap-2">
-      <Input placeholder="Enter a GitHub username..." value = {input} onChange = {(e) => setInput(e.target.value)}/>
-      <div className = "flex justify-center items-center h-7 w-7 mt-1 rounded">
-      <Search className = " h-7 w-7 text-black rounded" onClick = {() => addMember()}/>
-      </div>
+      <div className="flex flex-col gap-1">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Enter a GitHub username..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <div className="flex justify-center items-center h-7 w-7 mt-1 rounded">
+            <Search className="h-7 w-7 text-black rounded" onClick={() => addMember()} />
+          </div>
+        </div>
+        {input && suggestions && suggestions.length > 0 && (
+          <div className="border rounded bg-white shadow-sm max-h-40 overflow-y-auto text-sm">
+            {suggestions.map(user => (
+              <div
+                key={user.id}
+                className="px-2 py-1 cursor-pointer hover:bg-gray-100 flex flex-col"
+                onClick={() => setInput(user.email)}
+              >
+                <span className="font-medium">{user.name || user.email}</span>
+                {user.name && (
+                  <span className="text-xs text-gray-500">{user.email}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {members.map((member, index) => (
@@ -149,4 +183,5 @@ console.log("member Emails to invite:", memberEmails);
     </div>
   );
 }
+
 
