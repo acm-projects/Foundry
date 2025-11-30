@@ -733,7 +733,7 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0 rounded-b-xl">
           <div className="space-y-3">
             {/* Progress Bar */}
             <div>
