@@ -386,10 +386,10 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
             <div className="flex items-center gap-4">
               <span
                 className={`px-4 py-2 rounded-lg text-sm font-semibold ${isFailed
-                    ? "bg-red-100 text-red-800"
-                    : isComplete
-                      ? "bg-green-100 text-green-800"
-                      : "bg-blue-100 text-blue-800"
+                  ? "bg-red-100 text-red-800"
+                  : isComplete
+                    ? "bg-green-100 text-green-800"
+                    : "bg-blue-100 text-blue-800"
                   }`}
               >
                 {isFailed ? "Failed" : isComplete ? "Complete" : "In Progress"}
@@ -592,9 +592,12 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                           </div>
                         </div>
 
-                        {/* Error Message */}
+                        {/* Status Message - Blue for info, Red for errors */}
                         {hasError && (
-                          <div className="mt-2 text-xs text-red-700 bg-red-50 px-3 py-2 rounded border-l-2 border-red-500">
+                          <div className={`mt-2 text-xs px-3 py-2 rounded border-l-2 ${resource.status.includes('FAILED')
+                            ? 'text-red-700 bg-red-50 border-red-500'
+                            : 'text-blue-700 bg-blue-50 border-blue-500'
+                            }`}>
                             {resource.statusReason}
                           </div>
                         )}
@@ -767,8 +770,8 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                 <button
                   onClick={onClose}
                   className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${isFailed
-                      ? "bg-red-600 text-white hover:bg-red-700"
-                      : "bg-green-600 text-white hover:bg-green-700"
+                    ? "bg-red-600 text-white hover:bg-red-700"
+                    : "bg-green-600 text-white hover:bg-green-700"
                     }`}
                 >
                   {isFailed ? "Close" : "Done"}
