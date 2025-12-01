@@ -117,6 +117,7 @@ useEffect(() => {
       name: values.name,
       instanceType: values.instanceType,
       imageId: values.imageId,
+      repos: values.repos,
     };
 
     setNodes((nodes) =>

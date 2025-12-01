@@ -261,6 +261,8 @@ const deployClicked = () => {
     console.log(`Processing node: ${node.id}, type: ${node.type}`, node.data)
     
     const cleanData = { ...node.data }
+
+    console.log("clean data",cleanData)
     
     if (cleanData.imageID) {
       console.log(`  Removing old imageID from node ${node.id}`)

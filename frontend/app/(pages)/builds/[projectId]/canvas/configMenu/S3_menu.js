@@ -83,7 +83,7 @@ const response = await axios.post("http://localhost:8000/canvas/s3/upload", form
 
 console.log("response",response)
 
-
+onClose(storageKey);
     }
     catch(err) {
       console.log("error",err)
