@@ -338,7 +338,7 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
       if (totalResources > 0) {
         const progressValue = Math.round((completedResources / totalResources) * 100);
         const validProgress = Math.min(Math.max(progressValue, 0), 100);
-        
+
         setLastValidProgress({
           completed: completedResources,
           total: totalResources,
@@ -385,13 +385,12 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
             </div>
             <div className="flex items-center gap-4">
               <span
-                className={`px-4 py-2 rounded-lg text-sm font-semibold ${
-                  isFailed
-                    ? "bg-red-100 text-red-800"
-                    : isComplete
-                      ? "bg-green-100 text-green-800"
-                      : "bg-blue-100 text-blue-800"
-                }`}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold ${isFailed
+                  ? "bg-red-100 text-red-800"
+                  : isComplete
+                    ? "bg-green-100 text-green-800"
+                    : "bg-blue-100 text-blue-800"
+                  }`}
               >
                 {isFailed ? "Failed" : isComplete ? "Complete" : "In Progress"}
               </span>
@@ -515,35 +514,35 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                     const keyPairForResource =
                       keyPairs && isEC2
                         ? Object.values(keyPairs).find((kp) => {
-                            // Try multiple matching strategies since IDs might be encoded differently
-                            // Strategy 1: Direct include (for similar IDs)
-                            const directMatch = resource.logicalId.includes(
-                              kp.instanceNodeId.replace("EC2:", ""),
-                            );
+                          // Try multiple matching strategies since IDs might be encoded differently
+                          // Strategy 1: Direct include (for similar IDs)
+                          const directMatch = resource.logicalId.includes(
+                            kp.instanceNodeId.replace("EC2:", ""),
+                          );
 
-                            // Strategy 2: Check if they share significant parts (ignoring underscores and extra chars)
-                            const resourceIdClean = resource.logicalId
-                              .replace(/_/g, "")
-                              .toLowerCase();
-                            const nodeIdClean = kp.instanceNodeId
-                              .replace(/[EC2:_]/g, "")
-                              .toLowerCase();
-                            const partialMatch =
-                              resourceIdClean.includes(nodeIdClean) ||
-                              nodeIdClean.includes(resourceIdClean);
+                          // Strategy 2: Check if they share significant parts (ignoring underscores and extra chars)
+                          const resourceIdClean = resource.logicalId
+                            .replace(/_/g, "")
+                            .toLowerCase();
+                          const nodeIdClean = kp.instanceNodeId
+                            .replace(/[EC2:_]/g, "")
+                            .toLowerCase();
+                          const partialMatch =
+                            resourceIdClean.includes(nodeIdClean) ||
+                            nodeIdClean.includes(resourceIdClean);
 
-                            const matches = directMatch || partialMatch;
+                          const matches = directMatch || partialMatch;
 
-                            if (matches) {
-                              console.log("✅ KEY MATCH FOUND:", {
-                                resourceId: resource.logicalId,
-                                nodeId: kp.instanceNodeId,
-                                strategy: directMatch ? "direct" : "partial",
-                              });
-                            }
+                          if (matches) {
+                            console.log("✅ KEY MATCH FOUND:", {
+                              resourceId: resource.logicalId,
+                              nodeId: kp.instanceNodeId,
+                              strategy: directMatch ? "direct" : "partial",
+                            });
+                          }
 
-                            return matches;
-                          })
+                          return matches;
+                        })
                         : null;
 
                     return (
@@ -593,9 +592,12 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                           </div>
                         </div>
 
-                        {/* Error Message */}
+                        {/* Status Message - Blue for info, Red for errors */}
                         {hasError && (
-                          <div className="mt-2 text-xs text-red-700 bg-red-50 px-3 py-2 rounded border-l-2 border-red-500">
+                          <div className={`mt-2 text-xs px-3 py-2 rounded border-l-2 ${resource.status.includes('FAILED')
+                            ? 'text-red-700 bg-red-50 border-red-500'
+                            : 'text-blue-700 bg-blue-50 border-blue-500'
+                            }`}>
                             {resource.statusReason}
                           </div>
                         )}
@@ -733,7 +735,7 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0 rounded-b-xl">
           <div className="space-y-3">
             {/* Progress Bar */}
             <div>
@@ -742,8 +744,8 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
                   {stackInfo && stackInfo.completedResources !== undefined && stackInfo.totalResources !== undefined
                     ? `${stackInfo.completedResources} of ${stackInfo.totalResources} resources`
                     : lastValidProgress.total > 0
-                    ? `${lastValidProgress.completed} of ${lastValidProgress.total} resources`
-                    : "Initializing..."}
+                      ? `${lastValidProgress.completed} of ${lastValidProgress.total} resources`
+                      : "Initializing..."}
                 </span>
                 <span className="font-semibold">
                   {progress}%
@@ -767,11 +769,10 @@ function DeploymentModal({ isOpen, onClose, stackName, keyPairs }) {
               {isComplete && (
                 <button
                   onClick={onClose}
-                  className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${
-                    isFailed
-                      ? "bg-red-600 text-white hover:bg-red-700"
-                      : "bg-green-600 text-white hover:bg-green-700"
-                  }`}
+                  className={`px-6 py-2 rounded-lg font-semibold text-sm transition-colors ${isFailed
+                    ? "bg-red-600 text-white hover:bg-red-700"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                    }`}
                 >
                   {isFailed ? "Close" : "Done"}
                 </button>

@@ -8,11 +8,13 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import axios from 'axios'
 import DeploymentModal from './DeploymentModal';
+import UpdateModal from './UpdateModal';
 
 function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeploymentSuccess }) {
   const [status, setStatus] = useState(false)
   const [live, setLive] = useState(true)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [currentStackName, setCurrentStackName] = useState(stackName)
   const [keyPairs, setKeyPairs] = useState(null)
   const session = useSession()
@@ -24,26 +26,21 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
   const needsUpdate = deploymentState === 'needs-update'
 
   const handleDeploy = async () => {
-    // Open modal immediately
-    setIsModalOpen(true);
-
     // Get the React Flow JSON with node data from parent
     const reactJson = deployClicked()
-    
+
     console.log("Deploying with data:", JSON.stringify(reactJson, null, 2))
-    
+
     // Validate that all nodes have required configuration
     const errors = validateDeployData(reactJson)
     if (errors.length > 0) {
       alert(`Please configure all resources:\n${errors.join('\n')}`)
-      setIsModalOpen(false)
       return
     }
 
     // Validate buildId exists
     if (!buildId) {
       alert('Error: No build ID found. Please refresh the page or create a new build.')
-      setIsModalOpen(false)
       return
     }
 
@@ -51,42 +48,48 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
     const owner_id = session.data?.user?.id
     if (!owner_id) {
       alert('Error: No user ID found. Please sign in again.')
-      setIsModalOpen(false)
       return
     }
-    
+
     try {
       setStatus(true)
-      
+
       // For new deployments, use POST /canvas/deploy with buildId, canvas, owner_id, and region
       // For updates, still use the update endpoint
       const endpoint = needsUpdate ? '/canvas/deploy/update' : '/canvas/deploy'
       const actionText = needsUpdate ? 'update' : 'deploy'
-      
+
       // Validate stack_name exists for updates
       if (needsUpdate && !stackName) {
         alert('Cannot update: No stack name found. Please deploy first or clear canvas and redeploy.')
         setStatus(false)
         return
       }
-      
-      const requestBody = needsUpdate 
+
+      const requestBody = needsUpdate
         ? { canvas: reactJson, build_id: buildId, stack_name: stackName, auto_execute: true }
-        : { 
-            buildId: buildId,
-            canvas: reactJson,
-            owner_id: parseInt(owner_id, 10),
-            region: "us-east-1"
-          }
-      
+        : {
+          buildId: buildId,
+          canvas: reactJson,
+          owner_id: parseInt(owner_id, 10),
+          region: "us-east-1"
+        }
+
       const response = await api.post(endpoint, requestBody)
-      
+
+      // Only open modal AFTER backend confirms update/deployment has been submitted
+      if (needsUpdate) {
+        setIsUpdateModalOpen(true);
+      } else {
+        setIsDeployModalOpen(true);
+      }
+
       setLive(true)
-      
+
       const responseBuildId = response.data.buildId
       const responseStackName = response.data.stackName
       const responseKeyPairs = response.data.keyPairs || null
-      
+
       // Store stack name and key pairs for modal
       if (responseStackName) {
         setCurrentStackName(responseStackName)
@@ -94,21 +97,21 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       if (responseKeyPairs) {
         setKeyPairs(responseKeyPairs)
       }
-      
+
       onDeploymentSuccess(reactJson, responseBuildId, responseStackName)
-      
+
     } catch (error) {
       console.error("Deployment error:", error)
-      
+
       let errorMessage = `${needsUpdate ? 'Update' : 'Deployment'} failed.\n\n`
-      
+
       if (error.response) {
         errorMessage += `Status: ${error.response.status}\n`
-        
+
         if (error.response.status === 422 && error.response.data.detail) {
           errorMessage += `Validation errors:\n`
-          const details = Array.isArray(error.response.data.detail) 
-            ? error.response.data.detail 
+          const details = Array.isArray(error.response.data.detail)
+            ? error.response.data.detail
             : [error.response.data.detail]
           details.forEach(err => {
             errorMessage += `  - ${err.loc ? err.loc.join('.') : 'unknown'}: ${err.msg || JSON.stringify(err)}\n`
@@ -121,9 +124,8 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       } else {
         errorMessage += error.message
       }
-      
+
       alert(errorMessage)
-      setIsModalOpen(false)
     } finally {
       setStatus(false)
     }
@@ -132,8 +134,12 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
   // Handle modal reopen when clicking deploy button while deployment in progress
   const handleButtonClick = () => {
     if (status && currentStackName) {
-      // If deployment in progress, reopen modal
-      setIsModalOpen(true)
+      // If deployment in progress, reopen appropriate modal
+      if (needsUpdate) {
+        setIsUpdateModalOpen(true)
+      } else {
+        setIsDeployModalOpen(true)
+      }
     } else {
       // Otherwise start new deployment
       handleDeploy()
@@ -177,8 +183,15 @@ function Deploy({ deployClicked, deploymentState, buildId, stackName, onDeployme
       </div>
 
       <DeploymentModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isDeployModalOpen}
+        onClose={() => setIsDeployModalOpen(false)}
+        stackName={currentStackName}
+        keyPairs={keyPairs}
+      />
+
+      <UpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
         stackName={currentStackName}
         keyPairs={keyPairs}
       />
